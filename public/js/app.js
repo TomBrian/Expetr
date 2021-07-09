@@ -2458,6 +2458,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function () {
         _this2.fillPieData();
+
+        $('.loader').hide();
       })["catch"](function (err) {
         $('.loader').hide();
         console.log(err);

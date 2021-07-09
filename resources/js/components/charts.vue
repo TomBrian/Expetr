@@ -189,6 +189,7 @@ export default {
                 }
             }).then(() => {
                 this.fillPieData()
+                 $('.loader').hide();
             }).catch((err) => {
                 $('.loader').hide();
                 console.log(err)
