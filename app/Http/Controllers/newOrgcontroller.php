@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\history;
 use App\Models\organisations;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -52,6 +54,28 @@ class newOrgcontroller extends Controller
          'media_url' => $mediaUrl
       ]);
       $organisation = organisations::where('organisation_code','=',$OrgCode)->get();
+        // get name of 
+        $month = date('m');
+        $year = date('Y');
+        $dateObj   = DateTime::createFromFormat('!m', $month);
+        $monthName = $dateObj->format('F'); 
+         // make new history
+       history::create([
+           'month'=>  $monthName,
+           'year'=> $year,
+           'total_expenses'=> 0,
+           'total_rental'=> 0,
+           'total_salaries'=> 0,
+           'total_medical'=> 0,
+           'total_utilities'=> 0,
+           'total_food'=> 0,
+           'total_insurance'=> 0,
+           'total_delivery'=> 0,
+           'total_marketing'=> 0,
+           'total_gifts'=> 0,
+           'total_other'=> 0,
+           'organisation_code'=>$OrgCode
+                ]);
       $to_email = $request->email;
       Mail::send('pages.mail.orgCode',array('content'=>$OrgCode,'userName'=>$request->name,'organisation_name'=>$organisation[0]->name),function($message) use ($to_email){
           $message -> subject("Your organisation's code");
