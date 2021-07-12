@@ -96,7 +96,7 @@
                 </div>
             </div>
             <div class="search my-2 flex">
-                <input type="search" placeholder="search for conversation..." class="form-control"><button class="btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+                <input type="search" placeholder="search for conversation..." v-model="searchQuery" v-on:change="searchConv" class="form-control"><button class="btn"><i class="fa fa-search" aria-hidden="true"></i></button>
             </div>
         </div>
 
@@ -240,10 +240,24 @@ export default {
             conversations: [],
             openConversation: null,
             messages: [],
-            me: null
+            me: null,
+            searchQuery:''
         }
     },
-    methods: {
+    methods: {searchConv:function(){
+    //   alert(`searching ${this.searchQuery}`)
+    if (this.conversations > 1) {
+         axios.get(location.origin+"/api/s",{
+        query:this.searchQuery
+    }).then((res)=>{
+     this.searchResults = res.data;
+    }).finally(()=>{
+        alert('search done')
+    });
+    }else{
+        alert('you dont have enough conversations to search through.')
+    }
+    },
         getAllUsers: function () {
             axios.get(location.origin + '/api/all-users')
                 .then((res) => {

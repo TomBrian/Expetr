@@ -2885,15 +2885,32 @@ __webpack_require__.r(__webpack_exports__);
       conversations: [],
       openConversation: null,
       messages: [],
-      me: null
+      me: null,
+      searchQuery: ''
     };
   },
   methods: {
-    getAllUsers: function getAllUsers() {
+    searchConv: function searchConv() {
       var _this = this;
 
+      //   alert(`searching ${this.searchQuery}`)
+      if (this.conversations > 1) {
+        axios.get(location.origin + "/api/s", {
+          query: this.searchQuery
+        }).then(function (res) {
+          _this.searchResults = res.data;
+        })["finally"](function () {
+          alert('search done');
+        });
+      } else {
+        alert('you dont have enough conversations to search through.');
+      }
+    },
+    getAllUsers: function getAllUsers() {
+      var _this2 = this;
+
       axios.get(location.origin + '/api/all-users').then(function (res) {
-        _this.allUsers = res.data;
+        _this2.allUsers = res.data;
       })["catch"](function (err) {
         console.log(err);
       });
@@ -2913,7 +2930,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     createGroupConversation: function createGroupConversation() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.groupForm.participants.length < 2) {
         $('.alert-danger').show();
@@ -2925,21 +2942,21 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           $('.text-success').text('group created');
 
-          _this2.getConversations();
+          _this3.getConversations();
         });
       }
     },
     deleteConversation: function deleteConversation(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post(location.origin + "/api/delete-conversation/".concat(id)).then(function () {
-        _this3.openConversation = null;
+        _this4.openConversation = null;
 
-        _this3.getConversations();
+        _this4.getConversations();
       });
     },
     makeConversation: function makeConversation(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post(location.origin + "/api/create-private-chat/".concat(id)).then(function (res) {
         if (res.data == false) {
@@ -2949,9 +2966,9 @@ __webpack_require__.r(__webpack_exports__);
           $('.alert-success').show();
         }
 
-        _this4.getConversations();
+        _this5.getConversations();
 
-        _this4.messagesReq();
+        _this5.messagesReq();
       })["catch"](function (err) {
         console.log(err);
       });
@@ -2965,15 +2982,15 @@ __webpack_require__.r(__webpack_exports__);
       this.message += emoji.data;
     },
     getConversations: function getConversations() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get(location.origin + '/api/getConversations').then(function (res) {
-        _this5.conversations = res.data;
+        _this6.conversations = res.data;
 
-        _this5.openFirstConversation();
+        _this6.openFirstConversation();
 
-        for (var i = 0; i < _this5.conversations.length; i++) {
-          var element = _this5.conversations[i]; //  console.log(element);
+        for (var i = 0; i < _this6.conversations.length; i++) {
+          var element = _this6.conversations[i]; //  console.log(element);
         }
       })["catch"](function (err) {
         console.log(err);
@@ -2994,7 +3011,7 @@ __webpack_require__.r(__webpack_exports__);
       this.resetField();
     },
     sendMessage: function sendMessage(convId) {
-      var _this6 = this;
+      var _this7 = this;
 
       $('#inboxChat').val('');
       var message = this.message;
@@ -3005,9 +3022,9 @@ __webpack_require__.r(__webpack_exports__);
           console.log('failed');
         }
 
-        _this6.resetField();
+        _this7.resetField();
 
-        _this6.messagesReq();
+        _this7.messagesReq();
       })["catch"](function (err) {
         console.log(err);
       });
@@ -3016,20 +3033,20 @@ __webpack_require__.r(__webpack_exports__);
       document.querySelector(".inbox-content").scrollTop += document.querySelector(".inbox-content").scrollHeight;
     },
     messagesReq: function messagesReq() {
-      var _this7 = this;
+      var _this8 = this;
 
       if (this.openConversation != null) {
         axios.get(location.origin + "/api/get-messages/".concat(this.openConversation.conversationId)).then(function (res) {
-          _this7.messages = res.data.data;
+          _this8.messages = res.data.data;
 
-          for (var i = 0; i < _this7.messages.length; i++) {
-            var element = _this7.messages[i];
+          for (var i = 0; i < _this8.messages.length; i++) {
+            var element = _this8.messages[i];
             axios.post(location.origin + "/api/mark-message-as-read/".concat(element.id)).then(function (res) {});
           }
 
           $('.loader').hide();
         }).then(function () {
-          _this7.scrollToBottom();
+          _this8.scrollToBottom();
         });
       }
     },
@@ -3048,7 +3065,7 @@ __webpack_require__.r(__webpack_exports__);
     clearInterval(this.messageInterval);
   },
   mounted: function mounted() {
-    var _this8 = this;
+    var _this9 = this;
 
     this.getAllUsers();
     this.getConversations();
@@ -3058,7 +3075,7 @@ __webpack_require__.r(__webpack_exports__);
     $('.alert-danger').hide();
     $('.alert-success').hide();
     axios.get(location.origin + "/api/user").then(function (res) {
-      _this8.me = res.data;
+      _this9.me = res.data;
     });
   },
   unmounted: function unmounted() {
@@ -92080,7 +92097,34 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _vm._m(2)
+        _c("div", { staticClass: "search my-2 flex" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.searchQuery,
+                expression: "searchQuery"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "search",
+              placeholder: "search for conversation..."
+            },
+            domProps: { value: _vm.searchQuery },
+            on: {
+              change: _vm.searchConv,
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.searchQuery = $event.target.value
+              }
+            }
+          }),
+          _vm._m(2)
+        ])
       ]),
       _vm._v(" "),
       _vm.conversations.length == 0
@@ -92535,17 +92579,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "search my-2 flex" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "search", placeholder: "search for conversation..." }
-      }),
-      _c("button", { staticClass: "btn" }, [
-        _c("i", {
-          staticClass: "fa fa-search",
-          attrs: { "aria-hidden": "true" }
-        })
-      ])
+    return _c("button", { staticClass: "btn" }, [
+      _c("i", { staticClass: "fa fa-search", attrs: { "aria-hidden": "true" } })
     ])
   },
   function() {
