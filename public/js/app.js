@@ -2032,10 +2032,92 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'activities',
   data: function data() {
     return {
+      allUsers: [],
+      selectedUsers: [],
       fields: {
         title: '',
         description: '',
@@ -2048,20 +2130,83 @@ __webpack_require__.r(__webpack_exports__);
       },
       activitiesAlmostDue: [],
       activitiesFailed: [],
-      activitiesComplete: []
+      activitiesComplete: [],
+      activitiesUnderway: [],
+      searchQuery: ''
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     $('.loading').hide();
     $('.alert-success').hide();
     $('.alert-danger').hide();
+    this.getPending();
     this.getActivities();
+    this.getAllUsers();
+    fetch(location.origin + '/api/user').then(function (res) {
+      return res.json();
+    }).then(function (data) {
+      _this.allUsers.push(data);
+    })["catch"](function (err) {
+      return console.log(err);
+    });
   },
   methods: {
-    addActivity: function addActivity() {
-      var _this = this;
+    getPending: function getPending() {
+      var _this2 = this;
 
-      $('.loading').show();
+      axios.get(location.origin + '/api/get-underway-activities').then(function (res) {
+        // console.log(res.data);
+        _this2.activitiesUnderway = res.data;
+      });
+    },
+    addSelectedUsers: function addSelectedUsers(user) {
+      if (event.target.checked) {
+        this.selectedUsers.push(user); // console.log(this.selectedUsers);
+      } else {
+        for (var i = 0; i < this.selectedUsers.length; i++) {
+          var person = this.selectedUsers[i];
+
+          if (person == user) {
+            this.selectedUsers.splice(i, 1); // console.log(this.selectedUsers);
+          }
+        }
+      }
+    },
+    searchAc: function searchAc() {
+      var results = [];
+      var all = this.activities;
+
+      if (this.searchQuery == '') {
+        this.getActivities();
+      }
+
+      if (all.length > 0) {
+        $('#noResults').show();
+        var allConvs = this.activities;
+
+        for (var i = 0; i < allConvs.length; i++) {
+          var conv = allConvs[i];
+
+          if (conv.title.toUpperCase().indexOf(this.searchQuery.toUpperCase()) > -1) {
+            results.push(conv);
+          }
+        }
+      } else {
+        alert("you have no tasks");
+      }
+
+      this.searchResults = results;
+
+      if (this.searchResults.length > 0) {
+        this.activities = results;
+      } // console.log(this.searchResults);
+
+    },
+    addActivity: function addActivity() {
+      var _this3 = this;
+
       var today = new Date();
       var dd = today.getDate();
       var mm = today.getMonth() + 1; //January is 0!
@@ -2083,19 +2228,26 @@ __webpack_require__.r(__webpack_exports__);
 
       if (dateNow < dateDue) {
         $('#dateError').hide();
-        axios.post(location.origin + '/api/make-activity', {
-          title: this.fields.title,
-          description: this.fields.description,
-          date: this.fields.date
-        }).then(function () {
-          _this.getActivities();
 
-          $('.loading').hide();
-          $('.alert-success').show();
-        })["catch"](function () {
-          $('.alert-danger').show();
-          $('.loading').hide();
-        });
+        if (this.selectedUsers.length > 0) {
+          $('.loading').show();
+          axios.post(location.origin + '/api/make-activity', {
+            title: this.fields.title,
+            description: this.fields.description,
+            assigned_to: this.selectedUsers,
+            date: this.fields.date
+          }).then(function () {
+            _this3.getActivities();
+
+            $('.loading').hide();
+            $('.alert-success').show();
+          })["catch"](function () {
+            $('.alert-danger').show();
+            $('.loading').hide();
+          });
+        } else {
+          alert('you need to assign the task to someone');
+        }
       } else {
         $('#dateError').html('Please check if the date due you entered  is valid');
         $('.loading').hide();
@@ -2103,11 +2255,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getActivities: function getActivities() {
-      var _this2 = this;
+      var _this4 = this;
 
       axios.get(location.origin + '/api/get-activities').then(function (res) {
-        _this2.activities = res.data;
-        var act = _this2.activities;
+        _this4.activities = res.data;
+        var act = _this4.activities;
 
         for (var i = 0; i < act.length; i++) {
           var element = act[i];
@@ -2117,13 +2269,15 @@ __webpack_require__.r(__webpack_exports__);
           element.created_at = dateAlone;
         }
 
-        _this2.countUnreadNotifications();
+        _this4.countUnreadNotifications();
 
-        _this2.getFailed();
+        _this4.getPending();
 
-        _this2.getComplete();
+        _this4.getFailed();
 
-        _this2.getAlmostDue();
+        _this4.getComplete();
+
+        _this4.getAlmostDue();
 
         $('.loader').hide();
       })["catch"](function (err) {
@@ -2131,51 +2285,51 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     deletesAct: function deletesAct(id) {
-      var _this3 = this;
+      var _this5 = this;
 
       //dialogue
       if (confirm("Are you sure you want to delete the activity ".concat(id))) {
-        axios.post(location.origin + "/api/delete-activity/".concat(this.actions.targetId)).then(function () {
-          _this3.getActivities();
+        axios.post(location.origin + "/api/delete-activity/".concat(id)).then(function () {
+          _this5.getActivities();
         })["catch"](function (err) {
           console.log(err);
         });
       }
     },
     changeStatus: function changeStatus(id, status) {
-      var _this4 = this;
+      var _this6 = this;
 
       if (confirm("set status to ".concat(status, "?"))) {
         axios.post(location.origin + "/api/set-activity-status/".concat(id, "/").concat(status)).then(function () {
-          _this4.getActivities();
+          _this6.getActivities();
         })["catch"](function (err) {
           console.log(err);
         });
       }
     },
     getAlmostDue: function getAlmostDue() {
-      var _this5 = this;
+      var _this7 = this;
 
       axios.get(location.origin + '/api/get-almost-due-activities').then(function (res) {
-        _this5.activitiesAlmostDue = res.data;
+        _this7.activitiesAlmostDue = res.data;
       })["catch"](function (err) {
         console.log(err);
       });
     },
     getFailed: function getFailed() {
-      var _this6 = this;
+      var _this8 = this;
 
       axios.get(location.origin + '/api/get-failed-activities').then(function (res) {
-        _this6.activitiesFailed = res.data;
+        _this8.activitiesFailed = res.data;
       })["catch"](function (err) {
         console.log(err);
       });
     },
     getComplete: function getComplete() {
-      var _this7 = this;
+      var _this9 = this;
 
       axios.get(location.origin + '/api/get-completed-activities').then(function (res) {
-        _this7.activitiesComplete = res.data;
+        _this9.activitiesComplete = res.data;
       })["catch"](function (err) {
         console.log(err);
       });
@@ -2867,6 +3021,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'chats',
@@ -2885,15 +3042,63 @@ __webpack_require__.r(__webpack_exports__);
       conversations: [],
       openConversation: null,
       messages: [],
-      me: null
+      me: null,
+      searchQuery: ''
     };
   },
   methods: {
+    searchConv: function searchConv() {
+      var results = [];
+      var all = this.conversations;
+
+      if (this.searchQuery == '') {
+        this.getConversations();
+      }
+
+      if (all.length > 0) {
+        $('#noResults').show();
+        var allConvs = this.conversations;
+
+        for (var i = 0; i < allConvs.length; i++) {
+          var conv = allConvs[i];
+
+          if (conv.participants[0].name.toUpperCase().indexOf(this.searchQuery.toUpperCase()) > -1) {
+            results.push(conv);
+          }
+        }
+      } else {
+        alert("you have no conversations");
+      }
+
+      this.searchResults = results;
+
+      if (this.searchResults.length > 0) {
+        this.conversations = results;
+      }
+
+      console.log(this.searchResults);
+    },
     getAllUsers: function getAllUsers() {
       var _this = this;
 
+      //   alert(`searching ${this.searchQuery}`)
+      if (this.conversations > 1) {
+        axios.get(location.origin + "/api/s", {
+          query: this.searchQuery
+        }).then(function (res) {
+          _this.searchResults = res.data;
+        })["finally"](function () {
+          alert('search done');
+        });
+      } else {
+        alert('you dont have enough conversations to search through.');
+      }
+    },
+    getAllUsers: function getAllUsers() {
+      var _this2 = this;
+
       axios.get(location.origin + '/api/all-users').then(function (res) {
-        _this.allUsers = res.data;
+        _this2.allUsers = res.data;
       })["catch"](function (err) {
         console.log(err);
       });
@@ -2902,18 +3107,18 @@ __webpack_require__.r(__webpack_exports__);
       if (event.target.checked) {
         this.groupForm.participants.push(id);
       } else {
-        //    remove selected hooligan
+        //    remove selected person
         for (var i = 0; i < this.groupForm.participants.length; i++) {
-          var hooligan = this.groupForm.participants[i];
+          var person = this.groupForm.participants[i];
 
-          if (hooligan == id) {
+          if (person == id) {
             this.groupForm.participants.splice(i, 1);
           }
         }
       }
     },
     createGroupConversation: function createGroupConversation() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.groupForm.participants.length < 2) {
         $('.alert-danger').show();
@@ -2925,21 +3130,21 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           $('.text-success').text('group created');
 
-          _this2.getConversations();
+          _this3.getConversations();
         });
       }
     },
     deleteConversation: function deleteConversation(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post(location.origin + "/api/delete-conversation/".concat(id)).then(function () {
-        _this3.openConversation = null;
+        _this4.openConversation = null;
 
-        _this3.getConversations();
+        _this4.getConversations();
       });
     },
     makeConversation: function makeConversation(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post(location.origin + "/api/create-private-chat/".concat(id)).then(function (res) {
         if (res.data == false) {
@@ -2949,9 +3154,9 @@ __webpack_require__.r(__webpack_exports__);
           $('.alert-success').show();
         }
 
-        _this4.getConversations();
+        _this5.getConversations();
 
-        _this4.messagesReq();
+        _this5.messagesReq();
       })["catch"](function (err) {
         console.log(err);
       });
@@ -2965,15 +3170,15 @@ __webpack_require__.r(__webpack_exports__);
       this.message += emoji.data;
     },
     getConversations: function getConversations() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get(location.origin + '/api/getConversations').then(function (res) {
-        _this5.conversations = res.data;
+        _this6.conversations = res.data;
 
-        _this5.openFirstConversation();
+        _this6.openFirstConversation();
 
-        for (var i = 0; i < _this5.conversations.length; i++) {
-          var element = _this5.conversations[i]; //  console.log(element);
+        for (var i = 0; i < _this6.conversations.length; i++) {
+          var element = _this6.conversations[i]; //  console.log(element);
         }
       })["catch"](function (err) {
         console.log(err);
@@ -2994,7 +3199,7 @@ __webpack_require__.r(__webpack_exports__);
       this.resetField();
     },
     sendMessage: function sendMessage(convId) {
-      var _this6 = this;
+      var _this7 = this;
 
       $('#inboxChat').val('');
       var message = this.message;
@@ -3005,9 +3210,9 @@ __webpack_require__.r(__webpack_exports__);
           console.log('failed');
         }
 
-        _this6.resetField();
+        _this7.resetField();
 
-        _this6.messagesReq();
+        _this7.messagesReq();
       })["catch"](function (err) {
         console.log(err);
       });
@@ -3016,20 +3221,20 @@ __webpack_require__.r(__webpack_exports__);
       document.querySelector(".inbox-content").scrollTop += document.querySelector(".inbox-content").scrollHeight;
     },
     messagesReq: function messagesReq() {
-      var _this7 = this;
+      var _this8 = this;
 
       if (this.openConversation != null) {
         axios.get(location.origin + "/api/get-messages/".concat(this.openConversation.conversationId)).then(function (res) {
-          _this7.messages = res.data.data;
+          _this8.messages = res.data.data;
 
-          for (var i = 0; i < _this7.messages.length; i++) {
-            var element = _this7.messages[i];
+          for (var i = 0; i < _this8.messages.length; i++) {
+            var element = _this8.messages[i];
             axios.post(location.origin + "/api/mark-message-as-read/".concat(element.id)).then(function (res) {});
           }
 
           $('.loader').hide();
         }).then(function () {
-          _this7.scrollToBottom();
+          _this8.scrollToBottom();
         });
       }
     },
@@ -3048,17 +3253,18 @@ __webpack_require__.r(__webpack_exports__);
     clearInterval(this.messageInterval);
   },
   mounted: function mounted() {
-    var _this8 = this;
+    var _this9 = this;
 
     this.getAllUsers();
     this.getConversations();
-    this.countUnreadNotifications(); //set the interval on mount
+    this.countUnreadNotifications();
+    $('#noResults').hide(); //set the interval on mount
 
     this.messageInterval = setInterval(this.messagesReq, 20000);
     $('.alert-danger').hide();
     $('.alert-success').hide();
     axios.get(location.origin + "/api/user").then(function (res) {
-      _this8.me = res.data;
+      _this9.me = res.data;
     });
   },
   unmounted: function unmounted() {
@@ -3079,6 +3285,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3630,6 +3842,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'expenses',
   data: function data() {
@@ -3661,10 +3876,43 @@ __webpack_require__.r(__webpack_exports__);
       actions: {
         targetId: '',
         status: ''
-      }
+      },
+      searchQuery: ''
     };
   },
   methods: {
+    searchEx: function searchEx() {
+      $('.summary').hide();
+      var results = [];
+      var all = this.expenses;
+
+      if (this.searchQuery == '') {
+        this.getExp();
+        $('.summary').show();
+      }
+
+      if (all.length > 0) {
+        var allConvs = this.expenses;
+
+        for (var i = 0; i < allConvs.length; i++) {
+          var conv = allConvs[i];
+
+          if (conv.title.toUpperCase().indexOf(this.searchQuery.toUpperCase()) > -1) {
+            results.push(conv);
+          }
+        }
+      } else {
+        alert("you have no expenses");
+      }
+
+      this.searchResults = results;
+
+      if (this.searchResults.length > 0) {
+        this.expenses = results;
+      }
+
+      console.log(this.searchResults);
+    },
     getPdf: function getPdf() {
       var _this = this;
 
@@ -3718,16 +3966,11 @@ __webpack_require__.r(__webpack_exports__);
         $('.alert-danger').html('failed to create expense.Check all fields <strong>OR</strong> try again later');
       });
     },
-    deletes: function deletes() {
+    deletes: function deletes(id) {
       var _this3 = this;
 
-      // set targetId
-      var targId = $('#target').val();
-      this.actions.targetId = targId;
-      console.log(this.actions.status); //dialogue
-
       if (confirm("YOU ARE ABOUT TO DELETE AN EXPENSE!")) {
-        axios.post(location.origin + "/api/delete-expense/".concat(this.actions.targetId)).then(function () {
+        axios.post(location.origin + "/api/delete-expense/".concat(id)).then(function () {
           _this3.getExp();
         })["catch"](function (err) {
           console.log(err);
@@ -3932,6 +4175,56 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'home',
   data: function data() {
@@ -3943,7 +4236,16 @@ __webpack_require__.r(__webpack_exports__);
       unreadNotifications: [],
       topNotifications: [],
       activitiesAlmostDue: [],
-      eventsAlmostDue: []
+      eventsAlmostDue: null,
+      assignments: null,
+      requests: [],
+      location: {
+        origin: location.origin
+      },
+      quote: {
+        body: '',
+        credits: ''
+      }
     };
   },
   mounted: function mounted() {
@@ -3956,25 +4258,53 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (err) {
       console.log(err);
     });
+    this.getMyAssignments();
     this.getOrg();
     this.getNotifications();
     this.getAlmostDue();
     this.getApproachingEvents();
+    this.getQuote();
+    this.getJoinRequests();
   },
   methods: {
-    getNotifications: function getNotifications() {
+    getMyAssignments: function getMyAssignments() {
       var _this2 = this;
+
+      axios.get(location.origin + '/api/get-assignments').then(function (res) {
+        _this2.assignments = res.data;
+      });
+    },
+    getJoinRequests: function getJoinRequests() {
+      var _this3 = this;
+
+      axios.get(location.origin + '/api/get-all-join-requests').then(function (res) {
+        _this3.requests = res.data;
+      })["catch"](function (err) {
+        alert(err);
+      });
+    },
+    getQuote: function getQuote() {
+      var _this4 = this;
+
+      axios.get(location.origin + '/api/get-quote').then(function (res) {
+        var expl = res.data.split('-');
+        _this4.quote.body = expl[0];
+        _this4.quote.credits = expl[1];
+      });
+    },
+    getNotifications: function getNotifications() {
+      var _this5 = this;
 
       axios.get(location.origin + '/api/get-unread-notifications').then(function (res) {
         return res.data;
       }).then(function (data) {
-        _this2.unreadNotifications = data;
+        _this5.unreadNotifications = data;
         axios.get(location.origin + '/api/get-read-notifications').then(function (res) {
           return res.data;
         }).then(function (data) {
-          _this2.readNotifications = data;
+          _this5.readNotifications = data;
         }).then(function () {
-          _this2.combineNotification();
+          _this5.combineNotification();
         })["catch"](function (err) {
           console.log(err);
         });
@@ -3983,10 +4313,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getApproachingEvents: function getApproachingEvents() {
-      var _this3 = this;
+      var _this6 = this;
 
       axios.get(location.origin + '/api/approaching-events').then(function (res) {
-        _this3.eventsAlmostDue = res.data; // console.log(this.eventsAlmostDue)
+        _this6.eventsAlmostDue = res.data;
       });
     },
     combineNotification: function combineNotification() {
@@ -4004,8 +4334,8 @@ __webpack_require__.r(__webpack_exports__);
 
       var three = [];
 
-      if (all.length >= 3) {
-        for (var _i2 = 0; _i2 < 3; _i2++) {
+      if (all.length >= 2) {
+        for (var _i2 = 0; _i2 < 2; _i2++) {
           var _element2 = all[_i2];
           three.push(_element2);
         }
@@ -4069,6 +4399,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'members',
   data: function data() {
@@ -4084,20 +4422,22 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.createAvatar();
 
-      _this.sanitizeDate();
+      $('.loader').hide(); // this.sanitizeDate()
     })["catch"](function (err) {
       console.log(err);
     });
     this.countUnreadNotifications();
   },
   methods: {
-    sanitizeDate: function sanitizeDate() {
-      this.AllUsers.forEach(function (user) {
-        var date = user.created_at;
-        var dateArray = date.split('T');
-        user.created_at = dateArray[0];
-      });
-    },
+    // sanitizeDate: function () {
+    //     this.AllUsers.forEach(
+    //         user => {
+    //             const date = user.created_at;
+    //             const dateArray = date.split('T');
+    //             user.created_at = dateArray[0];
+    //         }
+    //     )
+    // },
     createAvatar: function createAvatar() {
       this.AllUsers.forEach(function (user) {
         var fullName = user.name;
@@ -4124,6 +4464,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _event_bus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../event-bus */ "./resources/js/event-bus.js");
 //
 //
 //
@@ -4258,6 +4599,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'navbar',
   data: function data() {
@@ -4288,6 +4653,9 @@ __webpack_require__.r(__webpack_exports__);
     setInterval(this.countUnreadTexts, 10000);
   },
   methods: {
+    openSideNav: function openSideNav() {
+      _event_bus__WEBPACK_IMPORTED_MODULE_0__.default.$emit('openSideNav');
+    },
     countUnreadTexts: function countUnreadTexts() {
       var _this2 = this;
 
@@ -4321,6 +4689,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _widgets_notification_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./widgets/notification.vue */ "./resources/js/components/widgets/notification.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4464,6 +4853,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _event_bus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../event-bus */ "./resources/js/event-bus.js");
 //
 //
 //
@@ -4604,10 +4994,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'sidebar',
   methods: {},
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    _event_bus__WEBPACK_IMPORTED_MODULE_0__.default.$on('openSideNav', function () {
+      $('.sidebar').toggleClass('sidebar-open');
+    });
+  }
 });
 
 /***/ }),
@@ -4623,6 +5029,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
 //
 //
 //
@@ -4724,6 +5131,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.user = data;
         _this.updates.name = _this.user.name;
         _this.updates.email = _this.user.email;
+        _this.updates.email_verified_at = _this.user.email_verified_at;
         $('.loader').hide();
       })["catch"](function (err) {
         console.log(err);
@@ -4732,7 +5140,8 @@ __webpack_require__.r(__webpack_exports__);
     makeChanges: function makeChanges() {
       axios.post(location.origin + '/api/update-my-details', {
         'name': this.updates.name,
-        'email': this.updates.email
+        'email': this.updates.email,
+        'email_verified_at': 'NULL'
       }).then(function (res) {
         if (res.data == false) {
           alert('could not update changes');
@@ -5113,6 +5522,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     acceptRequest: function acceptRequest(id) {
+      $(".".concat(id)).css({
+        'opacity': 0.5,
+        'pointer-events': 'none'
+      });
       axios.post(location.origin + "/api/accept-join/".concat(id)).then(function () {
         location.reload();
       })["catch"](function (err) {
@@ -5160,13 +5573,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "notification",
+  data: function data() {
+    return {
+      randomClass: Math.floor(Math.random() * 10000)
+    };
+  },
   props: {
-    message: ''
+    message: '',
+    identification: ''
   },
   methods: {
-    makeEvent: function makeEvent() {
+    makeEvent: function makeEvent(clss) {
+      $(".".concat(clss)).css('opacity', '0.4');
       this.$emit('deleteMe');
     }
   }
@@ -5651,6 +6087,8 @@ try {
  */
 
 
+window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+window.axios.defaults.withCredentials = true;
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /**
@@ -26553,7 +26991,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.flex[data-v-08945df8] {\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n.card-header h5[data-v-08945df8] {\r\n    font-size: 14px;\r\n    font-family: roboto;\r\n    font-weight: bolder;\r\n    font-smooth: inherit;\n}\n.card[data-v-08945df8],\r\n.card .card-header[data-v-08945df8] {\r\n    background: white;\n}\n.table td[data-v-08945df8] {\r\n    min-width: 150px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    max-width: 250px;\r\n    border-right: solid 1px #DEE2E6;\n}\n.table th[data-v-08945df8] {\r\n    border-right: solid 1px #DEE2E6;\n}\ntd[data-v-08945df8]::-webkit-scrollbar {\r\n    width: 3px;\n}\ntd[data-v-08945df8]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\ntd[data-v-08945df8]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.table[data-v-08945df8] {\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.activities-table[data-v-08945df8] {\r\n    background: white;\r\n    width: 100%;\r\n    min-height: 500px !important;\r\n    max-height: 500px !important;\r\n    padding: 20px;\r\n    overflow-y: scroll;\r\n    overflow-x: scroll;\n}\n.activities-table[data-v-08945df8]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.activities-table[data-v-08945df8]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.activities-table[data-v-08945df8] ::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.home[data-v-08945df8] {\r\n    background-color: transparent !important;\r\n    width: 100% !important;\n}\n.cards-row[data-v-08945df8] {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    align-items: center;\r\n    justify-content: space-between;\n}\n.cards-row-wrapper[data-v-08945df8] {\r\n    position: relative;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.card-column[data-v-08945df8] {\r\n    background-color: white;\r\n    padding-left: 15px;\r\n    padding-right: 15px;\r\n    padding-bottom: 15px;\r\n    border-radius: 10px;\r\n    height: 350px;\r\n    width: 350px;\r\n    display: flex;\r\n    flex-direction: column;\n}\n.card-column .content[data-v-08945df8]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.card-column .content[data-v-08945df8]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.card-column .content[data-v-08945df8]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.card-column .header[data-v-08945df8] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\n}\n.card-column .content[data-v-08945df8] {\r\n    flex: 1;\r\n    width: 100%;\r\n    overflow-y: scroll;\r\n    background-color: #fafafa;\n}\n.cards-loader[data-v-08945df8] {\r\n    /* background-color: #F1F5F7 !important; */\r\n    opacity: 1;\r\n    width: 100%;\r\n    -webkit-backdrop-filter: blur(10px);\r\n            backdrop-filter: blur(10px);\r\n    background: #F1F5F7 !important;\n}\n.cards-loader .lds-ellipsis[data-v-08945df8] {\r\n    opacity: 1 !important;\n}\n.add-wrapper[data-v-08945df8] {\r\n    width: 90%;\r\n    margin: auto;\r\n    position: relative;\r\n    margin-top: 10px !important;\r\n    margin-bottom: 10px !important;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n.add[data-v-08945df8] {\r\n    width: 50px;\r\n    height: 50px;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    color: white;\r\n    background-color: #2C76DC;\r\n    border-radius: 50%;\r\n    cursor: pointer;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.completion-rate .percentage[data-v-08945df8] {\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    color: rgba(128, 128, 128, 0.596);\n}\n.completion-rate[data-v-08945df8] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    width: 100%;\r\n    margin: auto;\r\n    align-items: center;\n}\n.percentage span[data-v-08945df8] {\r\n    font-size: 36px;\r\n    margin-left: 10px;\n}\n.search .form-control[data-v-08945df8] {\r\n    border-right: none;\r\n    border-radius: 37px 0px 0px 37px;\n}\n.form-control[data-v-08945df8]:focus {\r\n    box-shadow: 23px 23px 23px transparent;\n}\n.search .btn[data-v-08945df8] {\r\n    border: solid 1px rgba(141, 141, 141, 0.466);\r\n    border-left: none;\r\n    border-radius: 0px 37px 37px 0px;\n}\n.flex[data-v-08945df8] {\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n.jumbotron[data-v-08945df8] {\r\n    height: 100%;\r\n    display: flex;\r\n    align-items: center;\n}\n.card-header h5[data-v-08945df8] {\r\n    font-size: 14px;\r\n    font-family: roboto;\r\n    font-weight: bolder;\r\n    font-smooth: inherit;\n}\n.card[data-v-08945df8],\r\n.card .card-header[data-v-08945df8] {\r\n    background: white;\n}\n.modal[data-v-08945df8] {\r\n    border-radius: 0% !important;\r\n    z-index: 3000;\n}\n.avatar[data-v-08945df8] {\r\n    border-radius: 50%;\r\n    color: white;\r\n    background-color: #2C76DC;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    width: 50px;\r\n    height: 50px;\n}\n.profile-card[data-v-08945df8] {\r\n    width: 100% !important;\n}\n#select-users[data-v-08945df8] {\r\n    width: 100%;\r\n    height: 200px;\r\n    margin: auto;\r\n    position: relative;\r\n    overflow: scroll;\n}\n.empty[data-v-08945df8] {\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n#select-users[data-v-08945df8]::-webkit-scrollbar {\r\n    width: 3px;\n}\n#select-users[data-v-08945df8]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n#select-users[data-v-08945df8]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.table td[data-v-08945df8] {\r\n    min-width: 150px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    max-width: 250px;\r\n    border-right: solid 1px #DEE2E6;\n}\n.table th[data-v-08945df8] {\r\n    border-right: solid 1px #DEE2E6;\n}\ntd[data-v-08945df8]::-webkit-scrollbar {\r\n    width: 3px;\n}\ntd[data-v-08945df8]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\ntd[data-v-08945df8]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.table[data-v-08945df8] {\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.activities-table[data-v-08945df8] {\r\n    background: white;\r\n    width: 100%;\r\n    min-height: 500px !important;\r\n    max-height: 500px !important;\r\n    padding: 20px;\r\n    overflow-y: scroll;\r\n    overflow-x: scroll;\n}\n.activities-table[data-v-08945df8]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.activities-table[data-v-08945df8]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.activities-table[data-v-08945df8] ::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.home[data-v-08945df8] {\r\n    background-color: transparent !important;\r\n    width: 100% !important;\n}\n.cards-row[data-v-08945df8] {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    align-items: center;\r\n    justify-content: space-between;\n}\n.cards-row-wrapper[data-v-08945df8] {\r\n    position: relative;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.card-column[data-v-08945df8] {\r\n    background-color: white;\r\n    padding-left: 15px;\r\n    padding-right: 15px;\r\n    padding-bottom: 15px;\r\n    border-radius: 10px;\r\n    height: 350px;\r\n    width: 350px;\r\n    display: flex;\r\n    flex-direction: column;\n}\n@media (max-width:800px) {\n.card-column[data-v-08945df8] {\r\n        margin: auto;\n}\n.sm-none[data-v-08945df8] {\r\n        display: none;\n}\n}\n.card-column .content[data-v-08945df8]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.card-column .content[data-v-08945df8]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.card-column .content[data-v-08945df8]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.card-column .header[data-v-08945df8] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\n}\n.pending .header[data-v-08945df8] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    width: 70%;\r\n    margin: auto;\n}\n.card-column .content[data-v-08945df8] {\r\n    flex: 1;\r\n    width: 100%;\r\n    overflow-y: scroll;\r\n    background-color: #fafafa;\n}\n.cards-loader[data-v-08945df8] {\r\n    /* background-color: #F1F5F7 !important; */\r\n    opacity: 1;\r\n    width: 100%;\r\n    -webkit-backdrop-filter: blur(10px);\r\n            backdrop-filter: blur(10px);\r\n    background: #F1F5F7 !important;\n}\n.cards-loader .lds-ellipsis[data-v-08945df8] {\r\n    opacity: 1 !important;\n}\n.add-wrapper[data-v-08945df8] {\r\n    width: 90%;\r\n    margin: auto;\r\n    position: relative;\r\n    margin-top: 10px !important;\r\n    margin-bottom: 10px !important;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n.pending[data-v-08945df8] {\r\n    width: 100%;\r\n    background-color: white;\r\n    height: 350px;\n}\n.pending .content[data-v-08945df8] {\r\n    flex: 1;\r\n    width: 100%;\r\n    overflow-y: scroll;\r\n    background-color: #fafafa;\n}\n.pending .content[data-v-08945df8]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.pending .content[data-v-08945df8]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.pending .content[data-v-08945df8]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.add[data-v-08945df8] {\r\n    width: 50px;\r\n    height: 50px;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    color: white;\r\n    background-color: #2C76DC;\r\n    border-radius: 50%;\r\n    cursor: pointer;\n}\n@media (max-width:500px) {\n.home[data-v-08945df8] {\r\n        width: 100%;\r\n        padding: 0% !important;\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26601,7 +27039,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.window {\r\n    flex-grow: 1;\r\n    display: flex;\r\n    max-width: 83%;\r\n    max-height: 90vh;\n}\n@media (max-width:1000px) {\n.home {\r\n        width: 100% !important;\r\n        flex: 1 !important;\n}\n.window {\r\n        max-width: 93% !important;\n}\n}\n.loader {\r\n    width: 100%;\r\n    height: 100%;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    background-color: white;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 2;\n}\n.loader-wrapper {\r\n    position: relative;\r\n    width: 90%;\r\n    background-color: white;\r\n    margin: auto;\r\n    height: 100%;\r\n    min-height: 80vh;\r\n    overflow: hidden;\r\n    display: flex;\r\n    flex-direction: column;\n}\n.home {\r\n    position: relative;\r\n    background-color: white;\r\n    margin: auto;\r\n    height: 100%;\r\n    width: 90% !important;\r\n    min-height: 80vh;\r\n    overflow-y: scroll;\r\n    display: flex;\r\n    flex-direction: column;\n}\n.home::-webkit-scrollbar {\r\n    width: 3px;\n}\n.home::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.home::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\r\n\r\n/* loader */\n.lds-ellipsis {\r\n    display: inline-block;\r\n    position: relative;\r\n    width: 80px;\r\n    height: 80px;\n}\n.lds-ellipsis div {\r\n    position: absolute;\r\n    top: 33px;\r\n    width: 13px;\r\n    height: 13px;\r\n    border-radius: 50%;\r\n    background: #2C76DC;\r\n    -webkit-animation-timing-function: cubic-bezier(0, 1, 1, 0);\r\n            animation-timing-function: cubic-bezier(0, 1, 1, 0);\n}\n.lds-ellipsis div:nth-child(1) {\r\n    left: 8px;\r\n    -webkit-animation: lds-ellipsis1 0.6s infinite;\r\n            animation: lds-ellipsis1 0.6s infinite;\n}\n.lds-ellipsis div:nth-child(2) {\r\n    left: 8px;\r\n    -webkit-animation: lds-ellipsis2 0.6s infinite;\r\n            animation: lds-ellipsis2 0.6s infinite;\n}\n.lds-ellipsis div:nth-child(3) {\r\n    left: 32px;\r\n    -webkit-animation: lds-ellipsis2 0.6s infinite;\r\n            animation: lds-ellipsis2 0.6s infinite;\n}\n.lds-ellipsis div:nth-child(4) {\r\n    left: 56px;\r\n    -webkit-animation: lds-ellipsis3 0.6s infinite;\r\n            animation: lds-ellipsis3 0.6s infinite;\n}\n@-webkit-keyframes lds-ellipsis1 {\n0% {\r\n        transform: scale(0);\n}\n100% {\r\n        transform: scale(1);\n}\n}\n@keyframes lds-ellipsis1 {\n0% {\r\n        transform: scale(0);\n}\n100% {\r\n        transform: scale(1);\n}\n}\n@-webkit-keyframes lds-ellipsis3 {\n0% {\r\n        transform: scale(1);\n}\n100% {\r\n        transform: scale(0);\n}\n}\n@keyframes lds-ellipsis3 {\n0% {\r\n        transform: scale(1);\n}\n100% {\r\n        transform: scale(0);\n}\n}\n@-webkit-keyframes lds-ellipsis2 {\n0% {\r\n        transform: translate(0, 0);\n}\n100% {\r\n        transform: translate(24px, 0);\n}\n}\n@keyframes lds-ellipsis2 {\n0% {\r\n        transform: translate(0, 0);\n}\n100% {\r\n        transform: translate(24px, 0);\n}\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.window {\r\n    flex-grow: 1;\r\n    display: flex;\r\n    max-width: 83%;\r\n    max-height: 90vh;\n}\n@media (max-width:1000px) {\n.home {\r\n        width: 100%;\r\n        flex: 1;\n}\n.window {\r\n        max-width: 93%;\n}\n}\n@media (max-width:500px) {\n.window {\r\n        max-width: 100% !important;\n}\n}\n.loader {\r\n    width: 100%;\r\n    height: 100%;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    background-color: white;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 2;\n}\n.loader-wrapper {\r\n    position: relative;\r\n    width: 90%;\r\n    background-color: white;\r\n    margin: auto;\r\n    height: 100%;\r\n    min-height: 80vh;\r\n    overflow: hidden;\r\n    display: flex;\r\n    flex-direction: column;\n}\n.home {\r\n    position: relative;\r\n    background-color: white;\r\n    margin: auto;\r\n    height: 100%;\r\n    width: 90% !important;\r\n    min-height: 80vh;\r\n    overflow-y: scroll;\r\n    display: flex;\r\n    flex-direction: column;\n}\n.home::-webkit-scrollbar {\r\n    width: 3px;\n}\n.home::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.home::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\r\n\r\n/* loader */\n.lds-ellipsis {\r\n    display: inline-block;\r\n    position: relative;\r\n    width: 80px;\r\n    height: 80px;\n}\n.lds-ellipsis div {\r\n    position: absolute;\r\n    top: 33px;\r\n    width: 13px;\r\n    height: 13px;\r\n    border-radius: 50%;\r\n    background: #2C76DC;\r\n    -webkit-animation-timing-function: cubic-bezier(0, 1, 1, 0);\r\n            animation-timing-function: cubic-bezier(0, 1, 1, 0);\n}\n.lds-ellipsis div:nth-child(1) {\r\n    left: 8px;\r\n    -webkit-animation: lds-ellipsis1 0.6s infinite;\r\n            animation: lds-ellipsis1 0.6s infinite;\n}\n.lds-ellipsis div:nth-child(2) {\r\n    left: 8px;\r\n    -webkit-animation: lds-ellipsis2 0.6s infinite;\r\n            animation: lds-ellipsis2 0.6s infinite;\n}\n.lds-ellipsis div:nth-child(3) {\r\n    left: 32px;\r\n    -webkit-animation: lds-ellipsis2 0.6s infinite;\r\n            animation: lds-ellipsis2 0.6s infinite;\n}\n.lds-ellipsis div:nth-child(4) {\r\n    left: 56px;\r\n    -webkit-animation: lds-ellipsis3 0.6s infinite;\r\n            animation: lds-ellipsis3 0.6s infinite;\n}\n@-webkit-keyframes lds-ellipsis1 {\n0% {\r\n        transform: scale(0);\n}\n100% {\r\n        transform: scale(1);\n}\n}\n@keyframes lds-ellipsis1 {\n0% {\r\n        transform: scale(0);\n}\n100% {\r\n        transform: scale(1);\n}\n}\n@-webkit-keyframes lds-ellipsis3 {\n0% {\r\n        transform: scale(1);\n}\n100% {\r\n        transform: scale(0);\n}\n}\n@keyframes lds-ellipsis3 {\n0% {\r\n        transform: scale(1);\n}\n100% {\r\n        transform: scale(0);\n}\n}\n@-webkit-keyframes lds-ellipsis2 {\n0% {\r\n        transform: translate(0, 0);\n}\n100% {\r\n        transform: translate(24px, 0);\n}\n}\n@keyframes lds-ellipsis2 {\n0% {\r\n        transform: translate(0, 0);\n}\n100% {\r\n        transform: translate(24px, 0);\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26625,7 +27063,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.expenses[data-v-6f28c3e0] {\r\n    width: 100%;\r\n    background-color: white;\r\n    margin: auto;\n}\n.flex[data-v-6f28c3e0] {\r\n    width: 100%;\r\n    margin: auto;\r\n    justify-content: space-between;\n}\n.home[data-v-6f28c3e0] {\r\n    width: 98% !important;\r\n    background-color: transparent !important;\r\n    display: block !important;\n}\n.chart-card[data-v-6f28c3e0] {\r\n    margin: 5px;\r\n    background-color: white;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    padding: 30px;\n}\n.loader[data-v-6f28c3e0] {\r\n    background-color: #F1F5F7;\n}\n@media (max-width:1200px) {\n.flex[data-v-6f28c3e0] {\r\n        flex-wrap: wrap;\n}\n}\n.big[data-v-6f28c3e0] {\r\n    flex: 1;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.expenses[data-v-6f28c3e0] {\r\n    width: 100%;\r\n    background-color: white;\r\n    margin: auto;\n}\n.flex[data-v-6f28c3e0] {\r\n    width: 100%;\r\n    margin: auto;\r\n    justify-content: space-between;\n}\n.home[data-v-6f28c3e0] {\r\n    width: 98% !important;\r\n    background-color: transparent !important;\r\n    display: block !important;\n}\n@media (max-width:500px){\n.home[data-v-6f28c3e0]{\r\n        width: 100%;\n}\n}\n.chart-card[data-v-6f28c3e0] {\r\n    margin: 5px;\r\n    background-color: white;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    padding: 30px;\n}\n.loader[data-v-6f28c3e0] {\r\n    background-color: #F1F5F7;\n}\n@media (max-width:1200px) {\n.flex[data-v-6f28c3e0] {\r\n        flex-wrap: wrap;\n}\n}\n.big[data-v-6f28c3e0] {\r\n    flex: 1;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26649,7 +27087,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.home[data-v-86fea940] {\r\n    width: 100% !important;\r\n    background-color: transparent;\r\n    flex-direction: row !important;\r\n    justify-content: space-between;\n}\n.conversations[data-v-86fea940] {\r\n    height: 100%;\r\n    width: 300px;\r\n    background-color: white;\r\n    overflow-y: scroll;\n}\n.conversations[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.conversations[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.conversations[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.flex[data-v-86fea940] {\r\n    width: 100%;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n.search .form-control[data-v-86fea940] {\r\n    border-right: none;\r\n    border-radius: 37px 0px 0px 37px;\n}\n.form-control[data-v-86fea940]:focus {\r\n    box-shadow: 23px 23px 23px white;\n}\n.search .btn[data-v-86fea940] {\r\n    border: solid 1px rgba(141, 141, 141, 0.466);\r\n    border-left: none;\r\n    border-radius: 0px 37px 37px 0px;\n}\n.tab-content[data-v-86fea940] {\r\n    height: 100%;\n}\n.tab-pane[data-v-86fea940] {\r\n    width: 90%;\r\n    margin: auto;\r\n    height: 100%;\n}\n.profile-card[data-v-86fea940] {\r\n    width: 100% !important;\r\n    margin: auto;\r\n    cursor: pointer;\r\n    display: flex;\r\n    justify-content: space-between;\n}\n.profile-card[data-v-86fea940]:hover {\r\n    background-color: #efefef;\n}\n.profile-card .a-wrapper[data-v-86fea940] {\r\n    display: flex;\r\n    align-items: center;\n}\n.a-wrapper .avatar[data-v-86fea940] {\r\n    width: 50px;\r\n    height: 50px;\n}\n.avatar[data-v-86fea940] {\r\n    border-radius: 50%;\r\n    color: white;\r\n    background-color: #2C76DC;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\n}\n.d-wrapper[data-v-86fea940] {\r\n    height: -webkit-fit-content !important;\r\n    height: -moz-fit-content !important;\r\n    height: fit-content !important;\n}\n.badge-primary[data-v-86fea940] {\r\n    border-radius: 50%;\n}\n.conversations .header[data-v-86fea940] {\r\n    padding: 20px;\r\n    background-color: white;\n}\n.inbox[data-v-86fea940] {\r\n    position: relative;\r\n    flex: 1;\r\n    overflow-y: scroll;\n}\n.inbox[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.inbox[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.inbox[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.inbox-header[data-v-86fea940] {\r\n    background-color: white;\r\n    display: flex;\r\n    width: 100%;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    z-index: 0 !important;\n}\n.inbox-header .avatar[data-v-86fea940] {\r\n    width: 50px;\r\n    height: 50px;\r\n    margin: auto;\n}\n.inbox-header .username[data-v-86fea940] {\r\n    font-size: 15px;\n}\n.inbox-header i[data-v-86fea940] {\r\n    font-size: 20px;\r\n    cursor: pointer;\n}\n.inbox-header .profile-details[data-v-86fea940] {\r\n    display: block;\r\n    align-items: center;\r\n    text-align: center;\n}\n.inbox-footer[data-v-86fea940] {\r\n    position: absolute;\r\n    background-color: white;\r\n    width: 100%;\r\n    bottom: 0;\n}\n.inbox-footer .form-control[data-v-86fea940] {\r\n    border-radius: 37px;\r\n    width: 100%;\r\n\r\n    background-color: #F0F2F5;\n}\n.modal-body[data-v-86fea940] {\r\n    min-height: 600px;\n}\n.modal-body .container-fluid[data-v-86fea940] {\r\n    height: 80%;\n}\n.modal-body .container-fluid .container[data-v-86fea940] {\r\n    height: 100%;\n}\n.footer-form[data-v-86fea940] {\r\n    width: 70%;\n}\n.inbox-content[data-v-86fea940] {\r\n    height: 70%;\r\n    overflow-y: scroll;\n}\n.profiles-wrapper[data-v-86fea940] {\r\n    height: 100%;\r\n    overflow: scroll;\n}\n.inbox-content[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.inbox-content[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.inbox-content[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.profiles-wrapper[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.profiles-wrapper[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.profiles-wrapper[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.message-to[data-v-86fea940] {\r\n    background-color: indigo;\r\n    color: white;\r\n    border-radius: 20px 20px 0px 20px;\r\n    padding: 10px 10px 5px 10px;\r\n    width: 300px;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.message-from[data-v-86fea940] {\r\n    background-color: white;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    color: indigo;\r\n    border-radius: 0px 20px 20px 20px;\r\n    padding: 10px 10px 5px 10px;\r\n    width: 300px;\n}\n.message-from-wrapper[data-v-86fea940] {\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: flex-start;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    padding-top: 20px;\r\n    position: relative;\n}\n.message-to-wrapper[data-v-86fea940] {\r\n    width: 100%;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    display: flex;\r\n    justify-content: flex-end;\n}\n.inbox-content .message-to .date[data-v-86fea940] {\r\n    float: right;\r\n    opacity: 0.7;\n}\n.inbox-content .message-to .seen[data-v-86fea940] {\r\n    float: left;\r\n    opacity: 0.7;\n}\n.inbox-content .message-from .date[data-v-86fea940] {\r\n    float: left;\r\n    opacity: 0.7;\n}\n.inbox-content .message-from .seen[data-v-86fea940] {\r\n    float: right;\r\n    opacity: 0.7;\n}\n.conversations-modal[data-v-86fea940] {\r\n    height: 100% !important;\r\n    overflow-y: scroll;\n}\n.conversations-modal[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.conversations-modal[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.conversations-modal[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.inbox-footer img[data-v-86fea940] {\r\n    cursor: pointer;\n}\n.picker[data-v-86fea940] {\r\n    z-index: 10;\r\n    margin-left: -30%;\n}\n.inbox-jumbo[data-v-86fea940] {\r\n    width: 100% !important;\n}\n.open[data-v-86fea940] {\r\n    background-color: #efefef;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.home[data-v-86fea940] {\r\n    width: 100% !important;\r\n    background-color: transparent;\r\n    flex-direction: row !important;\r\n    justify-content: space-between;\n}\n.conversations[data-v-86fea940] {\r\n    height: 100%;\r\n    width: 300px;\r\n    background-color: white;\r\n    overflow-y: scroll;\n}\n.conversations[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.conversations[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.conversations[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.flex[data-v-86fea940] {\r\n    width: 100%;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n.search .form-control[data-v-86fea940] {\r\n    border-right: none;\r\n    border-radius: 37px 0px 0px 37px;\n}\n.form-control[data-v-86fea940]:focus {\r\n    box-shadow: 23px 23px 23px white;\n}\n.search .btn[data-v-86fea940] {\r\n    border: solid 1px rgba(141, 141, 141, 0.466);\r\n    border-left: none;\r\n    border-radius: 0px 37px 37px 0px;\n}\n.tab-content[data-v-86fea940] {\r\n    height: 100%;\n}\n.tab-pane[data-v-86fea940] {\r\n    width: 90%;\r\n    margin: auto;\r\n    height: 100%;\n}\n.profile-card[data-v-86fea940] {\r\n    width: 100% !important;\r\n    margin: auto;\r\n    cursor: pointer;\r\n    display: flex;\r\n    justify-content: space-between;\n}\n.profile-card[data-v-86fea940]:hover {\r\n    background-color: #efefef;\n}\n.profile-card .a-wrapper[data-v-86fea940] {\r\n    display: flex;\r\n    align-items: center;\n}\n.a-wrapper .avatar[data-v-86fea940] {\r\n    width: 50px;\r\n    height: 50px;\n}\n.avatar[data-v-86fea940] {\r\n    border-radius: 50%;\r\n    color: white;\r\n    background-color: #2C76DC;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\n}\n.d-wrapper[data-v-86fea940] {\r\n    height: -webkit-fit-content !important;\r\n    height: -moz-fit-content !important;\r\n    height: fit-content !important;\n}\n.badge-primary[data-v-86fea940] {\r\n    border-radius: 50%;\n}\n.conversations .header[data-v-86fea940] {\r\n    padding: 20px;\r\n    background-color: white;\n}\n.inbox[data-v-86fea940] {\r\n    position: relative;\r\n    flex: 1;\r\n    overflow-y: scroll;\n}\n.inbox[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.inbox[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.inbox[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.inbox-header[data-v-86fea940] {\r\n    background-color: white;\r\n    display: flex;\r\n    width: 100%;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    z-index: 0 !important;\n}\n.inbox-header .avatar[data-v-86fea940] {\r\n    width: 50px;\r\n    height: 50px;\r\n    margin: auto;\n}\n.inbox-header .username[data-v-86fea940] {\r\n    font-size: 15px;\n}\n.inbox-header i[data-v-86fea940] {\r\n    font-size: 20px;\r\n    cursor: pointer;\n}\n.inbox-header .profile-details[data-v-86fea940] {\r\n    display: block;\r\n    align-items: center;\r\n    text-align: center;\n}\n.inbox-footer[data-v-86fea940] {\r\n    position: absolute;\r\n    background-color: white;\r\n    width: 100%;\r\n    bottom: 0;\n}\n.inbox-footer .form-control[data-v-86fea940] {\r\n    border-radius: 37px;\r\n    width: 100%;\r\n\r\n    background-color: #F0F2F5;\n}\n.modal[data-v-86fea940]{\r\n    z-index: 3000;\n}\n.modal-body[data-v-86fea940] {\r\n    min-height: 600px;\n}\n.modal-body .container-fluid[data-v-86fea940] {\r\n    height: 80%;\n}\n.modal-body .container-fluid .container[data-v-86fea940] {\r\n    height: 100%;\n}\n.footer-form[data-v-86fea940] {\r\n    width: 70%;\n}\n.inbox-content[data-v-86fea940] {\r\n    height: 70%;\r\n    overflow-y: scroll;\n}\n.profiles-wrapper[data-v-86fea940] {\r\n    height: 100%;\r\n    overflow: scroll;\n}\n.inbox-content[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.inbox-content[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.inbox-content[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.profiles-wrapper[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.profiles-wrapper[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.profiles-wrapper[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.message-to[data-v-86fea940] {\r\n    background-color: indigo;\r\n    color: white;\r\n    border-radius: 20px 20px 0px 20px;\r\n    padding: 10px 10px 5px 10px;\r\n    width: 300px;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.message-from[data-v-86fea940] {\r\n    background-color: white;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    color: indigo;\r\n    border-radius: 0px 20px 20px 20px;\r\n    padding: 10px 10px 5px 10px;\r\n    width: 300px;\n}\n.message-from-wrapper[data-v-86fea940] {\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: flex-start;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    padding-top: 20px;\r\n    position: relative;\n}\n.message-to-wrapper[data-v-86fea940] {\r\n    width: 100%;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    display: flex;\r\n    justify-content: flex-end;\n}\n.inbox-content .message-to .date[data-v-86fea940] {\r\n    float: right;\r\n    opacity: 0.7;\n}\n.inbox-content .message-to .seen[data-v-86fea940] {\r\n    float: left;\r\n    opacity: 0.7;\n}\n.inbox-content .message-from .date[data-v-86fea940] {\r\n    float: left;\r\n    opacity: 0.7;\n}\n.inbox-content .message-from .seen[data-v-86fea940] {\r\n    float: right;\r\n    opacity: 0.7;\n}\n.conversations-modal[data-v-86fea940] {\r\n    height: 100% !important;\r\n    overflow-y: scroll;\n}\n.conversations-modal[data-v-86fea940]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.conversations-modal[data-v-86fea940]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.conversations-modal[data-v-86fea940]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.inbox-footer img[data-v-86fea940] {\r\n    cursor: pointer;\n}\n.picker[data-v-86fea940] {\r\n    z-index: 10;\r\n    margin-left: -30%;\n}\n.inbox-jumbo[data-v-86fea940] {\r\n    width: 100% !important;\n}\n.open[data-v-86fea940] {\r\n    background-color: #efefef;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26673,7 +27111,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.home[data-v-010d55b0] {\r\n    width: 98% !important;\r\n    background-color: transparent !important;\n}\n.download-card[data-v-010d55b0] {\r\n    background-color: white;\r\n    width: 350px;\r\n    height: 360px;\r\n    border-radius: 15px;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\n}\n.download-card .header[data-v-010d55b0] {\r\n    display: flex;\r\n    padding: 10px;\r\n    align-items: center;\r\n    width: 100%;\r\n    justify-content: space-between;\n}\n.header .title[data-v-010d55b0] {\r\n    font-weight: bold;\r\n    font-family: poppins;\n}\n.download-card .body[data-v-010d55b0] {\r\n    min-height: 70%;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\n}\n.pdf-icon[data-v-010d55b0] {\r\n    width: 130px;\n}\n.footer[data-v-010d55b0] {\r\n    flex: 1;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\r\n    width: 90%;\r\n    margin: auto;\n}\n.footer div[data-v-010d55b0] {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    color: #696767;\n}\n.loader[data-v-010d55b0] {\r\n    background-color: #F1F5F7;\n}\n.flex[data-v-010d55b0]{\r\n    flex-wrap: wrap;\r\n    width:100%;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.home[data-v-010d55b0] {\r\n    width: 98% !important;\r\n    min-height: 100% !important;\r\n    background-color: transparent !important;\n}\n.download-card[data-v-010d55b0] {\r\n    background-color: white;\r\n    width: 350px;\r\n    height: 360px;\r\n    border-radius: 15px;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-between;\n}\n.download-card .header[data-v-010d55b0] {\r\n    display: flex;\r\n    padding: 10px;\r\n    align-items: center;\r\n    width: 100%;\r\n    justify-content: space-between;\n}\n.header .title[data-v-010d55b0] {\r\n    font-weight: bold;\r\n    font-family: poppins;\n}\n.download-card .body[data-v-010d55b0] {\r\n    min-height: 70%;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\n}\n.pdf-icon[data-v-010d55b0] {\r\n    width: 130px;\n}\n.footer[data-v-010d55b0] {\r\n    flex: 1;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\r\n    width: 90%;\r\n    margin: auto;\n}\n.footer div[data-v-010d55b0] {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    color: #696767;\n}\n.loader[data-v-010d55b0] {\r\n    background-color: #F1F5F7;\n}\n.flex[data-v-010d55b0]{\r\n    flex-wrap: wrap;\r\n    width:100%;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26697,7 +27135,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.home[data-v-3f657ea4] {\r\n    background-color: transparent !important;\r\n    width: 100% !important;\r\n    position: relative;\n}\n.add-wrapper[data-v-3f657ea4] {\r\n    width: 90%;\r\n    margin: auto;\r\n    position: relative;\r\n    margin-top: 10px !important;\r\n    margin-bottom: 10px !important;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n.add[data-v-3f657ea4] {\r\n    width: 50px;\r\n    height: 50px;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    color: white;\r\n    background-color: #2C76DC;\r\n    border-radius: 50%;\r\n    cursor: pointer;\n}\n.event-cards[data-v-3f657ea4] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    width: 100%;\r\n    flex-wrap: wrap;\r\n    position: relative;\n}\n.event-card[data-v-3f657ea4] {\r\n    width: 350px;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    background-color: white;\r\n    border-radius: 0px 15px 15px 15px;\n}\n.loader[data-v-3f657ea4] {\r\n    background-color: #F1F5F7 !important;\r\n    z-index: 3;\n}\n.event-card .actions[data-v-3f657ea4] {\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: center;\n}\n.event-header[data-v-3f657ea4] {\r\n    padding: 20px;\n}\n.event-title[data-v-3f657ea4] {\r\n    font-weight: bold;\r\n    font-family: poppins;\r\n    width: 70%;\r\n    overflow: hidden;\n}\n.event-date[data-v-3f657ea4] {\r\n    font-family: roboto;\r\n    opacity: 0.6;\n}\n.event-card .content[data-v-3f657ea4] {\r\n    background-color: #fafafa;\r\n    padding: 20px;\r\n    text-align: left;\r\n    font-family: roboto;\r\n    height: 300px;\n}\n.content .footer[data-v-3f657ea4] {\r\n    opacity: 0.6;\n}\n.footer b[data-v-3f657ea4] {\r\n    color: grey;\n}\n.flex[data-v-3f657ea4] {\r\n    width: 100%;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.home[data-v-3f657ea4] {\r\n    background-color: transparent !important;\r\n    width: 100% !important;\r\n    position: relative;\n}\n.add-wrapper[data-v-3f657ea4] {\r\n    width: 90%;\r\n    margin: auto;\r\n    position: relative;\r\n    margin-top: 10px !important;\r\n    margin-bottom: 10px !important;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n.add[data-v-3f657ea4] {\r\n    width: 50px;\r\n    height: 50px;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    color: white;\r\n    background-color: #2C76DC;\r\n    border-radius: 50%;\r\n    cursor: pointer;\n}\n.event-cards[data-v-3f657ea4] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    width: 100%;\r\n    flex-wrap: wrap;\r\n    position: relative;\n}\n.event-card[data-v-3f657ea4] {\r\n    width: 350px;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    background-color: white;\r\n    border-radius: 0px 15px 15px 15px;\n}\n.loader[data-v-3f657ea4] {\r\n    background-color: #F1F5F7 !important;\r\n    z-index: 3;\n}\n.event-card .actions[data-v-3f657ea4] {\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: center;\n}\n.event-header[data-v-3f657ea4] {\r\n    padding: 20px;\n}\n.event-title[data-v-3f657ea4] {\r\n    font-weight: bold;\r\n    font-family: poppins;\r\n    width: 70%;\r\n    overflow: hidden;\n}\n.event-date[data-v-3f657ea4] {\r\n    font-family: roboto;\r\n    opacity: 0.6;\n}\n.event-card .content[data-v-3f657ea4] {\r\n    background-color: #fafafa;\r\n    padding: 20px;\r\n    text-align: left;\r\n    font-family: roboto;\r\n    height: 300px;\n}\n.content .footer[data-v-3f657ea4] {\r\n    opacity: 0.6;\n}\n.footer b[data-v-3f657ea4] {\r\n    color: grey;\n}\n.flex[data-v-3f657ea4] {\r\n    width: 100%;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n.vfc-content .vfc-content[data-v-3f657ea4]{\r\n    z-index: 0 !important;\r\n    position: relative !important;\n}\n.modal[data-v-3f657ea4] {\r\n    border-radius: 0% !important;\r\n    z-index: 3000;\n}\n.vfc-day[data-v-3f657ea4]{\r\nfont-family: sans-serif !important;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26721,7 +27159,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.home[data-v-5cd2fee6] {\r\n    width: 95% !important;\n}\n.total .number[data-v-5cd2fee6] {\r\n    font-weight: bold;\r\n    font-family: 'poppins', sans-serif;\r\n    position: absolute;\r\n    right: 20px;\n}\n.total .contributors[data-v-5cd2fee6] {\r\n    font-weight: bold;\r\n    font-family: 'poppins', sans-serif;\r\n    position: absolute;\r\n    left: 20px;\n}\n.table-wrap[data-v-5cd2fee6] {\r\n    width: 100%;\r\n    min-height: 630px;\r\n    margin: auto;\r\n    position: relative;\r\n    overflow: scroll !important;\r\n    border-bottom: solid 1px #DEE2E6;\r\n    background-color: white;\r\n    padding-bottom: 30px;\n}\n.table-wrap[data-v-5cd2fee6]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.table-wrap[data-v-5cd2fee6]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.table-wrap[data-v-5cd2fee6]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.modal[data-v-5cd2fee6] {\r\n    border-radius: 0% !important;\n}\n.header[data-v-5cd2fee6] {\r\n    margin-top: 20px !important;\r\n    margin-bottom: 20px !important;\r\n    width: 90%;\r\n    margin: auto;\r\n    font-size: 18px;\r\n    font-family: roboto;\r\n    text-transform: uppercase;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    padding: 10px;\n}\n.header .add[data-v-5cd2fee6] {\r\n    font-weight: lighter;\r\n    color: white;\r\n    background-color: #2C76DC;\r\n    height: 40px;\r\n    width: 40px;\r\n    border-radius: 50%;\r\n    position: relative;\r\n    cursor: pointer;\n}\n.add i[data-v-5cd2fee6] {\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\n}\n.table td[data-v-5cd2fee6] {\r\n    min-width: 150px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    max-width: 250px;\r\n    border-right: solid 1px #DEE2E6;\n}\n.table th[data-v-5cd2fee6] {\r\n    border-right: solid 1px #DEE2E6;\n}\n.table tr[data-v-5cd2fee6] {\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.table[data-v-5cd2fee6] {\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.btn[data-v-5cd2fee6]:focus {\r\n    border: none !important;\r\n    outline: none !important;\n}\n.form-control[data-v-5cd2fee6] {\r\n    width: 90%;\n}\n.form-control[data-v-5cd2fee6]:focus {\r\n    border: none !important;\r\n    outline: none !important;\n}\n.block div[data-v-5cd2fee6] {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: flex-start;\n}\n.block[data-v-5cd2fee6] {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: flex-start;\r\n    width: 100%;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\nform .catSug[data-v-5cd2fee6] {\r\n    display: flex;\r\n    flex-direction: row !important;\r\n    width: 90%;\r\n    margin: auto;\r\n    flex-wrap: wrap;\n}\n.catSug div[data-v-5cd2fee6] {\r\n    margin: 10px;\n}\n.form-submit[data-v-5cd2fee6] {\r\n    width: 90%;\r\n    margin: auto;\r\n    display: flex;\r\n    justify-content: space-between;\n}\n.wait[data-v-5cd2fee6] {\r\n    width: 70%;\r\n    margin: auto;\r\n    border-radius: 0%;\r\n    border-bottom: 2px solid #2C76DC !important;\r\n    border: none;\n}\n@media (max-width:1000px) {\n.home[data-v-5cd2fee6] {\r\n        width: 100% !important;\r\n        flex: 1 !important;\n}\n}\n.stop-wait[data-v-5cd2fee6] {\r\n    width: 70%;\r\n    margin: auto;\r\n    border-radius: 0%;\r\n    border-bottom: 2px solid rgb(133, 0, 0) !important;\r\n    border: none;\n}\n@media (max-width:1000px) {\n.sm-none[data-v-5cd2fee6] {\r\n        display: none !important;\n}\n}\n@media (min-width:1000px) {\n.lg-none[data-v-5cd2fee6] {\r\n        display: none !important;\n}\n}\r\n\r\n/* loader */\r\n/* */\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.home[data-v-5cd2fee6] {\r\n    width: 95%;\n}\n.total[data-v-5cd2fee6]{\r\n    width: 80%;\r\n    margin:auto;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\n@media (max-width:900px){\n.home[data-v-5cd2fee6]{\r\n        width:100%;\n}\n.total[data-v-5cd2fee6]{\r\n        width:100%;\n}\n.total .number[data-v-5cd2fee6]{\r\n        font-size: 12px !important;\n}\n.total .contributors[data-v-5cd2fee6]{\r\n        font-size: 12px !important;\r\n        text-align: center;\n}\n.search .form-control[data-v-5cd2fee6]{\r\n        height:35px;\n}\n.search .btn[data-v-5cd2fee6]{\r\n        height:35px;\n}\n}\n.search .form-control[data-v-5cd2fee6] {\r\n    border-right: none;\r\n    border-radius: 37px 0px 0px 37px;\n}\n.form-control[data-v-5cd2fee6]:focus {\r\n    box-shadow: 23px 23px 23px transparent;\n}\n.search .btn[data-v-5cd2fee6] {\r\n    border: solid 1px rgba(141, 141, 141, 0.466);\r\n    border-left: none;\r\n    border-radius: 0px 37px 37px 0px;\n}\n.total .number[data-v-5cd2fee6] {\r\n    font-weight: bold;\r\n    font-family: 'poppins', sans-serif;\n}\n.total .contributors[data-v-5cd2fee6] {\r\n    font-weight: bold;\r\n    font-family: 'poppins', sans-serif;\n}\n.table-wrap[data-v-5cd2fee6] {\r\n    width: 100%;\r\n    min-height: 630px;\r\n    margin: auto;\r\n    position: relative;\r\n    overflow: scroll !important;\r\n    border-bottom: solid 1px #DEE2E6;\r\n    background-color: white;\r\n    padding-bottom: 30px;\n}\n.table-wrap[data-v-5cd2fee6]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.table-wrap[data-v-5cd2fee6]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.table-wrap[data-v-5cd2fee6]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.modal-dialog[data-v-5cd2fee6] {\r\n    border-radius: 0% !important;\r\n    z-index: 3000;\n}\n.header[data-v-5cd2fee6] {\r\n    margin-top: 20px !important;\r\n    margin-bottom: 20px !important;\r\n    width: 90%;\r\n    margin: auto;\r\n    font-size: 18px;\r\n    font-family: roboto;\r\n    text-transform: uppercase;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    padding: 10px;\n}\n.header .add[data-v-5cd2fee6] {\r\n    font-weight: lighter;\r\n    color: white;\r\n    background-color: #2C76DC;\r\n    height: 40px;\r\n    width: 40px;\r\n    border-radius: 50%;\r\n    position: relative;\r\n    cursor: pointer;\n}\n.add i[data-v-5cd2fee6] {\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\n}\n.table td[data-v-5cd2fee6] {\r\n    min-width: 150px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    max-width: 250px;\r\n    border-right: solid 1px #DEE2E6;\n}\n.table th[data-v-5cd2fee6] {\r\n    border-right: solid 1px #DEE2E6;\n}\n.table tr[data-v-5cd2fee6] {\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.table[data-v-5cd2fee6] {\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.btn[data-v-5cd2fee6]:focus {\r\n    border: none !important;\r\n    outline: none !important;\n}\n.form-control[data-v-5cd2fee6] {\r\n    width: 90%;\n}\n.form-control[data-v-5cd2fee6]:focus {\r\n    outline: none !important;\n}\n.block div[data-v-5cd2fee6] {\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: flex-start;\n}\n.block[data-v-5cd2fee6] {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: flex-start;\r\n    width: 100%;\r\n    justify-content: space-between;\r\n    align-items: center;\n}\nform .catSug[data-v-5cd2fee6] {\r\n    display: flex;\r\n    flex-direction: row !important;\r\n    width: 90%;\r\n    margin: auto;\r\n    flex-wrap: wrap;\n}\n.catSug div[data-v-5cd2fee6] {\r\n    margin: 10px;\n}\n.form-submit[data-v-5cd2fee6] {\r\n    width: 90%;\r\n    margin: auto;\r\n    display: flex;\r\n    justify-content: space-between;\n}\n.wait[data-v-5cd2fee6] {\r\n    width: 70%;\r\n    margin: auto;\r\n    border-radius: 0%;\r\n    border-bottom: 2px solid #2C76DC !important;\r\n    border: none;\n}\n@media (max-width:1000px) {\n.home[data-v-5cd2fee6] {\r\n        width: 100% !important;\r\n        flex: 1 !important;\n}\n}\n.stop-wait[data-v-5cd2fee6] {\r\n    width: 70%;\r\n    margin: auto;\r\n    border-radius: 0%;\r\n    border-bottom: 2px solid rgb(133, 0, 0) !important;\r\n    border: none;\n}\n@media (max-width:1000px) {\n.sm-none[data-v-5cd2fee6] {\r\n        display: none !important;\n}\n}\n@media (min-width:1000px) {\n.lg-none[data-v-5cd2fee6] {\r\n        display: none !important;\n}\n}\r\n\r\n/* loader */\r\n/* */\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26769,7 +27207,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.greetings[data-v-fa6affac] {\r\n    font-family: 'poppins', sans-serif;\r\n    font-size: 24px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    margin: auto;\r\n    margin-top: 20px;\n}\n.home[data-v-fa6affac] {\r\n    background-color: transparent !important;\r\n    display: block !important;\n}\n.loader[data-v-fa6affac] {\r\n    background-color: #F1F5F7;\n}\n.organisation-details[data-v-fa6affac] {\r\n    display: flex;\r\n    width: 90%;\r\n    justify-content: space-between;\r\n    font-weight: bold;\n}\n.organisation-details .organisation-code[data-v-fa6affac] {\r\n    font-family: 'Courier New', Courier, monospace;\r\n    font-size: 18px;\n}\n.organisation-details .organisation-name[data-v-fa6affac] {\r\n    font-size: 18px;\n}\n.notification-card[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    background-color: white;\r\n    border-bottom: solid 1px #2C76DC;\n}\n.white-card[data-v-fa6affac] {\r\n    width: 300px;\r\n    height: 300px;\r\n    border-radius: 5px;\r\n    background-color: white;\n}\n.white-card .header[data-v-fa6affac] {\r\n    font-weight: bolder;\r\n    width: 100%;\r\n    text-align: center;\n}\n.white-card .number[data-v-fa6affac] {\r\n    font-size: 100px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.events-card[data-v-fa6affac] {\r\n    background-color: white;\r\n    flex: 1 !important;\r\n    overflow-y: scroll;\n}\n.events-card .header[data-v-fa6affac] {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.content .card-header[data-v-fa6affac] {\r\n    background: white;\r\n    border: none;\r\n    border-bottom: solid 1px #2C76DC;\n}\n.card-header a[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.card[data-v-fa6affac] {\r\n    border-top: none;\n}\n@media (max-width:1000px) {\n#first-flex[data-v-fa6affac] {\r\n        flex-direction: column !important;\r\n        justify-content: center;\r\n        align-items: center;\n}\n.greetings[data-v-fa6affac] {\r\n        font-size: 14px;\n}\n.organisation-details[data-v-fa6affac] {\r\n        display: block !important;\n}\n.events-card[data-v-fa6affac] {\r\n        width: 100%;\r\n        margin-top: 20px;\n}\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.greetings[data-v-fa6affac] {\r\n    font-family: 'poppins', sans-serif;\r\n    font-size: 24px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    margin: auto;\r\n    margin-top: 20px;\n}\n.home[data-v-fa6affac] {\r\n    background-color: transparent !important;\r\n    display: block !important;\n}\n.loader[data-v-fa6affac] {\r\n    background-color: #F1F5F7;\n}\n.quote blockquote[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.quote .card[data-v-fa6affac] {\r\n    background-color: transparent;\r\n    background-color: white;\n}\n.organisation-details[data-v-fa6affac] {\r\n    display: flex;\r\n    width: 90%;\r\n    justify-content: space-between;\r\n    font-weight: bold;\n}\n.organisation-details .organisation-code[data-v-fa6affac] {\r\n    font-family: 'Courier New', Courier, monospace;\r\n    font-size: 18px;\n}\n.organisation-details .organisation-name[data-v-fa6affac] {\r\n    font-size: 18px;\n}\n.notification-card[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    background-color: white;\r\n    border-bottom: solid 1px #2C76DC;\n}\n.white-card[data-v-fa6affac] {\r\n    width: 300px;\r\n    height: 300px;\r\n    border-radius: 5px;\r\n    background-color: white;\n}\n.white-card .header[data-v-fa6affac] {\r\n    font-weight: bolder;\r\n    width: 100%;\r\n    text-align: center;\n}\n@media (min-width:1000px) {\n.lg-none[data-v-fa6affac] {\r\n        display: none !important;\n}\n}\n.white-card .number[data-v-fa6affac] {\r\n    font-size: 100px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.events-card[data-v-fa6affac] {\r\n    background-color: white;\r\n    flex: 1 !important;\r\n    overflow-y: scroll;\r\n    height: 300px;\n}\n.events-card .header[data-v-fa6affac] {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.content .card-header[data-v-fa6affac] {\r\n    background: white;\r\n    border: none;\r\n    border-bottom: solid 1px #2C76DC;\n}\n.card-header a[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.card[data-v-fa6affac] {\r\n    border-top: none;\n}\n@media (max-width:500px) {\n.organisation-details[data-v-fa6affac] {\r\n        display: block !important;\n}\n.v-lg-none[data-v-fa6affac] {\r\n        display: block !important;\n}\n}\n@media (min-width:500px) {\n.v-lg-none[data-v-fa6affac] {\r\n        display: none;\n}\n}\n@media (max-width:1000px) {\n#first-flex[data-v-fa6affac] {\r\n        flex-direction: column !important;\r\n        justify-content: center;\r\n        align-items: center;\n}\n.greetings[data-v-fa6affac] {\r\n        font-size: 14px;\n}\n.events-card[data-v-fa6affac] {\r\n        width: 100%;\r\n        margin-top: 20px;\n}\n}\n.pending[data-v-fa6affac] {\r\n    width: 100%;\r\n    background-color: white;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.pending .content[data-v-fa6affac] {\r\n    flex: 1;\r\n    width: 100%;\r\n    overflow-y: scroll;\r\n    background-color: #fafafa;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.pending .header[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    width: 70%;\r\n    margin: auto;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26793,7 +27231,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.member-card[data-v-70c3d3c4] {\r\n    background-color: white;\r\n    height: 150px;\r\n    padding: 10px;\r\n    width: 290px;\r\n    margin: 30px;\r\n    display: flex;\r\n    align-items: center;\r\n    border-radius: 16px;\n}\n.member-card .left[data-v-70c3d3c4] {\r\n    height: 100%;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    display: flex;\r\n    align-items: center;\n}\n.member-card .left .avatar[data-v-70c3d3c4] {\r\n    width: 70px;\r\n    height: 70px;\r\n    border-radius: 50%;\r\n    background-color: #2C76DC;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    font-size: 20px;\r\n    color: white;\n}\n.home[data-v-70c3d3c4] {\r\n    flex-direction: row !important;\r\n    flex-wrap: wrap;\r\n    background-color: transparent !important;\r\n    justify-content: space-between;\r\n    width: 99% !important;\n}\n.details[data-v-70c3d3c4] {\r\n    flex: 1;\n}\n.details .user-name[data-v-70c3d3c4] {\r\n    font-weight: bold;\r\n    width: 90%;\r\n    margin: auto;\r\n    font-size: 18px;\r\n    color: rgb(63, 63, 63);\r\n    text-align: center;\n}\n.position[data-v-70c3d3c4] {\r\n    width: 90%;\r\n    margin: auto;\r\n    display: flex;\r\n    justify-content: center;\n}\n.email[data-v-70c3d3c4] {\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: center;\r\n    opacity: 0.7;\n}\n.chat[data-v-70c3d3c4] {\r\n    width: 80%;\r\n    display: flex;\r\n    margin: auto;\r\n    justify-content: space-between;\r\n    margin-top: 20px !important;\n}\n.chat .icon[data-v-70c3d3c4] {\r\n    width: 20px !important;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.member-card[data-v-70c3d3c4] {\r\n    background-color: white;\r\n    height: 150px;\r\n    padding: 10px;\r\n    width: 290px;\r\n    margin: 30px;\r\n    display: flex;\r\n    align-items: center;\r\n    border-radius: 16px;\n}\n.member-card .left[data-v-70c3d3c4] {\r\n    height: 100%;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    display: flex;\r\n    align-items: center;\n}\n.member-card .left .avatar[data-v-70c3d3c4] {\r\n    width: 70px;\r\n    height: 70px;\r\n    border-radius: 50%;\r\n    background-color: #2C76DC;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    font-size: 20px;\r\n    color: white;\n}\n.home[data-v-70c3d3c4] {\r\n    flex-direction: row !important;\r\n    flex-wrap: wrap;\r\n    background-color: transparent !important;\r\n    /* justify-content: space-between; */\r\n    width: 90% !important;\n}\n.details[data-v-70c3d3c4] {\r\n    flex: 1;\n}\n.details .user-name[data-v-70c3d3c4] {\r\n    font-weight: bold;\r\n    width: 90%;\r\n    margin: auto;\r\n    font-size: 18px;\r\n    color: rgb(63, 63, 63);\r\n    text-align: center;\n}\n.position[data-v-70c3d3c4] {\r\n    width: 90%;\r\n    margin: auto;\r\n    display: flex;\r\n    justify-content: center;\n}\n.email[data-v-70c3d3c4] {\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: center;\r\n    opacity: 0.7;\n}\n.chat[data-v-70c3d3c4] {\r\n    width: 80%;\r\n    display: flex;\r\n    margin: auto;\r\n    justify-content: space-between;\r\n    margin-top: 20px !important;\n}\n.chat .icon[data-v-70c3d3c4] {\r\n    width: 20px !important;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26817,7 +27255,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.profile[data-v-11e733ca] {\r\n    display: flex;\r\n    align-items: center;\r\n    font-family: poppins;\r\n    font-size: 14px;\n}\n.avatar[data-v-11e733ca] {\r\n    width: 40px;\r\n    height: 40px;\r\n    position: relative;\r\n    color: white;\r\n    border-radius: 50%;\r\n    background-color: #2C76DC;\n}\n.avatar p[data-v-11e733ca] {\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\n}\n@media (max-width:1000px) {\n.sm-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.icon[data-v-11e733ca] {\r\n        width: 20px !important;\n}\n.logo-sm[data-v-11e733ca] {\r\n        width: 25px;\n}\n}\n@media (min-width:1000px) {\n.lg-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n}\n.navbar[data-v-11e733ca] {\r\n    width: 100%;\r\n    background-color: white;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    z-index: 2;\n}\n.nav-item[data-v-11e733ca] {\r\n    margin-right: 1px;\r\n    font-weight: bolder;\n}\n.logo-lg[data-v-11e733ca] {\r\n    width: 150px;\n}\n.navbar-link[data-v-11e733ca] {\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.nav-link .w[data-v-11e733ca] {\r\n    padding: 10px;\r\n    position: relative;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.badge[data-v-11e733ca] {\r\n    position: absolute;\r\n    border-radius: 50%;\r\n    min-width: 20px;\r\n    min-height: 20px;\r\n    top: 0;\r\n    right: 0;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    font-size: 10px;\n}\n.nav-item[data-v-11e733ca] {\r\n    display: flex;\r\n    align-items: center;\n}\n.icon[data-v-11e733ca] {\r\n    width: 25px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.profile[data-v-11e733ca] {\r\n    display: flex;\r\n    align-items: center;\r\n    font-family: poppins;\r\n    font-size: 14px;\n}\n.avatar[data-v-11e733ca] {\r\n    width: 40px;\r\n    height: 40px;\r\n    position: relative;\r\n    color: white;\r\n    border-radius: 50%;\r\n    background-color: #2C76DC;\n}\n.avatar p[data-v-11e733ca] {\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\n}\n@media (max-width:1000px) {\n.sm-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.icon[data-v-11e733ca] {\r\n        width: 20px !important;\n}\n.logo-lg[data-v-11e733ca]{\r\n    display: none !important;\n}\n.logo-sm[data-v-11e733ca] {\r\n        width: 25px;\n}\n}\n@media (min-width:1000px) {\n.lg-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n}\n@media (max-width:500px){\n.nav-item[data-v-11e733ca]{\r\n          padding: 0% !important;\r\n          /* margin: 20px; */\n}\n.v-lg-none[data-v-11e733ca]{\r\n    display: block !important;\n}\n.v-sm-none[data-v-11e733ca]{\r\n     display: none !important;\n}\n.lg-none[data-v-11e733ca]{\r\n        display:none !important;\n}\n.icon[data-v-11e733ca] {\r\n         padding: 0% !important;\r\n        width: 20px !important;\n}\n}\n.v-lg-none[data-v-11e733ca]{\r\n    display: none;\n}\n.navbar[data-v-11e733ca] {\r\n    width: 100%;\r\n    background-color: white;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    z-index: 2;\n}\n.nav-item[data-v-11e733ca] {\r\n    font-weight: bolder;\n}\n.logo-lg[data-v-11e733ca] {\r\n    width: 150px;\n}\n.navbar-link[data-v-11e733ca] {\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.nav-link .w[data-v-11e733ca] {\r\n    padding: 10px;\r\n    position: relative;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.badge[data-v-11e733ca] {\r\n    position: absolute;\r\n    border-radius: 50%;\r\n    min-width: 20px;\r\n    min-height: 20px;\r\n    top: 0;\r\n    right: 0;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    font-size: 10px;\n}\n.nav-item[data-v-11e733ca] {\r\n    display: flex;\r\n    width:-webkit-fit-content !important;\r\n    width:-moz-fit-content !important;\r\n    width:fit-content !important;\r\n    align-items: center;\n}\n.icon[data-v-11e733ca] {\r\n    width: 25px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26841,7 +27279,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.wrapper[data-v-ad8086a6] {\r\n    position: relative;\r\n    width: -webkit-fit-content !important;\r\n    width: -moz-fit-content !important;\r\n    width: fit-content !important;\r\n    padding: 10px;\r\n    background-color: white;\r\n    min-width: 70%;\r\n    height: 100%;\r\n    margin: auto;\n}\n.header[data-v-ad8086a6] {\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    padding: 15px;\r\n    border-bottom: solid 0.5px rgba(128, 128, 128, 0.247);\r\n    font-family: poppins;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.home[data-v-ad8086a6] {\r\n    position: relative;\r\n    width: -webkit-fit-content !important;\r\n    width: -moz-fit-content !important;\r\n    width: fit-content !important;\r\n    padding: 10px;\r\n    background-color: white;\r\n    min-width: 70%;\r\n    height: 100%;\r\n    margin: auto;\r\n    display: block !important;\n}\n.none[data-v-ad8086a6]{\r\n     position: relative;\r\n    width: -webkit-fit-content !important;\r\n    width: -moz-fit-content !important;\r\n    width: fit-content !important;\r\n    padding: 10px;\r\n    background-color: white;\r\n    min-width: 70%;\r\n    height: 100%;\r\n    margin: auto;\n}\n.header[data-v-ad8086a6] {\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    padding: 15px;\r\n    border-bottom: solid 0.5px rgba(128, 128, 128, 0.247);\r\n    font-family: poppins;\n}\n.jumbotron[data-v-ad8086a6]{\r\nposition:absolute;\r\nleft:50%;\r\ntop:50%;\r\ntransform: translate(-50%,-50%);\r\nbackground-color: transparent;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26865,7 +27303,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.sidebar[data-v-5b987ee1] {\n    height: 90vh;\n    width: 230px;\n    padding: 0px;\n    background-color: white;\n}\n@media (max-width:1000px) {\n.sidebar[data-v-5b987ee1] {\n        width: -webkit-fit-content !important;\n        width: -moz-fit-content !important;\n        width: fit-content !important;\n}\n.sm-none[data-v-5b987ee1] {\n        display: none !important;\n}\n}\n.router-link-active .sidebar-item[data-v-5b987ee1] {\n    background-color: #2C76DC;\n}\n.router-link-active a[data-v-5b987ee1] {\n    color: white !important;\n}\n.router-link-active .sidebar-item[data-v-5b987ee1]:hover {\n    background-color: #2C76DC !important;\n    color: white !important;\n}\n.sidebar-item[data-v-5b987ee1] {\n    color: black;\n    padding: 20px;\n    display: flex;\n    justify-content: space-between;\n    width: 100%;\n    font-family: 'poppins', sans-serif;\n    font-size: 16px;\n}\n.sidebar-item a[data-v-5b987ee1] {\n    color: black;\n}\n.item-content[data-v-5b987ee1] {\n    width: -webkit-fit-content;\n    width: -moz-fit-content;\n    width: fit-content;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    height: -webkit-fit-content;\n    height: -moz-fit-content;\n    height: fit-content;\n}\n.icon[data-v-5b987ee1] {\n    font-size: 16px;\n    margin-right: 20px;\n}\na[data-v-5b987ee1]:hover {\n    text-decoration: none;\n}\n.sidebar-item[data-v-5b987ee1]:hover {\n    background-color: #efefef;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.sidebar[data-v-5b987ee1] {\r\n    height: 90vh;\r\n    width: 230px;\r\n    padding: 0px;\r\n    background-color: white;\r\n    transition: 0.3s;\n}\n@media (max-width:500px){\n.sidebar[data-v-5b987ee1]{\r\n  position:absolute;\r\n  left:-100%;\r\n  z-index:2000;\n}\n}\n@media (max-width:1000px) {\n.sidebar[data-v-5b987ee1] {\r\n        width: -webkit-fit-content;\r\n        width: -moz-fit-content;\r\n        width: fit-content;\r\n        z-index:2000;\n}\n.sm-none[data-v-5b987ee1] {\r\n        display: none !important;\n}\n}\n.router-link-active .sidebar-item[data-v-5b987ee1] {\r\n    background-color: #2C76DC;\n}\n.router-link-active a[data-v-5b987ee1] {\r\n    color: white !important;\n}\n.router-link-active .sidebar-item[data-v-5b987ee1]:hover {\r\n    background-color: #2C76DC !important;\r\n    color: white !important;\n}\n.sidebar-item[data-v-5b987ee1] {\r\n    color: black;\r\n    padding: 20px;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    width: 100%;\r\n    font-family: 'poppins', sans-serif;\r\n    font-size: 16px;\n}\n.sidebar-item a[data-v-5b987ee1] {\r\n    color: black;\n}\n.item-content[data-v-5b987ee1] {\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.icon[data-v-5b987ee1] {\r\n    font-size: 16px;\r\n    margin-right: 20px;\n}\na[data-v-5b987ee1]:hover {\r\n    text-decoration: none;\n}\n.sidebar-open[data-v-5b987ee1]{\r\n    left:0 !important;\n}\n.sidebar-item[data-v-5b987ee1]:hover {\r\n    background-color: #efefef;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26961,7 +27399,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.alert[data-v-3a898f96] {\r\n    transition: 0.3s;\r\n    width: 60%;\r\n    margin: auto;\r\n    margin-top: 20px !important;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.alert[data-v-3a898f96] {\r\n    transition: 0.5s;\r\n    width: 60%;\r\n    margin: auto;\r\n    margin-top: 20px !important;\n}\n.close[data-v-3a898f96]{\r\n    position: absolute;\r\n    right: 1px !important;\r\n    top: 50% !important;\r\n    transform: translateY(-50%);\r\n    color: maroon;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\n}\n@media (max-width:800px){\n.alert[data-v-3a898f96]{\r\n        width:90% !important;\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -90866,6 +91304,78 @@ var render = function() {
   return _c("div", { staticClass: "home px-4" }, [
     _vm._m(0),
     _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "completion-rate sm-none py-4 container-fluid text-center"
+      },
+      [
+        _c("div", { staticClass: "percentage" }, [
+          _vm._v("\r\n            almost due"),
+          _c("span", { staticClass: "text-warning font-weight-bolder" }, [
+            _vm._v(
+              _vm._s(
+                Math.round(
+                  _vm.activitiesAlmostDue.length > 0
+                    ? (_vm.activitiesAlmostDue.length * 100) /
+                        _vm.activities.length
+                    : "0"
+                )
+              ) + "%"
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "percentage" }, [
+          _vm._v("\r\n            failed"),
+          _c("span", { staticClass: "text-danger font-weight-bolder" }, [
+            _vm._v(
+              _vm._s(
+                Math.round(
+                  _vm.activitiesFailed.length > 0
+                    ? (_vm.activitiesFailed.length * 100) /
+                        _vm.activities.length
+                    : "0"
+                )
+              ) + "%"
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "percentage" }, [
+          _vm._v("\r\n            completed"),
+          _c("span", { staticClass: "text-success font-weight-bolder" }, [
+            _vm._v(
+              _vm._s(
+                Math.round(
+                  _vm.activitiesComplete.length > 0
+                    ? (_vm.activitiesComplete.length * 100) /
+                        _vm.activities.length
+                    : "0"
+                )
+              ) + "%"
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "percentage" }, [
+          _vm._v("\r\n            underway"),
+          _c("span", { staticClass: "text-info font-weight-bolder" }, [
+            _vm._v(
+              _vm._s(
+                Math.round(
+                  _vm.activitiesUnderway.length > 0
+                    ? (_vm.activitiesUnderway.length * 100) /
+                        _vm.activities.length
+                    : "0"
+                )
+              ) + "%"
+            )
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "cards-row-wrapper" }, [
       _c("div", { staticClass: "cards-row px-1" }, [
         _c("div", { staticClass: "card-column my-3 shadow-sm" }, [
@@ -90922,7 +91432,15 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", [
                         _c("small", { staticClass: "text-muted" }, [
-                          _vm._v(_vm._s(activityAlmostDue.date_due))
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("moment")(
+                                activityAlmostDue.date_due,
+                                "from",
+                                "now"
+                              )
+                            )
+                          )
                         ])
                       ])
                     ]
@@ -91005,7 +91523,15 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", [
                         _c("small", { staticClass: "text-muted" }, [
-                          _vm._v(_vm._s(activityFailed.date_due))
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("moment")(
+                                activityFailed.date_due,
+                                "from",
+                                "now"
+                              )
+                            )
+                          )
                         ])
                       ])
                     ]
@@ -91092,7 +91618,15 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", [
                         _c("small", { staticClass: "text-muted" }, [
-                          _vm._v(_vm._s(activityComplete.date_due))
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("moment")(
+                                activityComplete.date_due,
+                                "from",
+                                "now"
+                              )
+                            )
+                          )
                         ])
                       ])
                     ]
@@ -91127,7 +91661,127 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(1),
+    _c("div", { staticClass: "pending shadow-sm p-2" }, [
+      _c("div", { staticClass: "header text-info p-3" }, [
+        _c("div", { staticClass: "status" }, [_vm._v("Tasks underway")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "count" }, [
+          _vm._v(_vm._s(_vm.activitiesUnderway.length))
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "content p-2" },
+        _vm._l(_vm.activitiesUnderway, function(activityUnderway) {
+          return _c("div", { key: activityUnderway.id, staticClass: "card" }, [
+            _c(
+              "div",
+              {
+                staticClass: "card-header flex",
+                attrs: { role: "tab", id: "HeaderId" + activityUnderway.id }
+              },
+              [
+                _c("div", [
+                  _c("h5", { staticClass: "mb-0" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "text-dark nav-link",
+                        attrs: {
+                          "data-toggle": "collapse",
+                          href: "#ContentId" + activityUnderway.id,
+                          "aria-expanded": "true",
+                          "aria-controls": "ContentId" + activityUnderway.id
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\r\n                                " +
+                            _vm._s(activityUnderway.title) +
+                            "\r\n                            "
+                        )
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", [
+                  _c("small", { staticClass: "text-muted" }, [
+                    _vm._v(
+                      "due " +
+                        _vm._s(
+                          _vm._f("moment")(
+                            activityUnderway.date_due,
+                            "from",
+                            "now"
+                          )
+                        )
+                    )
+                  ])
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "collapse in",
+                attrs: {
+                  id: "ContentId" + activityUnderway.id,
+                  role: "tabpanel",
+                  "aria-labelledby": "HeaderId" + activityUnderway.id
+                }
+              },
+              [
+                _c("div", { staticClass: "card-body" }, [
+                  _vm._v(
+                    "\r\n                        " +
+                      _vm._s(activityUnderway.description) +
+                      "\r\n                    "
+                  )
+                ])
+              ]
+            )
+          ])
+        }),
+        0
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "add-wrapper my-3" }, [
+      _vm._m(1),
+      _vm._v(" "),
+      _c("div", { staticClass: "search my-2 flex" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.searchQuery,
+              expression: "searchQuery"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { type: "text", placeholder: "search for task..." },
+          domProps: { value: _vm.searchQuery },
+          on: {
+            keyup: function($event) {
+              return _vm.searchAc()
+            },
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchQuery = $event.target.value
+            }
+          }
+        }),
+        _vm._m(2)
+      ]),
+      _vm._v(" "),
+      _vm._m(3)
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -91147,7 +91801,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(2),
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
@@ -91257,19 +91911,114 @@ var render = function() {
                       attrs: { id: "dateError" }
                     }),
                     _vm._v(" "),
+                    _c("p", { staticClass: "font-weight-bold text-muted" }, [
+                      _vm._v("assigned_to:")
+                    ]),
+                    _vm._v(" "),
+                    _vm.allUsers.length == 0
+                      ? _c(
+                          "div",
+                          {
+                            staticClass: "card empty",
+                            attrs: { id: "select-users" }
+                          },
+                          [_vm._m(5)]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.allUsers.length > 0
+                      ? _c(
+                          "div",
+                          {
+                            staticClass: "card",
+                            attrs: { id: "select-users" }
+                          },
+                          _vm._l(_vm.allUsers, function(user) {
+                            return _c(
+                              "div",
+                              {
+                                key: user.id,
+                                staticClass: "profile-card p-3 flex",
+                                staticStyle: {
+                                  "justify-content": "space-between"
+                                }
+                              },
+                              [
+                                _c("div", { staticClass: "a-wrapper" }, [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "avatar mx-4 font-weight-bold"
+                                    },
+                                    [
+                                      _c("p", { staticClass: "my-3" }, [
+                                        _vm._v(
+                                          "\r\n                                            " +
+                                            _vm._s(
+                                              user.name.split(" ")[0].charAt(0)
+                                            ) +
+                                            _vm._s(
+                                              user.name.split(" ")[1].charAt(0)
+                                            )
+                                        )
+                                      ])
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "d-wrapper" }, [
+                                  _c("div", [_vm._v(_vm._s(user.name))]),
+                                  _vm._v(" "),
+                                  _c("div", [
+                                    _c("small", { staticClass: "text-muted" }, [
+                                      _vm._v(
+                                        "\r\n                                            " +
+                                          _vm._s(user.email) +
+                                          "\r\n                                        "
+                                      )
+                                    ])
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "mx-3" }, [
+                                  _c("input", {
+                                    staticStyle: {
+                                      "background-color": "blue",
+                                      color: "white",
+                                      "border-radius": "50% !important"
+                                    },
+                                    attrs: {
+                                      type: "checkbox",
+                                      name: user.name
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        return _vm.addSelectedUsers(user.id)
+                                      }
+                                    }
+                                  })
+                                ])
+                              ]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
                     _c(
                       "div",
                       { staticClass: "alert my-2 alert-danger feedback" },
-                      [_vm._v("Failed to add activity")]
+                      [_vm._v("Failed to add task")]
                     ),
                     _vm._v(" "),
                     _c(
                       "div",
                       { staticClass: "alert my-2 alert-success feedback" },
-                      [_vm._v("activity added")]
+                      [_vm._v("task added")]
                     ),
                     _vm._v(" "),
-                    _vm._m(3)
+                    _vm._m(6)
                   ]
                 )
               ])
@@ -91287,7 +92036,7 @@ var render = function() {
             "table table-striped table-inverse  table-hover table-bodered"
         },
         [
-          _vm._m(4),
+          _vm._m(7),
           _vm._v(" "),
           _c(
             "tbody",
@@ -91303,6 +92052,22 @@ var render = function() {
                   _c("td", [_vm._v(_vm._s(activity.date_due))]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(activity.author))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "ul",
+                      _vm._l(activity.assigned_to, function(user) {
+                        return _c("li", { key: user }, [
+                          _vm._v(
+                            "\r\n                                " +
+                              _vm._s(user) +
+                              "\r\n                            "
+                          )
+                        ])
+                      }),
+                      0
+                    )
+                  ]),
                   _vm._v(" "),
                   _c("td", [
                     _c(
@@ -91407,25 +92172,35 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "add-wrapper my-3" }, [
-      _c("div", [_c("h5", [_vm._v("All Tasks")])]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "add shadow-sm",
-          attrs: { "data-toggle": "modal", "data-target": "#modelId" }
-        },
-        [_c("i", { staticClass: "fas fa-plus" })]
-      )
+    return _c("div", [_c("h5", [_vm._v("All Tasks")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "btn" }, [
+      _c("i", { staticClass: "fa fa-search", attrs: { "aria-hidden": "true" } })
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "add shadow-sm",
+        attrs: { "data-toggle": "modal", "data-target": "#modelId" }
+      },
+      [_c("i", { staticClass: "fas fa-plus" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
-      _c("h5", { staticClass: "modal-title" }, [_vm._v("Create Activity")]),
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Create Task")]),
       _vm._v(" "),
       _c(
         "button",
@@ -91445,6 +92220,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "jumbotron text-center" }, [
+      _c("h5", { staticClass: "text-center" }, [
+        _vm._v(
+          "\r\n                                    You have no members in your organisation\r\n                                "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: " my-5" }, [
       _c("div", { staticClass: "loading my-2" }, [
         _c("small", [_vm._v("creating...")])
@@ -91456,7 +92243,7 @@ var staticRenderFns = [
           { staticClass: "btn btn-primary", attrs: { type: "submit" } },
           [
             _vm._v(
-              "\r\n                                    add activity\r\n                                "
+              "\r\n                                    add task\r\n                                "
             )
           ]
         ),
@@ -91486,6 +92273,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("date due")]),
         _vm._v(" "),
         _c("th", [_vm._v("Author")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("assigned to")]),
         _vm._v(" "),
         _c("th", [_vm._v("status")]),
         _vm._v(" "),
@@ -92080,8 +92869,46 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _vm._m(2)
+        _c("div", { staticClass: "search my-2 flex" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.searchQuery,
+                expression: "searchQuery"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "search",
+              placeholder: "search for conversation..."
+            },
+            domProps: { value: _vm.searchQuery },
+            on: {
+              change: _vm.searchConv,
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.searchQuery = $event.target.value
+              }
+            }
+          }),
+          _vm._m(2)
+        ])
       ]),
+      _vm._v(" "),
+      _vm.searchResults.length == 0
+        ? _c(
+            "div",
+            {
+              staticClass: "jumbotron text-center",
+              attrs: { id: "noResults" }
+            },
+            [_c("h5", [_vm._v("No conversation matches your query")])]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _vm.conversations.length == 0
         ? _c("div", { staticClass: "jumbotron text-center" }, [
@@ -92535,17 +93362,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "search my-2 flex" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "search", placeholder: "search for conversation..." }
-      }),
-      _c("button", { staticClass: "btn" }, [
-        _c("i", {
-          staticClass: "fa fa-search",
-          attrs: { "aria-hidden": "true" }
-        })
-      ])
+    return _c("button", { staticClass: "btn" }, [
+      _c("i", { staticClass: "fa fa-search", attrs: { "aria-hidden": "true" } })
     ])
   },
   function() {
@@ -92599,81 +93417,108 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "home" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "flex" },
-      _vm._l(_vm.downloads, function(download) {
-        return _c(
-          "div",
-          {
-            key: download.id,
-            staticClass: "download-card my-3 mx-3 grid-item shadow-sm p-4"
-          },
-          [
-            _c("div", { staticClass: "header" }, [
-              _c("div", { staticClass: "title" }, [
-                _vm._v(_vm._s(download.name))
-              ]),
+  return _c(
+    "div",
+    {
+      class: _vm.downloads.length == 0 ? "home flex align-items-center" : "home"
+    },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm.downloads.length == 0
+        ? _c(
+            "div",
+            {
+              staticClass: "jumbotron flex align-items-center",
+              staticStyle: { "flex-direction": "column" }
+            },
+            [
+              _c("h5", [_vm._v("You have no downloads yet")]),
               _vm._v(" "),
-              _c("div", [
-                _c("small", { staticClass: "text-muted" }, [
-                  _vm._v(_vm._s(download.created_at.split("T")[0]))
-                ])
+              _c("p", { staticClass: "text-muted" }, [
+                _vm._v(
+                  "\r\n            Pdf downloads are generated at the end of every month.\r\n        "
+                )
               ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "body" }, [
-              _c("img", {
-                staticClass: "pdf-icon",
-                attrs: { src: "/images/pdf.svg", alt: "" }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "footer" }, [
-              _c("div", { attrs: { title: "download" } }, [
-                _c("div", { staticClass: "mx-2" }, [
-                  _c(
-                    "a",
-                    {
-                      attrs: {
-                        href: download.file_url,
-                        download: download.name
-                      }
-                    },
-                    [
-                      _c("img", {
-                        staticClass: "footer-icon",
-                        attrs: { src: "/images/download.svg", alt: "" }
-                      })
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _vm._m(1, true)
-              ]),
-              _vm._v(" "),
-              _c("div", { attrs: { title: "view" } }, [
-                _c("div", { staticClass: "mx-2" }, [
-                  _c("a", { attrs: { href: download.file_url } }, [
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.downloads.length > 0
+        ? _c(
+            "div",
+            { staticClass: "flex" },
+            _vm._l(_vm.downloads, function(download) {
+              return _c(
+                "div",
+                {
+                  key: download.id,
+                  staticClass: "download-card my-3 mx-3 grid-item shadow-sm p-4"
+                },
+                [
+                  _c("div", { staticClass: "header" }, [
+                    _c("div", { staticClass: "title" }, [
+                      _vm._v(_vm._s(download.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", [
+                      _c("small", { staticClass: "text-muted" }, [
+                        _vm._v(_vm._s(download.created_at.split("T")[0]))
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "body" }, [
                     _c("img", {
-                      staticClass: "footer-icon",
-                      attrs: { src: "/images/view.svg", alt: "" }
+                      staticClass: "pdf-icon",
+                      attrs: { src: "/images/pdf.svg", alt: "" }
                     })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "footer" }, [
+                    _c("div", { attrs: { title: "download" } }, [
+                      _c("div", { staticClass: "mx-2" }, [
+                        _c(
+                          "a",
+                          {
+                            attrs: {
+                              href: download.file_url,
+                              download: download.name
+                            }
+                          },
+                          [
+                            _c("img", {
+                              staticClass: "footer-icon",
+                              attrs: { src: "/images/download.svg", alt: "" }
+                            })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(1, true)
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { attrs: { title: "view" } }, [
+                      _c("div", { staticClass: "mx-2" }, [
+                        _c("a", { attrs: { href: download.file_url } }, [
+                          _c("img", {
+                            staticClass: "footer-icon",
+                            attrs: { src: "/images/view.svg", alt: "" }
+                          })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(2, true)
+                    ])
                   ])
-                ]),
-                _vm._v(" "),
-                _vm._m(2, true)
-              ])
-            ])
-          ]
-        )
-      }),
-      0
-    )
-  ])
+                ]
+              )
+            }),
+            0
+          )
+        : _vm._e()
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
@@ -93125,10 +93970,38 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "total p-8", staticStyle: { position: "relative" } },
+      { staticClass: "total p-2", staticStyle: { position: "relative" } },
       [
         _c("div", { staticClass: "contributors text-primary" }, [
           _vm._v("contributors:   " + _vm._s(_vm.contributors))
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "search my-2 flex" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.searchQuery,
+                expression: "searchQuery"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "search for expense..." },
+            domProps: { value: _vm.searchQuery },
+            on: {
+              keyup: function($event) {
+                return _vm.searchEx()
+              },
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.searchQuery = $event.target.value
+              }
+            }
+          }),
+          _vm._m(1)
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "number text-primary" }, [
@@ -93155,7 +94028,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(1),
+              _vm._m(2),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
@@ -93655,7 +94528,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "alert alert-success" }),
                     _vm._v(" "),
-                    _vm._m(2)
+                    _vm._m(3)
                   ]
                 )
               ])
@@ -93668,7 +94541,7 @@ var render = function() {
     _c("div", { staticClass: "table-wrap px-3" }, [
       _c("div", { staticClass: "summary my-6" }, [
         _c("table", { staticClass: "table" }, [
-          _vm._m(3),
+          _vm._m(4),
           _vm._v(" "),
           _c("tr", [
             _c("th", { attrs: { scope: "row" } }, [_vm._v("Total")]),
@@ -93696,7 +94569,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(4),
+      _vm._m(5),
       _vm._v(" "),
       _c(
         "table",
@@ -93705,7 +94578,7 @@ var render = function() {
             "table table-striped table-inverse table-hover table-bodered"
         },
         [
-          _vm._m(5),
+          _vm._m(6),
           _vm._v(" "),
           _c(
             "tbody",
@@ -93798,16 +94671,11 @@ var render = function() {
                       on: {
                         submit: function($event) {
                           $event.preventDefault()
-                          return _vm.deletes()
+                          return _vm.deletes(expense.id)
                         }
                       }
                     },
                     [
-                      _c("input", {
-                        attrs: { type: "hidden" },
-                        domProps: { value: expense.id }
-                      }),
-                      _vm._v(" "),
                       _c(
                         "button",
                         {
@@ -93841,6 +94709,14 @@ var staticRenderFns = [
       },
       [_c("i", { staticClass: "fas fa-plus" })]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "btn" }, [
+      _c("i", { staticClass: "fa fa-search", attrs: { "aria-hidden": "true" } })
+    ])
   },
   function() {
     var _vm = this
@@ -94142,6 +95018,27 @@ var render = function() {
   return _c("div", { staticClass: "home" }, [
     _vm._m(0),
     _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "flex py-2",
+        staticStyle: { "justify-content": "center" }
+      },
+      [
+        _c(
+          "a",
+          { staticClass: "navbar-brand", attrs: { href: _vm.location.origin } },
+          [
+            _c("img", {
+              staticClass: "v-lg-none",
+              staticStyle: { opacity: "0.6" },
+              attrs: { src: "/images/logo.svg", alt: "" }
+            })
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "organisation-details my-4 mx-3" }, [
       _vm.organisation != null
         ? _c("div", { staticClass: "organisation-name text-muted" }, [
@@ -94172,33 +95069,168 @@ var render = function() {
       ? _c(
           "div",
           { staticClass: "display:flex;" },
-          _vm._l(_vm.topNotifications, function(notification) {
-            return _c(
+          [
+            _vm.requests.length > 0
+              ? _c(
+                  "div",
+                  {
+                    staticClass:
+                      "notification-card shadow-sm p-3 text-center m-6",
+                    staticStyle: { "background-color": "#17A2B8 !important" }
+                  },
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "nav-link",
+                        attrs: { to: "/dashboard/advanced/membership" }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "font-weight-bolder text-muted",
+                            staticStyle: {
+                              margin: "auto",
+                              color: "white !important"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "There are " +
+                                _vm._s(_vm.requests.length) +
+                                " unattended membership requests"
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ],
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(_vm.topNotifications, function(notification) {
+              return _c(
+                "div",
+                {
+                  key: notification.id,
+                  staticClass:
+                    "notification-card shadow-sm p-3 text-center my-2"
+                },
+                [
+                  _c("div", { staticClass: "font-weight-bolder text-muted" }, [
+                    _vm._v(_vm._s(notification.data.message))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "date text-muted font-weight-bold" },
+                    [
+                      _c("small", [
+                        _vm._v(
+                          _vm._s(
+                            _vm._f("moment")(
+                              notification.created_at,
+                              "from",
+                              "now"
+                            )
+                          )
+                        )
+                      ])
+                    ]
+                  )
+                ]
+              )
+            })
+          ],
+          2
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "pending shadow-sm my-3 p-2" }, [
+      _c("div", { staticClass: "header text-info p-3" }, [
+        _c("div", { staticClass: "status" }, [_vm._v("Your assignments")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "count" }, [
+          _vm._v(_vm._s(_vm.assignments.length))
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "content p-2" },
+        _vm._l(_vm.assignments, function(assignment) {
+          return _c("div", { key: assignment.id, staticClass: "card" }, [
+            _c(
               "div",
               {
-                key: notification.id,
-                staticClass: "notification-card shadow-sm p-3 text-center m-6"
+                staticClass: "card-header flex justify-content-between",
+                attrs: { role: "tab", id: "HeaderId" + assignment.id }
               },
               [
-                _c("div", { staticClass: "font-weight-bolder text-muted" }, [
-                  _vm._v(_vm._s(notification.data.message))
+                _c("div", [
+                  _c("h5", { staticClass: "mb-0" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "text-dark nav-link",
+                        attrs: {
+                          "data-toggle": "collapse",
+                          href: "#ContentId" + assignment.id,
+                          "aria-expanded": "true",
+                          "aria-controls": "ContentId" + assignment.id
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\r\n                                " +
+                            _vm._s(assignment.title) +
+                            "\r\n                            "
+                        )
+                      ]
+                    )
+                  ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "date text-muted font-weight-bold" }, [
-                  _c("small", [
+                _c("div", [
+                  _c("small", { staticClass: "text-muted" }, [
                     _vm._v(
-                      _vm._s(
-                        _vm._f("moment")(notification.created_at, "from", "now")
-                      )
+                      "due " +
+                        _vm._s(
+                          _vm._f("moment")(assignment.date_due, "from", "now")
+                        )
                     )
                   ])
                 ])
               ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "collapse in",
+                attrs: {
+                  id: "ContentId" + assignment.id,
+                  role: "tabpanel",
+                  "aria-labelledby": "HeaderId" + assignment.id
+                }
+              },
+              [
+                _c("div", { staticClass: "card-body" }, [
+                  _vm._v(
+                    "\r\n                        " +
+                      _vm._s(assignment.description) +
+                      "\r\n                    "
+                  )
+                ])
+              ]
             )
-          }),
-          0
-        )
-      : _vm._e(),
+          ])
+        }),
+        0
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "flex my-5", attrs: { id: "first-flex" } }, [
       _c(
@@ -94229,14 +95261,37 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "events-card shadow-sm mx-3" }, [
-        _vm._m(1),
+        _c("div", { staticClass: "header text-center p-3" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticStyle: { "font-size": "20px" } },
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass: "nav-link",
+                  attrs: { to: "/dashboard/calendar" }
+                },
+                [_c("i", { staticClass: "far fa-calendar-alt" })]
+              )
+            ],
+            1
+          )
+        ]),
         _vm._v(" "),
-        _vm.eventsAlmostDue.length > 0
-          ? _c(
-              "div",
-              { staticClass: "content p-4" },
-              [
-                _vm._v("\r\n                her\r\n                "),
+        _vm.eventsAlmostDue != null
+          ? _c("div", { staticClass: "content p-4" }, [
+              _c(
+                "div",
+                {
+                  attrs: {
+                    id: "accordianId",
+                    role: "tablist",
+                    "aria-multiselectable": "true"
+                  }
+                },
                 _vm._l(_vm.eventsAlmostDue, function(event) {
                   return _c("div", { key: event.id, staticClass: "card" }, [
                     _c(
@@ -94265,9 +95320,9 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\r\n                                    " +
+                                  "\r\n                                        " +
                                     _vm._s(event.title) +
-                                    "\r\n                                "
+                                    "\r\n                                    "
                                 )
                               ]
                             )
@@ -94299,25 +95354,41 @@ var render = function() {
                       [
                         _c("div", { staticClass: "card-body" }, [
                           _vm._v(
-                            "\r\n                            " +
+                            "\r\n                                " +
                               _vm._s(event.description) +
-                              "\r\n                        "
+                              "\r\n                            "
                           )
                         ])
                       ]
                     )
                   ])
-                })
-              ],
-              2
-            )
-          : _vm._e(),
-        _vm._v(" "),
-        (_vm.eventsAlmostDue.length = 0)
-          ? _c("div", { staticClass: "jumbotron text-center" }, [
-              _c("h5", [_vm._v("There are no events")])
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _vm.eventsAlmostDue.length == 0
+                ? _c("div", { staticClass: "jumbotron text-center" }, [
+                    _c("h5", [_vm._v("There are no approaching events")])
+                  ])
+                : _vm._e()
             ])
           : _vm._e()
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "container-fluid quote" }, [
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-body" }, [
+          _c("blockquote", { staticClass: "blockquote" }, [
+            _c("p", [_vm._v(_vm._s(_vm.quote.body))]),
+            _vm._v(" "),
+            _c("footer", { staticClass: "card-blockquote" }, [
+              _c("cite", { attrs: { title: "Source title" } }, [
+                _vm._v(_vm._s(_vm.quote.credits))
+              ])
+            ])
+          ])
+        ])
       ])
     ])
   ])
@@ -94343,13 +95414,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "header text-center p-3" }, [
-      _c("div", [_c("h5", [_vm._v("incoming events")])]),
-      _vm._v(" "),
-      _c("div", { staticStyle: { "font-size": "20px" } }, [
-        _c("i", { staticClass: "far fa-calendar-alt" })
-      ])
-    ])
+    return _c("div", [_c("h5", [_vm._v("incoming events")])])
   }
 ]
 render._withStripped = true
@@ -94378,6 +95443,8 @@ var render = function() {
     "div",
     { staticClass: "home" },
     [
+      _vm._m(0),
+      _vm._v(" "),
       _vm.AllUsers.length < 1
         ? _c(
             "div",
@@ -94386,14 +95453,14 @@ var render = function() {
                 "jumbotron jumbotron-fluid flex  align-items-center px-5 text-center",
               staticStyle: { margin: "auto" }
             },
-            [_vm._m(0)]
+            [_vm._m(1)]
           )
         : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.AllUsers, function(user) {
         return _c(
           "div",
-          { key: user.id, staticClass: "member-card shadow-sm" },
+          { key: user.id, staticClass: "member-card mx-3 shadow-sm" },
           [
             _c("div", { staticClass: "left" }, [
               _c("div", { staticClass: "avatar mx-1" }, [
@@ -94441,6 +95508,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "loader shadow-sm" }, [
+      _c("div", { staticClass: "lds-ellipsis" }, [
+        _c("div"),
+        _vm._v(" "),
+        _c("div"),
+        _vm._v(" "),
+        _c("div"),
+        _vm._v(" "),
+        _c("div")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "container flex  align-items-center" }, [
       _c("div", [
         _c("h5", [_vm._v("You have no members in your organisation.")]),
@@ -94477,22 +95560,31 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("nav", { staticClass: " shadow-sm navbar navbar-expand-sm" }, [
-    _c(
-      "a",
-      { staticClass: "navbar-brand", attrs: { href: _vm.location.origin } },
-      [
-        _c("img", {
-          staticClass: "logo-lg sm-none",
-          attrs: { src: "/images/logo.svg", alt: "" }
-        }),
-        _c("img", {
+    _c("a", { staticClass: "navbar-brand" }, [
+      _c(
+        "a",
+        {
+          staticClass: "logo-lg v-sm-none",
+          attrs: { href: _vm.location.origin }
+        },
+        [_c("img", { attrs: { src: "/images/logo.svg", alt: "" } })]
+      ),
+      _c(
+        "a",
+        {
           staticClass: "logo-sm lg-none",
-          attrs: { src: "/images/favicon.svg", alt: "" }
-        })
-      ]
-    ),
+          attrs: { href: _vm.location.origin }
+        },
+        [_c("img", { attrs: { src: "/images/favicon.svg", alt: "" } })]
+      ),
+      _c("img", {
+        staticClass: "logo-sm v-lg-none",
+        attrs: { src: "/images/menu.svg", alt: "" },
+        on: { click: _vm.openSideNav }
+      })
+    ]),
     _vm._v(" "),
-    _c("div", { staticClass: " right" }, [
+    _c("div", { staticClass: "right" }, [
       _c("ul", { staticClass: "nav justify-content-center" }, [
         _c(
           "li",
@@ -94512,7 +95604,7 @@ var render = function() {
         _vm._v(" "),
         _c(
           "li",
-          { staticClass: "nav-item" },
+          { staticClass: "nav-item sm-none" },
           [
             _c("router-link", { attrs: { to: "/dashboard/chats" } }, [
               _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
@@ -94537,7 +95629,7 @@ var render = function() {
           "li",
           {
             staticClass: "nav-item",
-            staticStyle: { "margin-right": "20px !important" }
+            staticStyle: { "margin-right": "10px !important" }
           },
           [
             _c("router-link", { attrs: { to: "/dashboard/notifications" } }, [
@@ -94610,47 +95702,71 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "wrapper home shadow-sm" },
+    {
+      class:
+        _vm.unreadNotifications.length == 0 && _vm.readNotifications == 0
+          ? "flex align-items-center none"
+          : "wrapper home shadow-sm"
+    },
     [
       _vm._m(0),
       _vm._v(" "),
-      _vm.unreadNotifications.length > 0
-        ? _c("div", { staticClass: "header" }, [
-            _c("span", { staticClass: "title" }, [_vm._v("Unread")])
-          ])
+      _vm.unreadNotifications.length > 0 || _vm.readNotifications.length > 0
+        ? _c(
+            "div",
+            { staticClass: "if" },
+            [
+              _vm.unreadNotifications.length > 0
+                ? _c("div", { staticClass: "header" }, [
+                    _c("span", { staticClass: "title" }, [_vm._v("Unread")])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.unreadNotifications, function(notification) {
+                return _c("notification", {
+                  key: notification.id,
+                  attrs: {
+                    identification: notification.id,
+                    message: notification.data.message
+                  },
+                  on: {
+                    deleteMe: function($event) {
+                      return _vm.deleteNotification(notification.id)
+                    }
+                  }
+                })
+              }),
+              _vm._v(" "),
+              _vm.readNotifications.length > 0
+                ? _c("div", { staticClass: "header my-6" }, [
+                    _c("span", { staticClass: "title" }, [_vm._v("Seen")])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.readNotifications, function(notification) {
+                return _c("notification", {
+                  key: notification.id,
+                  attrs: { message: notification.data.message },
+                  on: {
+                    deleteMe: function($event) {
+                      return _vm.deleteNotification(notification.id)
+                    }
+                  }
+                })
+              })
+            ],
+            2
+          )
         : _vm._e(),
       _vm._v(" "),
-      _vm._l(_vm.unreadNotifications, function(notification) {
-        return _c("notification", {
-          key: notification.id,
-          attrs: { message: notification.data.message },
-          on: {
-            deleteMe: function($event) {
-              return _vm.deleteNotification(notification.id)
-            }
-          }
-        })
-      }),
-      _vm._v(" "),
-      _vm.readNotifications.length > 0
-        ? _c("div", { staticClass: "header my-6" }, [
-            _c("span", { staticClass: "title" }, [_vm._v("Seen")])
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm._l(_vm.readNotifications, function(notification) {
-        return _c("notification", {
-          key: notification.id,
-          attrs: { message: notification.data.message },
-          on: {
-            deleteMe: function($event) {
-              return _vm.deleteNotification(notification.id)
-            }
-          }
-        })
-      })
-    ],
-    2
+      _vm.unreadNotifications.length == 0 && _vm.readNotifications == 0
+        ? _c(
+            "div",
+            { staticClass: "jumbotron text-center flex align-items-center" },
+            [_c("h5", [_vm._v("You have no notifications")])]
+          )
+        : _vm._e()
+    ]
   )
 }
 var staticRenderFns = [
@@ -94920,13 +96036,9 @@ var render = function() {
             _vm._v(" "),
             _vm.user != null
               ? _c("div", { staticClass: "input mx-3" }, [
-                  _vm._v("\r\n                    Email address: "),
-                  (_vm.updates.email_verified_at = "NULL")
-                    ? _c("small", { staticClass: "text-danger" }, [
-                        _vm._v("Not verified")
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
+                  _vm._v(
+                    "\r\n                    \r\n                    Email address: \r\n                    "
+                  ),
                   _c("input", {
                     directives: [
                       {
@@ -95489,7 +96601,7 @@ var render = function() {
           _vm._l(_vm.requests, function(request) {
             return _c(
               "div",
-              { key: request.id, staticClass: "member-card shadow-sm" },
+              { key: request.id, class: "member-card shadow-sm " + request.id },
               [
                 _c("div", { staticClass: "left" }, [
                   _c("div", { staticClass: "avatar mx-1" }, [
@@ -95616,20 +96728,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "alert alert-info shadow-sm" }, [
+  return _c("div", { class: "alert alert-info shadow-sm " + _vm.randomClass }, [
     _vm._v("\r\n    " + _vm._s(_vm.message) + "\r\n    "),
     _c(
       "button",
       {
         staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "alert",
-          "aria-label": "Close"
-        },
+        attrs: { type: "button" },
         on: {
           click: function($event) {
-            return _vm.makeEvent()
+            return _vm.makeEvent(_vm.randomClass)
           }
         }
       },

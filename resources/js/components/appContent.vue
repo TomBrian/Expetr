@@ -20,16 +20,20 @@ export default {
 
 @media (max-width:1000px) {
     .home {
-        width: 100% !important;
-        flex: 1 !important;
+        width: 100%;
+        flex: 1;
 
     }
 
     .window {
-        max-width: 93% !important;
+        max-width: 93%;
     }
 }
-
+@media (max-width:500px) {
+    .window {
+        max-width: 100% !important;
+    }
+}
 .loader {
     width: 100%;
     height: 100%;

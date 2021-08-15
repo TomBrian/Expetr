@@ -13,7 +13,7 @@
     @endif
         @csrf
         <input id="organisation" type="text" placeholder="organisation Code..."
-            class="form-control @error('organisation') is-invalid @enderror" name="organisation"
+            class="form-control @error('organisation') is-invalid @enderror" name="organisation_code"
             value="{{ old('organisation') }}" required autocomplete="organisation">
         @error('organisation')
         <span class="invalid-feedback" role="alert">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\organisations;
 use App\Models\User;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -26,6 +27,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function getQuote(){
+       return Inspiring::quote();
+    }
     public function index()
     {
 

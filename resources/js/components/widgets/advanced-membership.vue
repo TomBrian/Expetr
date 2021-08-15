@@ -21,7 +21,7 @@
         <h5>You have no join requests</h5>
     </div>
     <div class="flex" v-if="user.position == 'admin' && requests.length > 0">
-        <div class="member-card shadow-sm" v-for="request in requests" :key="request.id">
+        <div :class="'member-card shadow-sm '+request.id" v-for="request in requests" :key="request.id">
             <div class="left">
                 <div class="avatar mx-1">
                     <p class="my-1">{{request.name.split(' ')[0].charAt(0)}}{{request.name.split(' ')[1].charAt(0)}}</p>
@@ -164,6 +164,10 @@ export default {
 
         },
         acceptRequest: function (id) {
+            $(`.${id}`).css({
+                'opacity':0.5,
+                'pointer-events':'none'
+            })
             axios.post(location.origin + `/api/accept-join/${id}`).then(() => {
                 location.reload();
             }).catch((err) => {

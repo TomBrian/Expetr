@@ -12,13 +12,11 @@ body {
     overflow-x: hidden;
     background-color: #F1F5F7;
     min-height: 100vh;
+    height: fit-content !important;
 }
 .home {
     position: relative;
 }
-
-
-
 .navbar {
     .nav-content {
         display: flex;
@@ -73,7 +71,15 @@ body {
         font-family: 'poppins', sans-serif;
     }
 }
-
+@media (max-width:900px){
+    #notLogged-links {
+        width: 100vw !important;
+        .link-card {
+            margin: auto;
+            margin-bottom:20px;
+        }
+    }
+}
 #notLogged-links {
     width: 900px;
     margin-top: 50px;
@@ -112,8 +118,8 @@ body {
     }
 }
 .footer{
-    position:absolute;
-    bottom: 0;
+    position:relative;
+    margin-bottom: 0;
     width: 100%;
 }
 //login page

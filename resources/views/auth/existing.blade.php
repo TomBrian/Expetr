@@ -10,7 +10,11 @@
 
 
         <div class="form-title" style="text-transform:uppercase;">{{ __('Register to an existing organisation') }}</div>
-       
+        @if (session('message'))
+        <div class="alert alert-warning">
+            {{ session('message') }}
+        </div>
+    @endif
         @csrf
         <input id="organisation" type="text" placeholder="organisation Code..."
             class="form-control @error('organisation') is-invalid @enderror" name="organisation"

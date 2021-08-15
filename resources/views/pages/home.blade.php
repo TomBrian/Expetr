@@ -55,7 +55,6 @@
         function newOrg() {
             var url = "<?php echo route('regOrg')?>"
             window.location = url
-
         }
 
         function exOrg() {

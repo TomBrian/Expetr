@@ -10007,6 +10007,9 @@ body {
   overflow-x: hidden;
   background-color: #F1F5F7;
   min-height: 100vh;
+  height: -webkit-fit-content !important;
+  height: -moz-fit-content !important;
+  height: fit-content !important;
 }
 
 .home {
@@ -10062,6 +10065,15 @@ body {
   font-family: "poppins", sans-serif;
 }
 
+@media (max-width: 900px) {
+  #notLogged-links {
+    width: 100vw !important;
+  }
+  #notLogged-links .link-card {
+    margin: auto;
+    margin-bottom: 20px;
+  }
+}
 #notLogged-links {
   width: 900px;
   margin-top: 50px;
@@ -10099,8 +10111,8 @@ body {
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
+  position: relative;
+  margin-bottom: 0;
   width: 100%;
 }
 
