@@ -25,6 +25,9 @@ class exOrgController extends Controller
             'email' => ['required', 'unique:users,email'],
             'organisation' => ['required'],
          ]);
+         if (count(organisations::where('organisation_code','=',$request->organisation)->get()) == 0) {
+            return redirect(route('exOrga'))->with('message','The organisation code you entered does not match any organisation');
+        }
          //generate admin id
       $adminTwoChars = str_split($request->name);
       $adminId = $adminTwoChars[0] . $adminTwoChars[1] . rand(1000, 200000);
@@ -44,7 +47,6 @@ class exOrgController extends Controller
         'media_path'=>$adTargetPath,
         'media_url'=> $adTargetUrl 
     ]);
-   
     return redirect(route('login'))->with('message','welcome '.$request->name.' we will notify you through email once your request to join has been approved');
     }
 }

@@ -12,12 +12,13 @@
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+        {{-- <link rel="stylesheet" href="{{asset('css/app.css')}}"> --}}
         <title>
             {{$organisation}}
         </title>   
     </head>
 
-    <body>
+       <body>
        
         <div id="content">
             <dashboard></dashboard>
@@ -25,20 +26,7 @@
         <div class="footer text-center bg-light text-muted">
             <small>&copy;{{Date('Y')}} Expetr expense tracking and analysis system</small>
                  </div>
-        <style>
-            .skiptranslate{
-                display: flex;
-                justify-content: space-between;
-                align-items: center
-            }
-        </style>
-        <script type="text/javascript">
-            function googleTranslateElementInit() {
-              new google.translate.TranslateElement({pageLanguage: 'en'}, 'content');
-            }
-            </script>    
-             <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>        
-        <script src="{{asset('js')}}/app.js"></script>
+ <script src="{{asset('js')}}/app.js"></script>
          </body>
 
 </html>

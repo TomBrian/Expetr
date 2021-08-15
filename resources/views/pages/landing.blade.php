@@ -7,6 +7,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="stylesheet" href="{{asset('css/app.css')}}">
         <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,9 +71,11 @@
     <path fill="#006AFF" fill-opacity="1" d="M0,32L80,53.3C160,75,320,117,480,138.7C640,160,800,160,960,144C1120,128,1280,96,1360,80L1440,64L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path>
   </svg>
 </div>
-<h3 class="font-weight-bolder text-dark text-center" style="font-family:Poppins; margin-top:90px !important; width:70%; margin:auto;"> 
+<div style="width: 100%; display:flex; justify-content:center;">
+<h3 class="font-weight-bolder text-dark text-center after-hero" style="font-family:Poppins; width:70%; "> 
     It's more than management.It's a way of building team spirit among your organisation's staff
 </h3>
+</div>
 <p class="text-muted text-center" style="margin-top:10px;">Hold group conversations with staff members any time</p>
 <h1 class="text-center my-5"><u>Management tools we offer</u></h1>
 <div class="container-fluid svg">
@@ -180,6 +183,14 @@ margin: auto
     h3{
         font-size: 17px;
     }
+    .hero{
+        height: 50vh;
+    }
+    .after-hero{
+        margin-top:0px !important;
+        display: flex;
+        justify-self: center;
+    }
 }
 .cta{
 background-color: white;
@@ -190,21 +201,11 @@ display: flex;
 align-items: center;
 margin: auto
 }
+.after-hero{
+    margin-top:90px;
+}
 
 </style>
-<style>
-    .skiptranslate{
-        display: flex;
-        justify-content: space-between;
-        align-items: center
-    }
-</style>
-<script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({pageLanguage: 'en'}, 'content');
-    }
-    </script>    
-     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>        
 
 </body>
 

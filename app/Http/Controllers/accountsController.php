@@ -31,11 +31,13 @@ class accountsController extends Controller
      if ($request->name == Auth::user()->name) {
         User::find(Auth::user()->id)->update([
             'email' => $request->email,
+            'email_verified_at' => $request->email_verified_at
         ]);
     }else{
      User::find(Auth::user()->id)->update([
          'name' => $request->name,
-         'email' => $request->email
+         'email' => $request->email,
+         'email_verified_at' => $request->email_verified_at
      ]);
      $me = Auth::user();
      $all = User::where('organisation_code', '=', Auth::user()->organisation_code)->get();
@@ -47,9 +49,14 @@ class accountsController extends Controller
  }
 //  logging out
 public function logMeOut(){
+     // Get user who requested the logout
+$user = User::find(Auth::user()->id);
+// Revoke current user token
+$user->tokens()->delete();
     Auth::logout();
     return true;
 }
+
 //  deleting own account
 public function removeMe(Request $request){
 // the warning will be handled in frontend
@@ -109,7 +116,8 @@ public function removeUser($id){
 }
 // join requests handling
 public function getJoins(){
-   return User::where('approved','=','0')->get();
+   $unappronvedAll = User::where('approved','=','0');
+   return $unappronvedAll->where('organisation_code','=',Auth::user()->organisation_code)->get();
 }
 public function deleteJoin($id){
     User::find($id)->delete();

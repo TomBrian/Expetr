@@ -12,7 +12,7 @@
 </head>
 <body>
    <div class="card" style="border: solid 1px rgba(0, 0, 255, 0.151); width:fit-content; margin:auto; padding:20px; border-radius:20px; display:flex; flex-direction:column !important; justify-content:center;">
-       <div class="card-body">
+      <div class="card-body">
         <h1 style="color:blue;margin:auto; width:fit-content;">Expetr.com</h1>  
         <p class="card-text">Hello {{$userName}}.Welcome to expetr.com.</p>
          <p><b>{{$acceptorName}} accepted your join request.Log in to access {{$organisation_name}}'s dashboard</b></p>

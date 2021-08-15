@@ -1,5 +1,5 @@
 <template>
-<div class="home">
+<div :class="(downloads.length == 0)?'home flex align-items-center':'home'">
     <div class="loader shadow-sm">
         <div class="lds-ellipsis">
             <div></div>
@@ -8,7 +8,13 @@
             <div></div>
         </div>
     </div>
-    <div class="flex">
+    <div class="jumbotron flex align-items-center" v-if="downloads.length == 0" style="flex-direction:column;">
+        <h5>You have no downloads yet</h5>
+        <p class="text-muted">
+            Pdf downloads are generated at the end of every month.
+        </p>
+    </div>
+    <div class="flex" v-if="downloads.length > 0">
        <div v-for="download in downloads" :key="download.id" class="download-card my-3 mx-3 grid-item shadow-sm p-4">
         <div class="header">
             <div class="title">{{download.name}}</div>
@@ -67,6 +73,7 @@ export default {
 <style scoped>
 .home {
     width: 98% !important;
+    min-height: 100% !important;
     background-color: transparent !important;
 }
 

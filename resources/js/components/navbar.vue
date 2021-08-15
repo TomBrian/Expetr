@@ -1,18 +1,18 @@
 <template>
 <nav class=" shadow-sm navbar navbar-expand-sm">
-    <a class="navbar-brand" :href="location.origin"><img :src="'/images/logo.svg'" class="logo-lg sm-none" alt=""><img :src="'/images/favicon.svg'" class="logo-sm lg-none" alt=""></a>
+    <a class="navbar-brand"><a :href="location.origin" class="logo-lg v-sm-none"><img :src="'/images/logo.svg'"  alt=""></a><a :href="location.origin" class="logo-sm lg-none"><img :src="'/images/favicon.svg'" alt=""></a><img :src="'/images/menu.svg'" class="logo-sm v-lg-none" alt="" v-on:click="openSideNav"></a>
 
-    <div class=" right">
+    <div class="right">
         <ul class="nav justify-content-center">
             <li class="nav-item">
                 <router-link to="/dashboard/help"> <a class="nav-link" href="#"><img :src="'/images/help.svg'" class="icon" alt=""></a></router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item sm-none">
                 <router-link to="/dashboard/chats"><a class="nav-link" href="#">
                         <div class="w"><img :src="'/images/chats.svg'" class="icon" alt=""><span v-if="unreadTextsCount != '0'" class="badge badge-info"> {{unreadTextsCount}}</span></div>
                     </a></router-link>
             </li>
-            <li class="nav-item" style="margin-right:20px !important;">
+            <li class="nav-item" style="margin-right:10px !important;">
                 <router-link to="/dashboard/notifications"> <a class="nav-link reduce" href="#">
                         <div class="w"><img :src="'/images/notification.svg'" class="icon" alt=""><span v-if="unreadCount > 0" class="badge badge-info"> {{unreadCount}}</span></div>
                     </a></router-link>
@@ -67,7 +67,9 @@
     .icon {
         width: 20px !important;
     }
-
+ .logo-lg{
+    display: none !important;
+    }
     .logo-sm {
         width: 25px;
     }
@@ -78,7 +80,28 @@
         display: none !important;
     }
 }
-
+@media (max-width:500px){
+    .nav-item{
+          padding: 0% !important;
+          /* margin: 20px; */
+    }
+    .v-lg-none{
+    display: block !important;
+}
+.v-sm-none{
+     display: none !important;
+}
+    .lg-none{
+        display:none !important;
+    }
+     .icon {
+         padding: 0% !important;
+        width: 20px !important;
+    }
+}
+.v-lg-none{
+    display: none;
+}
 .navbar {
     width: 100%;
     background-color: white;
@@ -89,7 +112,6 @@
 }
 
 .nav-item {
-    margin-right: 1px;
     font-weight: bolder;
 }
 
@@ -124,6 +146,7 @@
 
 .nav-item {
     display: flex;
+    width:fit-content !important;
     align-items: center;
 }
 
@@ -133,6 +156,7 @@
 </style>
 
 <script>
+import EventBus from '../event-bus'
 export default {
     name: 'navbar',
     data() {
@@ -159,6 +183,9 @@ export default {
        
     },
     methods: {
+        openSideNav:function(){
+     EventBus.$emit('openSideNav');
+        },
         countUnreadTexts: function () {
             axios.get(location.origin + '/api/get-unread-messages-number').then((res) => {
                 this.unreadTextsCount = res.data;
