@@ -23,8 +23,8 @@
         <div id="content">
             <dashboard></dashboard>
         </div>
-        <div class="footer text-center bg-light text-muted">
-            <small>&copy;{{Date('Y')}} Expetr expense tracking and analysis system</small>
+        <div class="footer text-center bg-light text-muted" style="position:relative !important;">
+            <small>&copy;{{Date('Y')}} Expetr business management system</small>
                  </div>
  <script src="{{asset('js')}}/app.js"></script>
          </body>

@@ -26,7 +26,7 @@ class exOrgController extends Controller
             'organisation' => ['required'],
          ]);
          if (count(organisations::where('organisation_code','=',$request->organisation)->get()) == 0) {
-            return redirect(route('exOrga'))->with('message','The organisation code you entered does not match any organisation');
+            return redirect(route('exOrga'))->with('message','The organisation code you entered does not match any existing organisation');
         }
          //generate admin id
       $adminTwoChars = str_split($request->name);

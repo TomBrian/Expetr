@@ -1,69 +1,49 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="container">
-    <div class="heading">
-      
+<div class="container-fluid bg-white p-7" id="notLogged-links">
+ <div class="link-cards container flex">
+    <div class="card bg-white shadow-sm link-card mx-7 p-3">
+        <div class="icon">
+          <img src="{{asset('images/createOrg.svg')}}" alt="create new organisation"/>
+        </div>
+        <div class="text">
+           <h5 class="my-3 font-weight-bold text-center">Create a new organisation</h5>
+           <p class="text-muted text-center">
+             Once you have created an organisation, you will be automatically registered as an administrator.
+             An organisation code will be generated and sent to your email.This code will be used when registering new members in your organisation.
+           </p>
+        </div>
+        <div class="card-foot">
+          <button class="button py-2 text-center" onclick="window.location = '{{route('regOrg')}}'">
+             <span class="font-weight-bold">
+               Create organisation
+             </span>
+          </button>
+        </div>
     </div>
+    <div class="card bg-white shadow-sm link-card mx-7 p-3">
+      <div class="icon">
+        <img src="{{asset('images/existing.svg')}}" alt="create new organisation"/>
+      </div>
+      <div class="text">
+         <h5 class="my-3 font-weight-bold text-center">Register to an existing organisation</h5>
+         <p class="text-muted text-center">
+         Send a join request to an organisation that already has an account through registering with their organisation code (<b>contact existing members for the code</b>).
+         Once the request has been approved you will be able to access the dashboard
+        </p>
+      </div>
+      <div class="card-foot">
+        <button class="button py-2 text-center"  onclick="window.location = '{{route('exOrga')}}'">
+           <span class="font-weight-bold">
+             Register
+           </span>
+        </button>
+      </div>
+  </div>
+ </div>
 </div>
-<div class="container text-center" id="notLogged-links">
-    <small class="text-muted" >
-        By signing up, you confirm that you have read and agreed to the terms of our <a href="">privacy policy</a> 
-    </small>
-    <div class="flex my-4">
-        <div class="link-card shadow-sm" onclick="exOrg()">
-            <div class="link-header">
-                <img src="{{asset('images')}}/existing.svg" alt="existing">
-            </div>
-            <div class="link-text">
-                <div class="large">
-                    Register to existing organisation
-                </div>
-                <div class="small">
-                    Your request to join will be sent to the organisations admin for verification
-                </div>
-            </div>
-        </div>
-        
-        <script>
-            function exOrg() {
-                var url = "<?php echo route('regOrg')?>"
-                window.location = url
-
-            }
-
-        </script>
-        <div class="link-card shadow-sm" onclick="newOrg()">
-            <div class="link-header">
-                <img src="{{asset('images')}}/createOrg.svg" alt="existing">
-            </div>
-            <div class="link-text">
-                <div class="large">
-                    create a new organisation
-                </div>
-                <div class="small">
-                    Once you create an organisation.You are automaticaly registered as the admin
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="flex">
-        <div class="my-4"><a href="{{route('loggedin?')}}" class="font-weight-bolder text-muted">&#8592; Go back to home</a></div><div><a href="" class="font-weight-bolder text-muted">Privacy policy</a></div>
-    </div>
-    <script>
-        function newOrg() {
-            var url = "<?php echo route('regOrg')?>"
-            window.location = url
-        }
-
-        function exOrg() {
-            var url = "<?php echo route('exOrga')?>"
-            window.location = url
-
-        }
-
-    </script>
-
+<div class="container-fluid bg-white background">
+<div class="content container-fluid p-4"></div>
 </div>
 @endsection

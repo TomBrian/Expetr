@@ -31,21 +31,32 @@
 
     <body id="content">
 <nav class="navbar navbar-expand-sm navbar-light flex shadow-sm bg-light" id="landingNav">
-    <div><a class="navbar-brand" href="{{route('loggedin?')}}"><img
-       src="{{asset('images')}}/logo-light.svg" alt=""></a></div>
-<div class="d-lg-none">
-   <button class="navbar-toggler text-light" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <div><a class="navbar-brand mx-2 " href="{{route('loggedin?')}}"><img
+       src="{{asset('images')}}/logo-light.svg" style="width:110px" alt=""></a></div>
+@if (Auth::check())
+<button class="btn btn-light mx-3 font-weight-bold text-primary" onclick="window.location = '{{route('dashboard')}}'">
+        Go To Dashboard
+</button>
+@else
+<button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+aria-expanded="false" aria-label="Toggle navigation">
+<img src="{{asset('images/menu-white.svg')}}" alt="">
+</button>
+<div class="collapse navbar-collapse" id="collapsibleNavId">
+<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <li class="nav-item active">
+        <a class="nav-link text-white" href="{{route('login')}}">Login</a>
+    </li>
+    <li class="nav-item">
+        <button class="btn btn-light mx-3 font-weight-bold text-primary" onclick="window.location = '{{route('welcome')}}'">
+            Try it now
+        </button>
+    </li>
+</ul>
+
 </div>
-    <div class="collapse navbar-collapse" id="collapsibleNavId">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-           <li class="nav-item"><a href="#" class="nav-link">Guide</a></li>
-           <li class="nav-item"><a href="{{route('login')}}" class="nav-link">Login</a> </li>
-           <li class="nav-item"><a href="{{route('welcome')}}" class="nav-link">register</a></li>
-        </ul>
-    </div>
+
+@endif
 </nav>
 <div class="hero">
 <div class="overlay">
@@ -72,12 +83,13 @@
   </svg>
 </div>
 <div style="width: 100%; display:flex; justify-content:center;">
-<h3 class="font-weight-bolder text-dark text-center after-hero" style="font-family:Poppins; width:70%; "> 
+<h3 class="font-weight-bolder text-primary text-center after-hero" style="font-family:Poppins; width:70%; "> 
     It's more than management.It's a way of building team spirit among your organisation's staff
 </h3>
 </div>
-<p class="text-muted text-center" style="margin-top:10px;">Hold group conversations with staff members any time</p>
-<h1 class="text-center my-5"><u>Management tools we offer</u></h1>
+<p class="text-muted text-center" style="margin-top:10px;">Expetr brings you tools that are created to
+     help you build team spirit among your staff members</p>
+<h2 class="text-center my-5" style="color:orange;">Management tools we offer</h2>
 <div class="container-fluid svg">
     <h3 class="font-weight-bolder lg-none">Expense recording and processing</h3>
     <div class="hero-text text-left px-5">
@@ -117,9 +129,7 @@
             <img src="{{asset('images/tasks.svg')}}" style="width: 70%;" alt="">
         </div>
 </div>
-<div class="footer text-center bg-light text-muted">
-    <small>&copy;{{Date('Y')}} Expetr expense tracking and analysis system</small>
-         </div>
+
 <style>
 .svg{
     display:flex;
@@ -143,7 +153,7 @@
     }
 }
 .svg h3{
-    color:#3F3D56;
+    color:orange;
 }
 .hero-image{
 width: 50%
@@ -206,7 +216,9 @@ margin: auto
 }
 
 </style>
-
+<div class="footer text-center bg-light text-muted" style="position:relative !important;">
+    <small>&copy;{{Date('Y')}} Expetr business management system</small>
+         </div>
 </body>
 
 </html>

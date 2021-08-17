@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" style="display: flex;justify-content:center;align-items:center; height:90vh;">
-    <form method="POST" id="login" class="shadow-sm" action="{{ route('login') }}">
+<div class="container-fluid bg-white" id="notLogged-links" style="display: flex;justify-content:center;\">
+    <form method="POST" id="login" class="shadow-sm card my-3" action="{{ route('login') }}">
         <div class="form-title">
             {{__('LOGIN')}}
         </div>
@@ -37,18 +37,16 @@
         @enderror
         <div class="flex">
             <div class="form-group">
-                <div class="flex" style="height: fit-content;align-items:center;">
+                <div class="flex" style="align-items:center;">
                     <input class="input" type="checkbox" name="remember" id="remember"
                         {{ old('remember') ? 'checked' : '' }}>
-                    <label class="label" style="margin-top:-20px; margin-left:10px;" for="remember">
+                    <label class="label" style="margin-top:-10px; margin-left:10px;" for="remember">
                         {{ __('Remember Me') }}
                     </label>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col">
-
-
                     @if (Route::has('password.request'))
                     <u>
                         <a class="btn btn-link" href="{{ route('password.request') }}" style="margin-top:-20px;">
@@ -63,7 +61,10 @@
         <button type="submit" id="btn">
             {{ __('Login') }}
         </button>
-        <div class="flex my-3"><small>Dont have an account? <a href="{{route('welcome')}}">register</a></small></div>
+        <div class="flex my-1"><small>Dont have an account? <a href="{{route('welcome')}}">register</a></small></div>
     </form>
+</div>
+<div class="container-fluid bg-white background">
+    <div class="content container-fluid p-4"></div>
 </div>
 @endsection

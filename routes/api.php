@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 **/
 
 // expenses
-
+Route::post('/log-me-out',[accountsController::class,'logMeOut'])->name('apiLog')->middleware('auth');
 Route::group(['middleware'=>'auth:sanctum'],function(){
 Route::get('/get-quote',[HomeController::class,'getQuote'])->middleware('auth');
 Route::post('/make-expense', [App\Http\Controllers\expensesController::class, 'make'])->middleware('auth');
@@ -78,7 +78,6 @@ Route::get('/get-organisation-downloads',[downloadsController::class,'index'])->
 // uniform resource locators for the accountsController endpoints
 Route::post('/remove-me',[accountsController::class,'removeMe'])->middleware('auth');
 Route::post('/update-my-details',[accountsController::class,'changes'])->middleware('auth');
-Route::post('/log-me-out',[accountsController::class,'logMeOut'])->name('apiLog')->middleware('auth');
 // admin requests
 Route::post('/change-organisation-name',[accountsController::class,'orgUpdates'])->middleware('auth');
 Route::post('/new-position/{id}/{position}',[accountsController::class,'newPosition'])->middleware('auth');

@@ -140,7 +140,7 @@ export default {
             topNotifications: [],
             activitiesAlmostDue: [],
             eventsAlmostDue: null,
-            assignments: null,
+            assignments: [],
             requests: [],
             location: {
                 origin: location.origin

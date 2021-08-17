@@ -1,15 +1,14 @@
 @extends('layouts.app')
 {{-- register to an existing org --}}
 @section('content')
-<div class="container" style="display: flex;justify-content:center;align-items:center; height:120vh;">
-    <form method="POST" id="login" class="shadow-sm" action="{{ route('register') }}">
+<div class="container-fluid bg-white p-3"  id="notLogged-links" style="display: flex;justify-content:center;">
+    <form method="POST" id="login" class="shadow-sm card my-3" action="{{ route('register') }}">
 
-        {{-- <div style="width:fit-content;margin:auto">
-            <img src="{{asset('images')}}/existing.svg" class="form-icon">
-        </div> --}}
+        <div style="width:fit-content;margin:auto">
+            <img src="{{asset('images')}}/existing.svg" class="form-icon my-2">
+        </div>
 
-
-        <div class="form-title" style="text-transform:uppercase;">{{ __('Register to an existing organisation') }}</div>
+        {{-- <div class="form-title" style="text-transform:uppercase;">{{ __('Register to an existing organisation') }}</div> --}}
         @if (session('message'))
         <div class="alert alert-warning">
             {{ session('message') }}
@@ -45,7 +44,7 @@
             <strong>{{ $message }}</strong>
         </span>
         @enderror
-
+<div class="password-group">
         <input id="password" type="password" placeholder="password..."
             class="form-control @error('password') is-invalid @enderror" name="password" required
             autocomplete="new-password">
@@ -59,12 +58,15 @@
         <input id="password-confirm" type="password" placeholder="confirm password..." class="form-control"
             name="password_confirmation" required autocomplete="new-password">
 
-
+</div>
 
         <button type="submit" id="btn">
             {{ __('Register') }}
         </button>
 <div class="flex my-3"><small>Already have an account? <a href="{{route('login')}}">log in</a></small></div>
     </form>
+</div>
+<div class="container-fluid bg-white background">
+    <div class="content container-fluid p-4"></div>
 </div>
 @endsection

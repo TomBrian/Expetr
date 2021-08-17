@@ -4222,7 +4222,7 @@ __webpack_require__.r(__webpack_exports__);
       topNotifications: [],
       activitiesAlmostDue: [],
       eventsAlmostDue: null,
-      assignments: null,
+      assignments: [],
       requests: [],
       location: {
         origin: location.origin
@@ -4674,27 +4674,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _widgets_notification_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./widgets/notification.vue */ "./resources/js/components/widgets/notification.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //

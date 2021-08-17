@@ -29,31 +29,49 @@
     </head>
 
     <body>
-        <div id="app">
-   <div class="logo">
-       <a href="{{route('loggedin?')}}">
-       <img src="{{asset('images/logo.svg')}}" alt="">
-       </a>
-   </div>
-   <style>
-       .logo{
-           width: fit-content;
-           margin: auto;
-       }
-       .logo img{
-        width: 120px;
-       }
-       #app{
-           padding-top:30px;
-       }
-   </style>
-            <main>
-                @yield('content')
-            </main>
+<div id="app">
+    <nav class="navbar navbar-expand-md flex bg-white">
+        <div><a class="navbar-brand mx-2 " href="{{route('loggedin?')}}"><img
+           src="{{asset('images/logo.svg')}}" style="width:110px" alt=""></a></div>
+    @if (Auth::check())
+    <button class="btn text-light mx-3 font-weight-bold bg-primary" onclick="window.location = '{{route('dashboard')}}'">
+            Go To Dashboard
+    </button>
+    @else
+    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <img src="{{asset('images/menu.svg')}}" alt="">
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavId">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item active">
+            <a class="nav-link text-primary font-weight-bold" href="{{route('login')}}">Login</a>
+        </li>
+        <li class="nav-item">
+            <button class="btn btn-primary mx-3 font-weight-bold text-light" onclick="window.location = '{{route('welcome')}}'">
+                Try it now
+            </button>
+        </li>
+    </ul>
+    
+    </div>
+    
+    @endif
+    </nav>
+                @yield('content')    
         </div>
-        <div class="footer text-center bg-light text-muted">
-   <small>&copy;{{Date('Y')}} Expetr expense tracking and analysis system</small>
-        </div>
+        {{-- <style>
+            .logo{
+                width: fit-content;
+                margin: auto;
+            }
+            .logo img{
+             width: 120px;
+            }
+        </style> --}}
+        <footer class="footer text-center bg-light text-muted">
+            <small>&copy;{{Date('Y')}} Expetr business management system</small>
+         </footer>
     </body>
 
 </html>
