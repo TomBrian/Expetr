@@ -198,7 +198,7 @@ export default {
             const secondName = nameArr[1];
             const initials = firstName.charAt(0) + secondName.charAt(0);
             this.avatar = initials
-            console.log('you are logged in as ' + initials);
+            // console.log('you are logged in as ' + initials);
         }
 
     }
