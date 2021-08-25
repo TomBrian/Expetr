@@ -4654,8 +4654,7 @@ __webpack_require__.r(__webpack_exports__);
       var firstName = nameArr[0];
       var secondName = nameArr[1];
       var initials = firstName.charAt(0) + secondName.charAt(0);
-      this.avatar = initials;
-      console.log('you are logged in as ' + initials);
+      this.avatar = initials; // console.log('you are logged in as ' + initials);
     }
   }
 });
