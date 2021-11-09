@@ -1,13 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="hero">
-        <div class="blob">
-            <svg width="235" height="253" viewBox="0 0 235 253" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M211.047 79.2026C235.136 122.217 252.439 178.161 204.94 214.463C157.101 250.764 44.1197 267.671 -14.237 235.348C-72.933 202.776 -77.3437 120.974 -44.7725 69.257C-12.2013 17.5399 56.6731 -4.09173 106.548 0.632427C156.422 5.10794 186.958 35.9393 211.047 79.2026Z"
-                    fill="#1813FF" fill-opacity="0.1" />
-            </svg>
-        </div>
+
         <div class="hero-text text-center text-muted container sm:w-full">
             <h1 class="my-5">Expetr provides <span class="em">vital business management</span> tools to
                 help you track growth</h1>
