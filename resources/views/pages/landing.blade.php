@@ -7,20 +7,22 @@
                 help you track growth</h1>
             <p class="text-center text-muted">Track and analyse your expenses,Manage events and assign tasks all on one
                 dashboard.</p>
-            <button class="flex my-5 hover:shadow-lg btn-primary justify-content-between">
-                <div class="text">
-                    <p class="text-lg">
-                        Get Started
-                    </p>
-                </div>
-                <div class="arrow">
-                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M25.459 14.291L14.3906 4.68457C14.3057 4.61133 14.1973 4.57031 14.083 4.57031H11.4902C11.2734 4.57031 11.1738 4.83984 11.3379 4.98047L21.5977 13.8867H4.45313C4.32422 13.8867 4.21875 13.9922 4.21875 14.1211V15.8789C4.21875 16.0078 4.32422 16.1133 4.45313 16.1133H21.5947L11.335 25.0195C11.1709 25.1631 11.2705 25.4297 11.4873 25.4297H14.168C14.2236 25.4297 14.2793 25.4092 14.3203 25.3711L25.459 15.709C25.5604 15.6208 25.6417 15.5119 25.6975 15.3896C25.7532 15.2672 25.782 15.1344 25.782 15C25.782 14.8656 25.7532 14.7328 25.6975 14.6104C25.6417 14.4881 25.5604 14.3792 25.459 14.291Z"
-                            fill="#1813FF" />
-                    </svg>
-                </div>
-            </button>
+            <a href="{{ route('welcome') }}">
+                <button class="flex my-5 hover:shadow-lg btn-primary justify-content-between">
+                    <div class="text">
+                        <p class="text-lg">
+                            Get Started
+                        </p>
+                    </div>
+                    <div class="arrow">
+                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M25.459 14.291L14.3906 4.68457C14.3057 4.61133 14.1973 4.57031 14.083 4.57031H11.4902C11.2734 4.57031 11.1738 4.83984 11.3379 4.98047L21.5977 13.8867H4.45313C4.32422 13.8867 4.21875 13.9922 4.21875 14.1211V15.8789C4.21875 16.0078 4.32422 16.1133 4.45313 16.1133H21.5947L11.335 25.0195C11.1709 25.1631 11.2705 25.4297 11.4873 25.4297H14.168C14.2236 25.4297 14.2793 25.4092 14.3203 25.3711L25.459 15.709C25.5604 15.6208 25.6417 15.5119 25.6975 15.3896C25.7532 15.2672 25.782 15.1344 25.782 15C25.782 14.8656 25.7532 14.7328 25.6975 14.6104C25.6417 14.4881 25.5604 14.3792 25.459 14.291Z"
+                                fill="#1813FF" />
+                        </svg>
+                    </div>
+                </button>
+            </a>
         </div>
     </div>
     <div class="container">
