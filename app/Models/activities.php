@@ -13,6 +13,7 @@ class activities extends Model
         'description',
         'date_due',
         'author',
+        'assigned_to',
         'organisation_code',
         'status'
     ];

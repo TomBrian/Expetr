@@ -4,9 +4,12 @@ use App\Http\Controllers\accountsController;
 use App\Http\Controllers\chatsController;
 use App\Http\Controllers\downloadsController;
 use App\Http\Controllers\historyController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\profileController;
 use App\Models\User;
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,9 +21,13 @@ use Illuminate\Support\Facades\Route;
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+
+**/
+
 // expenses
+Route::post('/log-me-out',[accountsController::class,'logMeOut'])->name('apiLog')->middleware('auth');
+Route::group(['middleware'=>'auth:sanctum'],function(){
+Route::get('/get-quote',[HomeController::class,'getQuote'])->middleware('auth');
 Route::post('/make-expense', [App\Http\Controllers\expensesController::class, 'make'])->middleware('auth');
 Route::post('/delete-expense/{id}', [App\Http\Controllers\expensesController::class, 'deleteExp'])->middleware('auth');
 Route::post('/set-status/{id}/{status}', [App\Http\Controllers\expensesController::class, 'setStatus'])->middleware('auth');
@@ -36,7 +43,6 @@ Route::get('/get-organisation', [App\Http\Controllers\profileController::class, 
 Route::get('/all-users', function () {
     return User::where('id','!=',Auth::user()->id)->where('organisation_code','=',Auth::user()->organisation_code)->where('approved','=',1)->get();
 })->middleware('auth');
-Route::get('/register-organisation/create', [App\Http\Controllers\newOrgcontroller::class, 'make'])->name('createOrg');
 Route::get('/user', function () {
     return Auth::user();
 })->middleware('auth');
@@ -46,8 +52,10 @@ Route::get('/get-activities', [App\Http\Controllers\activitiesController::class,
 Route::get('/get-almost-due-activities', [App\Http\Controllers\activitiesController::class, 'almostDue'])->middleware('auth');
 Route::get('/get-failed-activities', [App\Http\Controllers\activitiesController::class, 'failed'])->middleware('auth');
 Route::get('/get-completed-activities', [App\Http\Controllers\activitiesController::class, 'completed'])->middleware('auth');
+Route::get('/get-underway-activities', [App\Http\Controllers\activitiesController::class, 'getUnderway'])->middleware('auth');
 Route::post('/delete-activity/{id}', [App\Http\Controllers\activitiesController::class, 'deleteAct'])->middleware('auth');
 Route::post('/set-activity-status/{id}/{status}', [App\Http\Controllers\activitiesController::class, 'statusAct'])->middleware('auth');
+Route::get('/get-assignments', [App\Http\Controllers\activitiesController::class, 'assignments'])->middleware('auth');
 // events
 Route::post('/make-event', [App\Http\Controllers\eventsController::class, 'make'])->middleware('auth');
 Route::get('/get-events', [App\Http\Controllers\eventsController::class, 'display'])->middleware('auth');
@@ -70,7 +78,6 @@ Route::get('/get-organisation-downloads',[downloadsController::class,'index'])->
 // uniform resource locators for the accountsController endpoints
 Route::post('/remove-me',[accountsController::class,'removeMe'])->middleware('auth');
 Route::post('/update-my-details',[accountsController::class,'changes'])->middleware('auth');
-Route::post('/log-me-out',[accountsController::class,'logMeOut'])->name('apiLog')->middleware('auth');
 // admin requests
 Route::post('/change-organisation-name',[accountsController::class,'orgUpdates'])->middleware('auth');
 Route::post('/new-position/{id}/{position}',[accountsController::class,'newPosition'])->middleware('auth');
@@ -80,4 +87,5 @@ Route::get('/get-unread-messages-number',[chatsController::class,'numberOfUnread
 Route::get('get-all-join-requests',[accountsController::class,'getJoins'])->middleware('auth');
 Route::post('delete-join/{id}',[accountsController::class,'deleteJoin'])->middleware('auth');
 Route::post('accept-join/{id}',[accountsController::class,'acceptJoin'])->middleware('auth');
-
+});
+Route::get('/register-organisation/create', [App\Http\Controllers\newOrgcontroller::class, 'make'])->name('createOrg');

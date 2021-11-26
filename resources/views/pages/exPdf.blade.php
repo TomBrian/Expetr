@@ -24,8 +24,8 @@
          padding :15px;
          border:solid 1px grey;
      }
-     th{ background:grey;
-         color: white;
+     th{ background:#efefef;
+         color: grey;
          padding: 10px;
          border-left:solid 1px grey;
          border-bottom:solid 1px grey;
@@ -86,9 +86,9 @@
              
         </tbody>
 </table>
-<div class="footer" style="background: grey; color:white; text-align:center; width:100%; position:absolute; bottom:0;">
-  <small>&copy;<?php echo date('Y')?> Expetr Expense Tracking And Analysis System__<a href=" https://www.Expetr.com">Expetr.com </a>__</small>  
-</div>
+<div class="footer text-center bg-light text-muted" style="position:relative !important;">
+    <small>&copy;{{Date('Y')}} Expetr business management system</small>
+         </div>
 </div>
 </body>
 </html>

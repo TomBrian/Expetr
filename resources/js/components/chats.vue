@@ -99,6 +99,7 @@
                 <input type="search" placeholder="search for conversation..." v-model="searchQuery" v-on:change="searchConv" class="form-control"><button class="btn"><i class="fa fa-search" aria-hidden="true"></i></button>
             </div>
         </div>
+<<<<<<< HEAD
  <div class="jumbotron text-center" v-if="searchResults.length == 0" id="noResults">
             <h5>No conversation matches your query</h5>
 </div>
@@ -106,6 +107,15 @@
             <h5>You have no conversations</h5>
         </div>
         
+=======
+        <div class="jumbotron text-center" v-if="searchResults.length == 0" id="noResults">
+            <h5>No conversation matches your query</h5>
+        </div>
+        <div class="jumbotron text-center" v-if="conversations.length == 0 ">
+            <h5>You have no conversations</h5>
+        </div>
+
+>>>>>>> b76127416238573a71100617fa38f108f7a02456
         <div v-if="openConversation != null">
             <div :class="openConversation.conversationId == convo.conversationId?'open profile-card p-3 flex':'profile-card p-3 flex'" v-on:click="changeOpenConv(convo.conversationId)" v-for="(convo,i) in conversations" :key="i">
                 <div class="a-wrapper">
@@ -244,6 +254,7 @@ export default {
             openConversation: null,
             messages: [],
             me: null,
+<<<<<<< HEAD
             searchQuery:'',
             searchResults:[]
         }
@@ -271,6 +282,38 @@ export default {
      }
      console.log(this.searchResults);
     },
+=======
+            searchQuery: '',
+            searchResults: []
+        }
+    },
+    methods: {
+        searchConv: function () {
+            var results = [];
+            const all = this.conversations;
+            if (this.searchQuery == '') {
+               this.getConversations(); 
+            }
+            if (all.length > 0) {
+                $('#noResults').show()
+                const allConvs = this.conversations;
+                for (let i = 0; i < allConvs.length; i++) {
+                    const conv = allConvs[i];
+                    if (conv.participants[0].name.toUpperCase().indexOf(this.searchQuery.toUpperCase()) > -1) {
+                        results.push(conv);
+                    }
+                }
+            } else {
+                alert("you have no conversations")
+            }
+
+            this.searchResults = results;
+            if (this.searchResults.length > 0) {
+                this.conversations = results;
+            }
+            console.log(this.searchResults);
+        },
+>>>>>>> b76127416238573a71100617fa38f108f7a02456
         getAllUsers: function () {
             axios.get(location.origin + '/api/all-users')
                 .then((res) => {
@@ -284,10 +327,10 @@ export default {
             if (event.target.checked) {
                 this.groupForm.participants.push(id);
             } else {
-                //    remove selected hooligan
+                //    remove selected person
                 for (let i = 0; i < this.groupForm.participants.length; i++) {
-                    const hooligan = this.groupForm.participants[i];
-                    if (hooligan == id) {
+                    const person = this.groupForm.participants[i];
+                    if (person == id) {
                         this.groupForm.participants.splice(i, 1)
                     }
                 }
@@ -408,8 +451,8 @@ export default {
             }
         }
     },
- destroyed(){
-clearInterval(this.messageInterval);
+    destroyed() {
+        clearInterval(this.messageInterval);
 
     },
     mounted() {
@@ -599,7 +642,9 @@ clearInterval(this.messageInterval);
 
     background-color: #F0F2F5;
 }
-
+.modal{
+    z-index: 3000;
+}
 .modal-body {
     min-height: 600px;
 }

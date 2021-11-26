@@ -16,11 +16,23 @@ class activitiesController extends Controller
 {
     public function make(Request $request)
     {
+        $assigned = '';
+        if (count($request->assigned_to) > 0) {
+           $allAssigned = $request->assigned_to;
+        //    change array to string
+          foreach ($allAssigned as $person) {
+              $assigned .= $person.',';
+          }
+        }
+        else{
+            $assigned = 'general';
+        }
         activities::create([
             'title' => $request->title,
             'description' => $request->description,
             'date_due' => $request->date,
             'author' => Auth::user()->name,
+            'assigned_to' => $assigned,
             'organisation_code' => Auth::user()->organisation_code,
             'status' => 'NULL'
         ]);
@@ -71,14 +83,24 @@ foreach ($activities as $activity){
     $start = strtotime(date('Y-m-d'));
     $end = strtotime($activity->date_due);
     $days_between = ceil(($end - $start) / 86400);
-    if($days_between <= 4 && $days_between >= 0){
+    if($days_between <= 2 && $days_between >= 0){
     array_push($almost,$activity);
     }
 }
    return $almost;
     }
 
-
+public function getUnderway(){
+    $activities = activities::where('organisation_code','=',Auth::user()->organisation_code)->where('status','!=','done')->get();
+    //  query checking for activities taking place
+    $underway = array();
+foreach ($activities as $task) {
+    if ($task->status == 'doing') {
+        array_push($underway,$task);
+    }
+}
+   return $underway;
+}
     public function failed(){
         $activitieses = activities::where('organisation_code','=',Auth::user()->organisation_code)->get();
        $activities = $activitieses->where('status','!=','done');
@@ -100,7 +122,30 @@ foreach ($activities as $activity){
         return $activities->where('status','=','done')->get();
     }
     public function display()
-    {
-        return activities::where('organisation_code', '=', Auth::user()->organisation_code)->get();
+{   
+      $activities = activities::where('organisation_code', '=', Auth::user()->organisation_code)->get();
+      foreach ($activities as $activity) {
+          $assignedIds = $activity->assigned_to;
+          $array = explode(',',$assignedIds);
+          array_splice($array,count($array)-1,1);
+          $arrayNames = array();
+          foreach ($array as $user) {
+              $person = User::find($user);
+              array_push($arrayNames,$person->name);
+          }
+          $activity->assigned_to = $arrayNames;
+      }
+      return $activities;
     }
+    public function assignments(){
+        $activities = activities::where('organisation_code', '=', Auth::user()->organisation_code)->get();
+        $myAssignments = array();
+        foreach ($activities as $activity) {
+            $assignedIds = explode(',', $activity->assigned_to);
+            if (in_array(Auth::user()->id,$assignedIds)) {
+                array_push($myAssignments,$activity);
+            }
+        }
+        return $myAssignments;
+    }   
 }

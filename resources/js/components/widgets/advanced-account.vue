@@ -134,7 +134,7 @@ export default {
         logMeOut:function(){
             axios.post(location.origin + '/api/log-me-out').then((res)=>{
                 if (res.data == true) {
-                      location.reload();
+                     location.reload();
                 }
                  else{
                      alert('could not log you out.Please try again later');

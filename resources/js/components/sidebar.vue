@@ -76,11 +76,20 @@
     width: 230px;
     padding: 0px;
     background-color: white;
+    transition: 0.3s;
 }
+@media (max-width:500px){
+    .sidebar{
+  position:absolute;
+  left:-100%;
+  z-index:2000;
+    }
 
+}
 @media (max-width:1000px) {
     .sidebar {
-        width: fit-content !important;
+        width: fit-content;
+        z-index:2000;
     }
 
     .sm-none {
@@ -131,7 +140,9 @@
 a:hover {
     text-decoration: none;
 }
-
+.sidebar-open{
+    left:0 !important;
+}
 .sidebar-item:hover {
     background-color: #efefef;
 
@@ -139,9 +150,15 @@ a:hover {
 </style>
 
 <script>
+import EventBus from '../event-bus';
 export default {
     name: 'sidebar',
-    methods: {},
-    mounted: () => {}
+    methods: {
+    },
+    mounted(){
+         EventBus.$on('openSideNav', function () {
+         $('.sidebar').toggleClass('sidebar-open');
+    });
+    }
 }
 </script>

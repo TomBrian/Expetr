@@ -18,6 +18,7 @@ class CreateActivitiesTable extends Migration
             $table->text('title');
             $table->text('description');
             $table->text('author');
+            $table->text('assigned_to');
             $table->text('status');
             $table->text('organisation_code');
             $table->text('date_due');

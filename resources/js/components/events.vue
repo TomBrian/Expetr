@@ -305,4 +305,15 @@ export default {
     justify-content: space-between;
     align-items: center;
 }
+.vfc-content .vfc-content{
+    z-index: 0 !important;
+    position: relative !important;
+}
+.modal {
+    border-radius: 0% !important;
+    z-index: 3000;
+}
+.vfc-day{
+font-family: sans-serif !important;
+}
 </style>

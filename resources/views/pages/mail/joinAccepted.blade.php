@@ -12,9 +12,9 @@
 </head>
 <body>
    <div class="card" style="border: solid 1px rgba(0, 0, 255, 0.151); width:fit-content; margin:auto; padding:20px; border-radius:20px; display:flex; flex-direction:column !important; justify-content:center;">
-       <div class="card-body">
-        <h1 style="color:blue;margin:auto; width:fit-content;">Expetr.com</h1>  
-        <p class="card-text">Hello {{$userName}}.Welcome to expetr.com.</p>
+      <div class="card-body">
+        <h1 style="color:blue;margin:auto; width:fit-content;">Expetr</h1>  
+        <p class="card-text">Hello {{$userName}}.Welcome to expetr</p>
          <p><b>{{$acceptorName}} accepted your join request.Log in to access {{$organisation_name}}'s dashboard</b></p>
          <p>Visit our help center for any inquiries.To make changes to your account, go to the advanced/account tab.</p>
         <small style="color:grey;">Please do not reply to this message</small>

@@ -1,5 +1,13 @@
 <template>
 <div class="home">
+    <div class="loader shadow-sm">
+        <div class="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
 <div class="jumbotron jumbotron-fluid flex  align-items-center px-5 text-center" v-if="AllUsers.length < 1" style="margin:auto;"> 
     <div class="container flex  align-items-center">
         <div>
@@ -8,7 +16,7 @@
     </div>
     </div>
 </div>
-    <div class="member-card shadow-sm" v-for="user in AllUsers" :key="user.id">
+    <div class="member-card mx-3 shadow-sm" v-for="user in AllUsers" :key="user.id">
         <div class="left">
             <div class="avatar mx-1">
                 <p class="my-1">{{user.avatar}}</p>
@@ -46,6 +54,10 @@ export default {
             this.AllUsers = res.data
             //console.log(this.AllUsers)
             this.createAvatar()
+<<<<<<< HEAD
+=======
+            $('.loader').hide()
+>>>>>>> b76127416238573a71100617fa38f108f7a02456
            // this.sanitizeDate()
         }).catch((err) => {
             console.log(err)
@@ -111,8 +123,8 @@ export default {
     flex-direction: row !important;
     flex-wrap: wrap;
     background-color: transparent !important;
-    justify-content: space-between;
-    width: 99% !important;
+    /* justify-content: space-between; */
+    width: 90% !important;
 }
 
 .details {

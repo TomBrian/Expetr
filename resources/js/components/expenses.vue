@@ -17,8 +17,11 @@
     <div class="stop-wait alert alert-danger">
         Failed to process file.Please try again later
     </div>
-    <div class="total p-8" style="position:relative;">
+    <div class="total p-2" style="position:relative;">
         <div class="contributors text-primary">contributors: &nbsp; {{contributors}}</div>
+         <div class="search my-2 flex">
+                <input type="text" placeholder="search for expense..." v-model="searchQuery" v-on:keyup="searchEx()" class="form-control"><button class="btn"><i class="fa fa-search" aria-hidden="true"></i></button>
+        </div>
         <div class="number text-primary">total: &nbsp; {{expenseTotal}}</div>
     </div>
 
@@ -216,8 +219,8 @@
                         </div>
                     </td>
                     <td>
-                        <form @submit.prevent="deletes()" method="post">
-                            <input type="hidden" :value="expense.id" />
+                        <form @submit.prevent="deletes(expense.id)" method="post">
+                           
                             <button class="btn btn-danger" type="submit">Delete</button>
                         </form>
                     </td>
@@ -262,10 +265,37 @@ export default {
                 targetId: '',
                 status: ''
             },
+            searchQuery:''
         }
     },
 
-    methods: {
+    methods: {   
+        searchEx: function () {
+            $('.summary').hide();
+            var results = [];
+            const all = this.expenses;
+            if (this.searchQuery == '') {
+               this.getExp(); 
+               $('.summary').show();
+            }
+            if (all.length > 0) {
+                const allConvs = this.expenses;
+                for (let i = 0; i < allConvs.length; i++) {
+                    const conv = allConvs[i];
+                    if (conv.title.toUpperCase().indexOf(this.searchQuery.toUpperCase()) > -1) {
+                        results.push(conv);
+                    }
+                }
+            } else {
+                alert("you have no expenses")
+            }
+
+            this.searchResults = results;
+            if (this.searchResults.length > 0) {
+                this.expenses = results;
+            }
+            console.log(this.searchResults);
+        },
         getPdf: function () {
             $('.wait').show();
             axios.get(location.origin + '/api/downloads/download-expenses-pdf', {
@@ -316,14 +346,9 @@ export default {
                 });
 
         },
-        deletes: function () {
-            // set targetId
-            const targId = $('#target').val();
-            this.actions.targetId = targId
-            console.log(this.actions.status)
-            //dialogue
+        deletes: function (id) {
             if (confirm("YOU ARE ABOUT TO DELETE AN EXPENSE!")) {
-                axios.post(location.origin + `/api/delete-expense/${this.actions.targetId}`).then(() => {
+                axios.post(location.origin + `/api/delete-expense/${id}`).then(() => {
                     this.getExp();
                 }).catch((err) => {
                     console.log(err);
@@ -366,21 +391,60 @@ export default {
 
 <style scoped>
 .home {
-    width: 95% !important;
+    width: 95%;
+}
+.total{
+    width: 80%;
+    margin:auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+@media (max-width:900px){
+    .home{
+        width:100%;
+    }
+    .total{
+        width:100%;
+    }
+    .total .number{
+        font-size: 12px !important;
+    }
+    .total .contributors{
+        font-size: 12px !important;
+        text-align: center;
+    }
+    .search .form-control{
+        height:35px;
+    }
+    .search .btn{
+        height:35px;
+    }
+}
+.search .form-control {
+    border-right: none;
+    border-radius: 37px 0px 0px 37px;
 }
 
+.form-control:focus {
+    box-shadow: 23px 23px 23px transparent;
+}
+
+.search .btn {
+    border: solid 1px rgba(141, 141, 141, 0.466);
+    border-left: none;
+    border-radius: 0px 37px 37px 0px;
+}
 .total .number {
     font-weight: bold;
     font-family: 'poppins', sans-serif;
-    position: absolute;
-    right: 20px;
+   
 }
 
 .total .contributors {
     font-weight: bold;
     font-family: 'poppins', sans-serif;
-    position: absolute;
-    left: 20px;
+  
 }
 
 .table-wrap {
@@ -406,8 +470,9 @@ export default {
     width: 3px;
 }
 
-.modal {
+.modal-dialog {
     border-radius: 0% !important;
+    z-index: 3000;
 }
 
 .header {
@@ -471,7 +536,6 @@ export default {
 }
 
 .form-control:focus {
-    border: none !important;
     outline: none !important;
 }
 

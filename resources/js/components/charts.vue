@@ -260,7 +260,11 @@ export default {
     background-color: transparent !important;
     display: block !important;
 }
-
+@media (max-width:500px){
+    .home{
+        width: 100%;
+    }
+}
 .chart-card {
     margin: 5px;
     background-color: white;

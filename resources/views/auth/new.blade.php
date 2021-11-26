@@ -2,13 +2,12 @@
 {{-- the form to create a new org --}}
 @section('content')
 <div id="app">
-    {{-- too lazy to add css to my app.css file --}}
-    <div class="container" style="display: flex;justify-content:center;align-items:center; height:fit-content;">
-        <form method="POST" id="login" class="shadow-sm" action="{{ route('createOrg') }}">
-            {{-- <div style="width:fit-content;margin:auto">
-                <img src="{{asset('images')}}/createOrg.svg" class="form-icon">
-            </div> --}}
-            <div class="form-title" style="text-transform:uppercase;">{{ __('create a new organisation') }}</div>
+    <div class="container-fluid bg-white p-7"  id="notLogged-links" style="display: flex; justify-content:center;">
+        <form method="POST" id="login" class="shadow-sm my-3 card bg-white" action="{{ route('createOrg') }}">
+            <div style="width:fit-content;margin:auto">
+                <img src="{{asset('images')}}/createOrg.svg" class="form-icon my-2">
+            </div>
+            {{-- <div class="form-title" style="text-transform:uppercase;">{{ __('create a new organisation') }}</div> --}}
 
             @csrf
             @method('GET')
@@ -21,9 +20,6 @@
                 <strong>{{ $message }}</strong>
             </span>
             @enderror
-            <div class="text-info">
-                <small>You will be automatically registered as the admin</small>
-            </div>
             <input id="name" type="text" placeholder="your(admin) name..."
                 class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required
                 autocomplete="name" autofocus>
@@ -42,7 +38,7 @@
                 <strong>{{ $message }}</strong>
             </span>
             @enderror
-
+<div class="password-group">
             <input id="password" type="password" placeholder="password..."
                 class="form-control @error('password') is-invalid @enderror" name="password" required
                 autocomplete="new-password">
@@ -55,14 +51,14 @@
 
             <input id="password-confirm" type="password" placeholder="confirm password..." class="form-control"
                 name="password_confirmation" required autocomplete="new-password">
-
-
-
-            <button type="submit" id="btn">
+</div>
+       <button type="submit" id="btn">
                 {{ __('Register') }}
             </button>
             <div class="flex my-3"><small>Already have an account? <a href="{{route('login')}}">log in</a></small></div>
         </form>
     </div>
+    <div class="container-fluid bg-white background">
+        <div class="content container-fluid p-4"></div>
 </div>
 @endsection
