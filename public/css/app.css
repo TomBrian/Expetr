@@ -10005,7 +10005,7 @@ h3 {
 body {
   width: 100vw;
   overflow-x: hidden;
-  background-color: #F1F5F7;
+  background-color: #f1f5f7;
   min-height: 100vh;
 }
 
@@ -10041,61 +10041,6 @@ body {
   text-decoration: underline;
   text-transform: uppercase;
   font-weight: normal;
-}
-
-#landingNav {
-  background-color: #006AFF !important;
-}
-#landingNav .nav-link {
-  color: white !important;
-}
-
-.heading {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  margin: auto;
-  margin-top: 30px;
-}
-.heading h1 {
-  font-size: 30px;
-  font-family: "poppins", sans-serif;
-}
-
-#notLogged-links {
-  width: 900px;
-  margin-top: 50px;
-}
-#notLogged-links .link-card {
-  cursor: pointer;
-  padding: 20px;
-  border-radius: 37px;
-  transition: 0.5s;
-  width: -webkit-fit-content !important;
-  width: -moz-fit-content !important;
-  width: fit-content !important;
-  background-color: white;
-  max-width: 300px;
-}
-#notLogged-links .link-card .link-header {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  margin: auto;
-}
-#notLogged-links .link-card .link-text .large {
-  text-transform: uppercase;
-  font-size: 24px;
-  font-family: "roboto", sans-serif;
-  text-align: center;
-}
-#notLogged-links .link-card .link-text .small {
-  text-align: center;
-  font-size: 13px;
-  opacity: 0.7;
-}
-#notLogged-links .link-card:hover {
-  transform: scale(1.1);
 }
 
 .footer {
@@ -10146,7 +10091,7 @@ body {
   width: -moz-fit-content;
   width: fit-content;
   min-width: 150px;
-  background-color: #427AA1;
+  background-color: #427aa1;
   padding: 10px;
   border: none;
   border-radius: 37px;

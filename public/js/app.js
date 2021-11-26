@@ -2867,6 +2867,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'chats',
@@ -2886,31 +2889,43 @@ __webpack_require__.r(__webpack_exports__);
       openConversation: null,
       messages: [],
       me: null,
-      searchQuery: ''
+      searchQuery: '',
+      searchResults: []
     };
   },
   methods: {
     searchConv: function searchConv() {
-      var _this = this;
+      var results = [];
+      var all = this.conversations;
 
-      //   alert(`searching ${this.searchQuery}`)
-      if (this.conversations > 1) {
-        axios.get(location.origin + "/api/s", {
-          query: this.searchQuery
-        }).then(function (res) {
-          _this.searchResults = res.data;
-        })["finally"](function () {
-          alert('search done');
-        });
+      if (all.length > 0) {
+        $('#noResults').show();
+        var allConvs = this.conversations;
+
+        for (var i = 0; i < allConvs.length; i++) {
+          var conv = allConvs[i];
+
+          if (conv.participants[0].name.toUpperCase().indexOf(this.searchQuery.toUpperCase()) > -1) {
+            results.push(conv);
+          }
+        }
       } else {
-        alert('you dont have enough conversations to search through.');
+        alert("you have no conversations");
       }
+
+      this.searchResults = results;
+
+      if (this.searchResults.length > 0) {
+        this.conversations = results;
+      }
+
+      console.log(this.searchResults);
     },
     getAllUsers: function getAllUsers() {
-      var _this2 = this;
+      var _this = this;
 
       axios.get(location.origin + '/api/all-users').then(function (res) {
-        _this2.allUsers = res.data;
+        _this.allUsers = res.data;
       })["catch"](function (err) {
         console.log(err);
       });
@@ -2930,7 +2945,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     createGroupConversation: function createGroupConversation() {
-      var _this3 = this;
+      var _this2 = this;
 
       if (this.groupForm.participants.length < 2) {
         $('.alert-danger').show();
@@ -2942,21 +2957,21 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           $('.text-success').text('group created');
 
-          _this3.getConversations();
+          _this2.getConversations();
         });
       }
     },
     deleteConversation: function deleteConversation(id) {
-      var _this4 = this;
+      var _this3 = this;
 
       axios.post(location.origin + "/api/delete-conversation/".concat(id)).then(function () {
-        _this4.openConversation = null;
+        _this3.openConversation = null;
 
-        _this4.getConversations();
+        _this3.getConversations();
       });
     },
     makeConversation: function makeConversation(id) {
-      var _this5 = this;
+      var _this4 = this;
 
       axios.post(location.origin + "/api/create-private-chat/".concat(id)).then(function (res) {
         if (res.data == false) {
@@ -2966,9 +2981,9 @@ __webpack_require__.r(__webpack_exports__);
           $('.alert-success').show();
         }
 
-        _this5.getConversations();
+        _this4.getConversations();
 
-        _this5.messagesReq();
+        _this4.messagesReq();
       })["catch"](function (err) {
         console.log(err);
       });
@@ -2982,15 +2997,15 @@ __webpack_require__.r(__webpack_exports__);
       this.message += emoji.data;
     },
     getConversations: function getConversations() {
-      var _this6 = this;
+      var _this5 = this;
 
       axios.get(location.origin + '/api/getConversations').then(function (res) {
-        _this6.conversations = res.data;
+        _this5.conversations = res.data;
 
-        _this6.openFirstConversation();
+        _this5.openFirstConversation();
 
-        for (var i = 0; i < _this6.conversations.length; i++) {
-          var element = _this6.conversations[i]; //  console.log(element);
+        for (var i = 0; i < _this5.conversations.length; i++) {
+          var element = _this5.conversations[i]; //  console.log(element);
         }
       })["catch"](function (err) {
         console.log(err);
@@ -3011,7 +3026,7 @@ __webpack_require__.r(__webpack_exports__);
       this.resetField();
     },
     sendMessage: function sendMessage(convId) {
-      var _this7 = this;
+      var _this6 = this;
 
       $('#inboxChat').val('');
       var message = this.message;
@@ -3022,9 +3037,9 @@ __webpack_require__.r(__webpack_exports__);
           console.log('failed');
         }
 
-        _this7.resetField();
+        _this6.resetField();
 
-        _this7.messagesReq();
+        _this6.messagesReq();
       })["catch"](function (err) {
         console.log(err);
       });
@@ -3033,20 +3048,20 @@ __webpack_require__.r(__webpack_exports__);
       document.querySelector(".inbox-content").scrollTop += document.querySelector(".inbox-content").scrollHeight;
     },
     messagesReq: function messagesReq() {
-      var _this8 = this;
+      var _this7 = this;
 
       if (this.openConversation != null) {
         axios.get(location.origin + "/api/get-messages/".concat(this.openConversation.conversationId)).then(function (res) {
-          _this8.messages = res.data.data;
+          _this7.messages = res.data.data;
 
-          for (var i = 0; i < _this8.messages.length; i++) {
-            var element = _this8.messages[i];
+          for (var i = 0; i < _this7.messages.length; i++) {
+            var element = _this7.messages[i];
             axios.post(location.origin + "/api/mark-message-as-read/".concat(element.id)).then(function (res) {});
           }
 
           $('.loader').hide();
         }).then(function () {
-          _this8.scrollToBottom();
+          _this7.scrollToBottom();
         });
       }
     },
@@ -3065,17 +3080,18 @@ __webpack_require__.r(__webpack_exports__);
     clearInterval(this.messageInterval);
   },
   mounted: function mounted() {
-    var _this9 = this;
+    var _this8 = this;
 
     this.getAllUsers();
     this.getConversations();
-    this.countUnreadNotifications(); //set the interval on mount
+    this.countUnreadNotifications();
+    $('#noResults').hide(); //set the interval on mount
 
     this.messageInterval = setInterval(this.messagesReq, 20000);
     $('.alert-danger').hide();
     $('.alert-success').hide();
     axios.get(location.origin + "/api/user").then(function (res) {
-      _this9.me = res.data;
+      _this8.me = res.data;
     });
   },
   unmounted: function unmounted() {
@@ -4099,22 +4115,23 @@ __webpack_require__.r(__webpack_exports__);
     axios.get(location.origin + '/api/all-users').then(function (res) {
       _this.AllUsers = res.data; //console.log(this.AllUsers)
 
-      _this.createAvatar();
+      _this.createAvatar(); // this.sanitizeDate()
 
-      _this.sanitizeDate();
     })["catch"](function (err) {
       console.log(err);
     });
     this.countUnreadNotifications();
   },
   methods: {
-    sanitizeDate: function sanitizeDate() {
-      this.AllUsers.forEach(function (user) {
-        var date = user.created_at;
-        var dateArray = date.split('T');
-        user.created_at = dateArray[0];
-      });
-    },
+    // sanitizeDate: function () {
+    //     this.AllUsers.forEach(
+    //         user => {
+    //             const date = user.created_at;
+    //             const dateArray = date.split('T');
+    //             user.created_at = dateArray[0];
+    //         }
+    //     )
+    // },
     createAvatar: function createAvatar() {
       this.AllUsers.forEach(function (user) {
         var fullName = user.name;
@@ -4716,6 +4733,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'account',
   data: function data() {
@@ -4741,6 +4759,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.user = data;
         _this.updates.name = _this.user.name;
         _this.updates.email = _this.user.email;
+        _this.updates.email_verified_at = _this.user.email_verified_at;
         $('.loader').hide();
       })["catch"](function (err) {
         console.log(err);
@@ -4749,7 +4768,8 @@ __webpack_require__.r(__webpack_exports__);
     makeChanges: function makeChanges() {
       axios.post(location.origin + '/api/update-my-details', {
         'name': this.updates.name,
-        'email': this.updates.email
+        'email': this.updates.email,
+        'email_verified_at': 'NULL'
       }).then(function (res) {
         if (res.data == false) {
           alert('could not update changes');
@@ -92127,6 +92147,17 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
+      _vm.searchResults.length == 0
+        ? _c(
+            "div",
+            {
+              staticClass: "jumbotron text-center",
+              attrs: { id: "noResults" }
+            },
+            [_c("h5", [_vm._v("No conversation matches your query")])]
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _vm.conversations.length == 0
         ? _c("div", { staticClass: "jumbotron text-center" }, [
             _c("h5", [_vm._v("You have no conversations")])
@@ -94955,13 +94986,9 @@ var render = function() {
             _vm._v(" "),
             _vm.user != null
               ? _c("div", { staticClass: "input mx-3" }, [
-                  _vm._v("\r\n                    Email address: "),
-                  (_vm.updates.email_verified_at = "NULL")
-                    ? _c("small", { staticClass: "text-danger" }, [
-                        _vm._v("Not verified")
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
+                  _vm._v(
+                    "\r\n                    \r\n                    Email address: \r\n                    "
+                  ),
                   _c("input", {
                     directives: [
                       {

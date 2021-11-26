@@ -20,7 +20,8 @@
                     <input type="text" v-model="updates.name" class="form-control">
                 </div>
                 <div class="input mx-3" v-if="user != null">
-                    Email address: <small v-if="updates.email_verified_at = 'NULL'" class="text-danger">Not verified</small>
+                    
+                    Email address: 
                     <input type="email" v-model="updates.email" class="form-control">
                 </div>
             </div>
@@ -98,6 +99,7 @@ export default {
                     this.user = data;
                     this.updates.name = this.user.name
                     this.updates.email = this.user.email
+                    this.updates.email_verified_at = this.user.email_verified_at
                        $('.loader').hide();
                 })
                 .catch((err) => {
@@ -107,7 +109,8 @@ export default {
         makeChanges:function(){
             axios.post(location.origin + '/api/update-my-details',{
              'name':this.updates.name,
-             'email':this.updates.email
+             'email':this.updates.email,
+             'email_verified_at':'NULL'
             }).then((res)=>{
                 if (res.data == false) {
                     alert('could not update changes');

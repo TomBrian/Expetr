@@ -31,11 +31,13 @@ class accountsController extends Controller
      if ($request->name == Auth::user()->name) {
         User::find(Auth::user()->id)->update([
             'email' => $request->email,
+            'email_verified_at' => $request->email_verified_at
         ]);
     }else{
      User::find(Auth::user()->id)->update([
          'name' => $request->name,
-         'email' => $request->email
+         'email' => $request->email,
+         'email_verified_at' => $request->email_verified_at
      ]);
      $me = Auth::user();
      $all = User::where('organisation_code', '=', Auth::user()->organisation_code)->get();

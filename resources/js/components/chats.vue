@@ -99,10 +99,13 @@
                 <input type="search" placeholder="search for conversation..." v-model="searchQuery" v-on:change="searchConv" class="form-control"><button class="btn"><i class="fa fa-search" aria-hidden="true"></i></button>
             </div>
         </div>
-
-        <div class="jumbotron text-center" v-if="conversations.length == 0">
+ <div class="jumbotron text-center" v-if="searchResults.length == 0" id="noResults">
+            <h5>No conversation matches your query</h5>
+</div>
+        <div class="jumbotron text-center" v-if="conversations.length == 0 ">
             <h5>You have no conversations</h5>
         </div>
+        
         <div v-if="openConversation != null">
             <div :class="openConversation.conversationId == convo.conversationId?'open profile-card p-3 flex':'profile-card p-3 flex'" v-on:click="changeOpenConv(convo.conversationId)" v-for="(convo,i) in conversations" :key="i">
                 <div class="a-wrapper">
@@ -241,22 +244,32 @@ export default {
             openConversation: null,
             messages: [],
             me: null,
-            searchQuery:''
+            searchQuery:'',
+            searchResults:[]
         }
     },
-    methods: {searchConv:function(){
-    //   alert(`searching ${this.searchQuery}`)
-    if (this.conversations > 1) {
-         axios.get(location.origin+"/api/s",{
-        query:this.searchQuery
-    }).then((res)=>{
-     this.searchResults = res.data;
-    }).finally(()=>{
-        alert('search done')
-    });
-    }else{
-        alert('you dont have enough conversations to search through.')
-    }
+    methods: {searchConv:function(){ 
+        var results = [];
+     const all = this.conversations;
+        if (all.length > 0) {
+         $('#noResults').show()
+         const allConvs = this.conversations;
+         for (let i = 0; i < allConvs.length; i++) {
+             const conv = allConvs[i];
+             if (conv.participants[0].name.toUpperCase().indexOf(this.searchQuery.toUpperCase()) > -1) {
+                 results.push(conv);
+             }
+         }
+        }
+        else{
+            alert("you have no conversations")
+        }
+    
+     this.searchResults = results;
+     if(this.searchResults.length > 0){
+          this.conversations = results;
+     }
+     console.log(this.searchResults);
     },
         getAllUsers: function () {
             axios.get(location.origin + '/api/all-users')
@@ -403,6 +416,7 @@ clearInterval(this.messageInterval);
         this.getAllUsers();
         this.getConversations();
         this.countUnreadNotifications();
+        $('#noResults').hide()
         //set the interval on mount
         this.messageInterval = setInterval(this.messagesReq, 20000);
         $('.alert-danger').hide()

@@ -46,22 +46,22 @@ export default {
             this.AllUsers = res.data
             //console.log(this.AllUsers)
             this.createAvatar()
-            this.sanitizeDate()
+           // this.sanitizeDate()
         }).catch((err) => {
             console.log(err)
         })
         this.countUnreadNotifications()
     },
     methods: {
-        sanitizeDate: function () {
-            this.AllUsers.forEach(
-                user => {
-                    const date = user.created_at;
-                    const dateArray = date.split('T');
-                    user.created_at = dateArray[0];
-                }
-            )
-        },
+        // sanitizeDate: function () {
+        //     this.AllUsers.forEach(
+        //         user => {
+        //             const date = user.created_at;
+        //             const dateArray = date.split('T');
+        //             user.created_at = dateArray[0];
+        //         }
+        //     )
+        // },
         createAvatar: function () {
             this.AllUsers.forEach(user => {
                 const fullName = user.name;
