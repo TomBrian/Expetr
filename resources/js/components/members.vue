@@ -1,68 +1,83 @@
 <template>
-<div class="home">
-    <div class="loader shadow-sm">
-        <div class="lds-ellipsis">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-<div class="jumbotron jumbotron-fluid flex  align-items-center px-5 text-center" v-if="AllUsers.length < 1" style="margin:auto;"> 
-    <div class="container flex  align-items-center">
-        <div>
-       <h5>You have no members in your organisation.</h5>
-       <small class="text-muted">Share the organisation code with those you want to add to the organisation.Your organisation code will be required while we register them</small>
-    </div>
-    </div>
-</div>
-    <div class="member-card mx-3 shadow-sm" v-for="user in AllUsers" :key="user.id">
-        <div class="left">
-            <div class="avatar mx-1">
-                <p class="my-1">{{user.avatar}}</p>
+    <div class="home">
+        <div class="loader shadow-sm">
+            <div class="lds-ellipsis">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
-        <div class="details">
-            <div class="user-name">
-                {{user.name}}
+        <div
+            class="jumbotron jumbotron-fluid flex  align-items-center px-5 text-center"
+            v-if="AllUsers.length < 1"
+            style="margin:auto;"
+        >
+            <div class="container flex  align-items-center">
+                <div>
+                    <h5>You have no members in your organisation.</h5>
+                    <small class="text-muted"
+                        >Share the organisation code with those you want to add
+                        to the organisation.Your organisation code will be
+                        required while we register them</small
+                    >
+                </div>
             </div>
-            <div class="position">
-                <div class="badge my-1 badge-secondary">{{user.position}}</div>
+        </div>
+        <div
+            class="member-card mx-3 shadow-sm"
+            v-for="user in AllUsers"
+            :key="user.id"
+        >
+            <div class="left">
+                <div class="avatar mx-1">
+                    <p class="my-1">{{ user.avatar }}</p>
+                </div>
             </div>
-            <div class="email text-muted">
-                <small>{{user.email}}</small>
-            </div>
-            <div class="chat my-1">
-                
-                <small class="text-muted">Joined {{user.created_at | moment("from", "now")}}</small>
+            <div class="details">
+                <div class="user-name">
+                    {{ user.name }}
+                </div>
+                <div class="position">
+                    <div class="badge my-1 badge-secondary">
+                        {{ user.position }}
+                    </div>
+                </div>
+                <div class="email text-muted">
+                    <small>{{ user.email }}</small>
+                </div>
+                <div class="chat my-1">
+                    <small class="text-muted"
+                        >Joined
+                        {{ user.created_at | moment("from", "now") }}</small
+                    >
+                </div>
             </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
 export default {
-    name: 'members',
+    name: "members",
     data() {
         return {
             AllUsers: []
-        }
+        };
     },
     mounted() {
-        axios.get(location.origin + '/api/all-users').then((res) => {
-            this.AllUsers = res.data
-            //console.log(this.AllUsers)
-            this.createAvatar()
-<<<<<<< HEAD
-=======
-            $('.loader').hide()
->>>>>>> b76127416238573a71100617fa38f108f7a02456
-           // this.sanitizeDate()
-        }).catch((err) => {
-            console.log(err)
-        })
-        this.countUnreadNotifications()
+        axios
+            .get(location.origin + "/api/all-users")
+            .then(res => {
+                this.AllUsers = res.data;
+                //console.log(this.AllUsers)
+                this.createAvatar();
+                // this.sanitizeDate()
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        this.countUnreadNotifications();
     },
     methods: {
         // sanitizeDate: function () {
@@ -74,18 +89,18 @@ export default {
         //         }
         //     )
         // },
-        createAvatar: function () {
+        createAvatar: function() {
             this.AllUsers.forEach(user => {
                 const fullName = user.name;
-                const nameArr = fullName.split(' ');
+                const nameArr = fullName.split(" ");
                 const firstName = nameArr[0];
                 const secondName = nameArr[1];
                 const initials = firstName.charAt(0) + secondName.charAt(0);
-                user.avatar = initials
+                user.avatar = initials;
             });
         }
     }
-}
+};
 </script>
 
 <style scoped>
@@ -111,7 +126,7 @@ export default {
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    background-color: #2C76DC;
+    background-color: #2c76dc;
     display: flex;
     align-items: center;
     justify-content: center;
