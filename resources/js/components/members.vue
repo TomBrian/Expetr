@@ -54,7 +54,10 @@ export default {
             this.AllUsers = res.data
             //console.log(this.AllUsers)
             this.createAvatar()
+<<<<<<< HEAD
+=======
             $('.loader').hide()
+>>>>>>> b76127416238573a71100617fa38f108f7a02456
            // this.sanitizeDate()
         }).catch((err) => {
             console.log(err)
