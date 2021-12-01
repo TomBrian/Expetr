@@ -48,6 +48,23 @@ class accountsController extends Controller
    return true;
  }
 //  logging out
+public function logMeIn(Request $request){
+    // dd('logging');
+    $user = User::where('email','=',$request->email);
+    if($user->count() == 1){
+    $verify = $user->get()->where('organisation_code','=',$request->organisation_code)->first();
+    if (Hash::check($request->password,$verify->password)){
+        Auth::login($user->first(),$request->remember);
+        return redirect(route('dashboard'));
+       }
+       else{
+    return redirect(route('login'))->with('message-danger','the credentials you entered dont match our records');
+       }
+    }
+    else{
+       return redirect(route('login'))->with('message-danger','the credentials you entered dont match our records');
+    }
+}
 public function logMeOut(){
      // Get user who requested the logout
 $user = User::find(Auth::user()->id);

@@ -3,8 +3,8 @@
 @section('content')
     <div class="container">
         <div class="container shadow-md bg-white" id="notLogged-links" style="display: flex; align-items-center">
-            <form method="POST" id="login" class="card p-5 my-3" action="{{ route('login') }}">
-                {{ csrf_field() }}
+            <form method="POST" id="login" class="card p-5 my-3" action="{{ route('login-custom') }}">
+                @csrf
                 @method('POST')
                 <div class="form-header">
                     <h3>{{ __('welcome back !') }}</h3>
@@ -15,11 +15,16 @@
                         {{ session('message') }}
                     </div>
                 @endif
+                @if (session('message-danger'))
+                    <div class="alert alert-success">
+                        {{ session('message-danger') }}
+                    </div>
+                @endif
 
                 <input id="organisation" type="text" placeholder="organisation Code..."
-                    class="form-control @error('organisation') is-invalid @enderror" name="organisation"
-                    value="{{ old('organisation') }}" required autocomplete="organisation">
-                @error('organisation')
+                    class="form-control @error('organisation_code') is-invalid @enderror" name="organisation_code"
+                    value="{{ old('organisation_code') }}" required autocomplete="organisation_code">
+                @error('organisation_code')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
