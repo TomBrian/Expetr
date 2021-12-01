@@ -10282,6 +10282,10 @@ h2 {
   font-weight: 700 !important;
 }
 
+.sm-show {
+  display: none;
+}
+
 @media (min-width: 900px) {
   .navbar-collapse {
     width: -webkit-fit-content !important;

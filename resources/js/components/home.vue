@@ -28,8 +28,8 @@
                 CODE:{{ organisation.organisation_code }}
             </div>
         </div>
-        <div class="greetings">howdy, {{ user.name }}</div>
-        <div class="alert info">
+        <h2 class="greetings">howdy, {{ user.name }}</h2>
+        <div class="alert sm-show my-3 alert-info">
             <h3>expetr app is better on desktop</h3>
             <p class="text-muted">Hang on for a mobile friendlier dashboard.</p>
         </div>
@@ -451,7 +451,9 @@ export default {
 .card {
     border-top: none;
 }
-
+.sm-show {
+    display: none;
+}
 @media (max-width: 500px) {
     .organisation-details {
         display: block !important;
@@ -469,6 +471,9 @@ export default {
 }
 
 @media (max-width: 1000px) {
+    .sm-show {
+        display: block;
+    }
     #first-flex {
         flex-direction: column !important;
         justify-content: center;

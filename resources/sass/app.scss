@@ -274,6 +274,9 @@ h2 {
 .font-bold {
     font-weight: 700 !important;
 }
+.sm-show {
+    display: none;
+}
 //media queries
 @media (min-width: 900px) {
     .navbar-collapse {
