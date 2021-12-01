@@ -10022,7 +10022,10 @@ body {
   align-items: center;
 }
 .navbar .btn {
-  width: 130px;
+  min-width: 130px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 .navbar .nav-content {
   display: flex;
@@ -10118,18 +10121,27 @@ body {
 
 #notLogged-links {
   border-radius: 37px;
-  min-height: 85vh;
+  height: 90vh;
+  overflow: hidden;
+  padding: 0px !important;
 }
 #notLogged-links form {
   width: 50%;
+  min-width: 350px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
 }
 #notLogged-links .image {
   width: 50% !important;
+  min-width: 320px;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
+  margin-bottom: 0px;
   width: 100%;
   height: -webkit-fit-content;
   height: -moz-fit-content;
@@ -10169,12 +10181,15 @@ body {
   width: 400px;
   padding: 20px;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   flex-direction: column;
   background-color: white;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+}
+#login p {
+  font-size: 14px;
 }
 #login .password-group {
   display: flex;
@@ -10188,9 +10203,6 @@ body {
 }
 #login input:focus {
   box-shadow: 10px 10px transparent !important;
-}
-#login #btn {
-  margin: auto !important;
 }
 
 .container {
@@ -10209,7 +10221,7 @@ h6 {
 }
 
 .em {
-  color: #ffa500;
+  color: #3490dc;
 }
 
 p {
@@ -10282,6 +10294,24 @@ h2 {
   }
 }
 @media (max-width: 900px) {
+  .container {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  #notLogged-links {
+    height: -webkit-fit-content !important;
+    height: -moz-fit-content !important;
+    height: fit-content !important;
+  }
+  #notLogged-links form {
+    padding: 20px !important;
+    width: 100% !important;
+  }
+  #notLogged-links .image {
+    display: none !important;
+  }
+
   .hero {
     width: 100% !important;
   }
@@ -10319,7 +10349,6 @@ h2 {
 }
 .btn-light {
   background-color: white;
-  border-radius: 24px;
   color: #090774;
   font-weight: bolder;
   display: flex;
@@ -10345,7 +10374,14 @@ h2 {
 
 .btn {
   transition: 0.2s;
+  min-width: 200px;
+  border-radius: 10px;
+  font-weight: bold;
 }
 .btn:hover {
   transform: scale(1.03);
+}
+
+a:hover {
+  text-decoration: none;
 }

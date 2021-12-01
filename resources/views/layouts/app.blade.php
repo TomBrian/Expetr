@@ -31,9 +31,9 @@
     <div id="app">
         <nav class="navbar container navbar-expand-md flex bg-white">
             <div><a class="navbar-brand mx-2 " href="{{ route('loggedin?') }}"><img
-                        src="{{ asset('images/logo.svg') }}" style="width:120px" alt=""></a></div>
+                        src="{{ asset('images/logo.svg') }}" width="150px" alt=""></a></div>
             @if (Auth::check())
-                <button class="btn text-light mx-3 py-2 font-weight-bold bg-primary"
+                <button class="btn btn-primary mx-4 py-2 font-weight-bold text-light"
                     onclick="window.location = '{{ route('dashboard') }}'">
                     Go To Dashboard
                 </button>

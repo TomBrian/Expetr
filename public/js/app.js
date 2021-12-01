@@ -4875,16 +4875,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'navbar',
+  name: "navbar",
   data: function data() {
     return {
       user: {},
-      avatar: '',
+      avatar: "",
       unreadNotifications: [],
       unreadCount: 0,
-      unreadTextsCount: '',
+      unreadTextsCount: "",
       location: {
         origin: location.origin
       }
@@ -4893,7 +4932,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    fetch(location.origin + '/api/user').then(function (res) {
+    fetch(location.origin + "/api/user").then(function (res) {
       return res.json();
     }).then(function (data) {
       _this.user = data;
@@ -4907,18 +4946,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     openSideNav: function openSideNav() {
-      _event_bus__WEBPACK_IMPORTED_MODULE_0__.default.$emit('openSideNav');
+      _event_bus__WEBPACK_IMPORTED_MODULE_0__.default.$emit("openSideNav");
     },
     countUnreadTexts: function countUnreadTexts() {
       var _this2 = this;
 
-      axios.get(location.origin + '/api/get-unread-messages-number').then(function (res) {
+      axios.get(location.origin + "/api/get-unread-messages-number").then(function (res) {
         _this2.unreadTextsCount = res.data;
       });
     },
     createAvatar: function createAvatar() {
       var fullName = this.user.name;
-      var nameArr = fullName.split(' ');
+      var nameArr = fullName.split(" ");
       var firstName = nameArr[0];
       var secondName = nameArr[1];
       var initials = firstName.charAt(0) + secondName.charAt(0);
@@ -27507,7 +27546,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.profile[data-v-11e733ca] {\r\n    display: flex;\r\n    align-items: center;\r\n    font-family: poppins;\r\n    font-size: 14px;\n}\n.avatar[data-v-11e733ca] {\r\n    width: 40px;\r\n    height: 40px;\r\n    position: relative;\r\n    color: white;\r\n    border-radius: 50%;\r\n    background-color: #2C76DC;\n}\n.avatar p[data-v-11e733ca] {\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\n}\n@media (max-width:1000px) {\n.sm-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.icon[data-v-11e733ca] {\r\n        width: 20px !important;\n}\n.logo-lg[data-v-11e733ca]{\r\n    display: none !important;\n}\n.logo-sm[data-v-11e733ca] {\r\n        width: 25px;\n}\n}\n@media (min-width:1000px) {\n.lg-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n}\n@media (max-width:500px){\n.nav-item[data-v-11e733ca]{\r\n          padding: 0% !important;\r\n          /* margin: 20px; */\n}\n.v-lg-none[data-v-11e733ca]{\r\n    display: block !important;\n}\n.v-sm-none[data-v-11e733ca]{\r\n     display: none !important;\n}\n.lg-none[data-v-11e733ca]{\r\n        display:none !important;\n}\n.icon[data-v-11e733ca] {\r\n         padding: 0% !important;\r\n        width: 20px !important;\n}\n}\n.v-lg-none[data-v-11e733ca]{\r\n    display: none;\n}\n.navbar[data-v-11e733ca] {\r\n    width: 100%;\r\n    background-color: white;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    z-index: 2;\n}\n.nav-item[data-v-11e733ca] {\r\n    font-weight: bolder;\n}\n.logo-lg[data-v-11e733ca] {\r\n    width: 150px;\n}\n.navbar-link[data-v-11e733ca] {\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.nav-link .w[data-v-11e733ca] {\r\n    padding: 10px;\r\n    position: relative;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.badge[data-v-11e733ca] {\r\n    position: absolute;\r\n    border-radius: 50%;\r\n    min-width: 20px;\r\n    min-height: 20px;\r\n    top: 0;\r\n    right: 0;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    font-size: 10px;\n}\n.nav-item[data-v-11e733ca] {\r\n    display: flex;\r\n    width:-webkit-fit-content !important;\r\n    width:-moz-fit-content !important;\r\n    width:fit-content !important;\r\n    align-items: center;\n}\n.icon[data-v-11e733ca] {\r\n    width: 25px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.profile[data-v-11e733ca] {\r\n    display: flex;\r\n    align-items: center;\r\n    font-family: poppins;\r\n    font-size: 14px;\n}\n.avatar[data-v-11e733ca] {\r\n    width: 40px;\r\n    height: 40px;\r\n    position: relative;\r\n    color: white;\r\n    border-radius: 50%;\r\n    background-color: #2c76dc;\n}\n.avatar p[data-v-11e733ca] {\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\n}\n@media (max-width: 1000px) {\n.sm-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.icon[data-v-11e733ca] {\r\n        width: 20px !important;\n}\n.logo-lg[data-v-11e733ca] {\r\n        display: none !important;\n}\n.logo-sm[data-v-11e733ca] {\r\n        width: 25px;\n}\n}\n@media (min-width: 1000px) {\n.lg-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n}\n@media (max-width: 500px) {\n.nav-item[data-v-11e733ca] {\r\n        padding: 0% !important;\r\n        /* margin: 20px; */\n}\n.v-lg-none[data-v-11e733ca] {\r\n        display: block !important;\n}\n.v-sm-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.lg-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.icon[data-v-11e733ca] {\r\n        padding: 0% !important;\r\n        width: 20px !important;\n}\n}\n.v-lg-none[data-v-11e733ca] {\r\n    display: none;\n}\n.navbar[data-v-11e733ca] {\r\n    width: 100%;\r\n    background-color: white;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    z-index: 2;\n}\n.nav-item[data-v-11e733ca] {\r\n    font-weight: bolder;\n}\n.logo-lg[data-v-11e733ca] {\r\n    width: 150px;\n}\n.navbar-link[data-v-11e733ca] {\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.nav-link .w[data-v-11e733ca] {\r\n    padding: 10px;\r\n    position: relative;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.badge[data-v-11e733ca] {\r\n    position: absolute;\r\n    border-radius: 50%;\r\n    min-width: 20px;\r\n    min-height: 20px;\r\n    top: 0;\r\n    right: 0;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    font-size: 10px;\n}\n.nav-item[data-v-11e733ca] {\r\n    display: flex;\r\n    width: -webkit-fit-content !important;\r\n    width: -moz-fit-content !important;\r\n    width: fit-content !important;\r\n    align-items: center;\n}\n.icon[data-v-11e733ca] {\r\n    width: 25px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -95837,7 +95876,11 @@ var render = function() {
           staticClass: "logo-lg v-sm-none",
           attrs: { href: _vm.location.origin }
         },
-        [_c("img", { attrs: { src: "/images/logo.svg", alt: "" } })]
+        [
+          _c("img", {
+            attrs: { src: "/images/logo.svg", width: "150px", alt: "" }
+          })
+        ]
       ),
       _c(
         "a",
@@ -95885,7 +95928,10 @@ var render = function() {
                   }),
                   _vm.unreadTextsCount != "0"
                     ? _c("span", { staticClass: "badge badge-info" }, [
-                        _vm._v(" " + _vm._s(_vm.unreadTextsCount))
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(_vm.unreadTextsCount)
+                        )
                       ])
                     : _vm._e()
                 ])
@@ -95914,7 +95960,10 @@ var render = function() {
                     }),
                     _vm.unreadCount > 0
                       ? _c("span", { staticClass: "badge badge-info" }, [
-                          _vm._v(" " + _vm._s(_vm.unreadCount))
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(_vm.unreadCount)
+                          )
                         ])
                       : _vm._e()
                   ])
