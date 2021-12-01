@@ -4,6 +4,8 @@
     <div class="container">
         <div class="container shadow-md bg-white" id="notLogged-links" style="display: flex; align-items-center">
             <form method="POST" id="login" class="card p-5 my-3" action="{{ route('login') }}">
+                {{ csrf_field() }}
+                @method('GET')
                 <div class="form-header">
                     <h3>{{ __('welcome back !') }}</h3>
                 </div>
@@ -13,11 +15,10 @@
                         {{ session('message') }}
                     </div>
                 @endif
-                @csrf
-                @method('GET')
+
                 <input id="organisation" type="text" placeholder="organisation Code..."
-                    class="form-control @error('organisation') is-invalid @enderror" name="organisation"
-                    value="{{ old('organisation') }}" required autocomplete="organisation">
+                    class="form-control @error('organisation_code') is-invalid @enderror" name="organisation_code"
+                    value="{{ old('organisation_code') }}" required autocomplete="organisation_code">
                 @error('organisation')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

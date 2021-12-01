@@ -73,11 +73,9 @@ foreach ($conversations as $conversation) {
     Conversation::where('id',$conversation->id)->delete();
 }
  User::find(Auth::user()->id)->delete();
-//kick the goner out
 return  Auth::user()->password;
 }
 else{
-    // tell them they are lying if they dont
     return  [Auth::user()->password,Hash::make($request->password)];
 }
 }
