@@ -10122,6 +10122,7 @@ body {
 #notLogged-links {
   border-radius: 37px;
   height: 90vh;
+  max-height: 640px;
   overflow: hidden;
   padding: 0px !important;
 }
@@ -10306,7 +10307,7 @@ h2 {
   }
   #notLogged-links form {
     padding: 20px !important;
-    width: 100% !important;
+    width: 100vw !important;
   }
   #notLogged-links .image {
     display: none !important;

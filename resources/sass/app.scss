@@ -134,6 +134,7 @@ body {
 #notLogged-links {
     border-radius: 37px;
     height: 90vh;
+    max-height: 640px;
     overflow: hidden;
     padding: 0px !important;
     // height: fit-content;
@@ -292,7 +293,7 @@ h2 {
         height: fit-content !important;
         form {
             padding: 20px !important;
-            width: 100% !important;
+            width: 100vw !important;
         }
         .image {
             display: none !important;
