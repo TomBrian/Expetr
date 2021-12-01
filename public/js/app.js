@@ -4463,8 +4463,98 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'home',
+  name: "home",
   data: function data() {
     return {
       user: [],
@@ -4481,15 +4571,15 @@ __webpack_require__.r(__webpack_exports__);
         origin: location.origin
       },
       quote: {
-        body: '',
-        credits: ''
+        body: "",
+        credits: ""
       }
     };
   },
   mounted: function mounted() {
     var _this = this;
 
-    fetch(location.origin + '/api/user').then(function (res) {
+    fetch(location.origin + "/api/user").then(function (res) {
       return res.json();
     }).then(function (data) {
       _this.user = data;
@@ -4508,14 +4598,14 @@ __webpack_require__.r(__webpack_exports__);
     getMyAssignments: function getMyAssignments() {
       var _this2 = this;
 
-      axios.get(location.origin + '/api/get-assignments').then(function (res) {
+      axios.get(location.origin + "/api/get-assignments").then(function (res) {
         _this2.assignments = res.data;
       });
     },
     getJoinRequests: function getJoinRequests() {
       var _this3 = this;
 
-      axios.get(location.origin + '/api/get-all-join-requests').then(function (res) {
+      axios.get(location.origin + "/api/get-all-join-requests").then(function (res) {
         _this3.requests = res.data;
       })["catch"](function (err) {
         alert(err);
@@ -4524,8 +4614,8 @@ __webpack_require__.r(__webpack_exports__);
     getQuote: function getQuote() {
       var _this4 = this;
 
-      axios.get(location.origin + '/api/get-quote').then(function (res) {
-        var expl = res.data.split('-');
+      axios.get(location.origin + "/api/get-quote").then(function (res) {
+        var expl = res.data.split("-");
         _this4.quote.body = expl[0];
         _this4.quote.credits = expl[1];
       });
@@ -4533,11 +4623,11 @@ __webpack_require__.r(__webpack_exports__);
     getNotifications: function getNotifications() {
       var _this5 = this;
 
-      axios.get(location.origin + '/api/get-unread-notifications').then(function (res) {
+      axios.get(location.origin + "/api/get-unread-notifications").then(function (res) {
         return res.data;
       }).then(function (data) {
         _this5.unreadNotifications = data;
-        axios.get(location.origin + '/api/get-read-notifications').then(function (res) {
+        axios.get(location.origin + "/api/get-read-notifications").then(function (res) {
           return res.data;
         }).then(function (data) {
           _this5.readNotifications = data;
@@ -4553,7 +4643,7 @@ __webpack_require__.r(__webpack_exports__);
     getApproachingEvents: function getApproachingEvents() {
       var _this6 = this;
 
-      axios.get(location.origin + '/api/approaching-events').then(function (res) {
+      axios.get(location.origin + "/api/approaching-events").then(function (res) {
         _this6.eventsAlmostDue = res.data;
       });
     },
@@ -4584,7 +4674,7 @@ __webpack_require__.r(__webpack_exports__);
       } //console.log(this.topNotifications);
 
 
-      $('.loader').hide();
+      $(".loader").hide();
     }
   }
 });
@@ -27498,7 +27588,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.greetings[data-v-fa6affac] {\r\n    font-family: 'poppins', sans-serif;\r\n    font-size: 24px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    margin: auto;\r\n    margin-top: 20px;\n}\n.home[data-v-fa6affac] {\r\n    background-color: transparent !important;\r\n    display: block !important;\n}\n.loader[data-v-fa6affac] {\r\n    background-color: #F1F5F7;\n}\n.quote blockquote[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.quote .card[data-v-fa6affac] {\r\n    background-color: transparent;\r\n    background-color: white;\n}\n.organisation-details[data-v-fa6affac] {\r\n    display: flex;\r\n    width: 90%;\r\n    justify-content: space-between;\r\n    font-weight: bold;\n}\n.organisation-details .organisation-code[data-v-fa6affac] {\r\n    font-family: 'Courier New', Courier, monospace;\r\n    font-size: 18px;\n}\n.organisation-details .organisation-name[data-v-fa6affac] {\r\n    font-size: 18px;\n}\n.notification-card[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    background-color: white;\r\n    border-bottom: solid 1px #2C76DC;\n}\n.white-card[data-v-fa6affac] {\r\n    width: 300px;\r\n    height: 300px;\r\n    border-radius: 5px;\r\n    background-color: white;\n}\n.white-card .header[data-v-fa6affac] {\r\n    font-weight: bolder;\r\n    width: 100%;\r\n    text-align: center;\n}\n@media (min-width:1000px) {\n.lg-none[data-v-fa6affac] {\r\n        display: none !important;\n}\n}\n.white-card .number[data-v-fa6affac] {\r\n    font-size: 100px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.events-card[data-v-fa6affac] {\r\n    background-color: white;\r\n    flex: 1 !important;\r\n    overflow-y: scroll;\r\n    height: 300px;\n}\n.events-card .header[data-v-fa6affac] {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.content .card-header[data-v-fa6affac] {\r\n    background: white;\r\n    border: none;\r\n    border-bottom: solid 1px #2C76DC;\n}\n.card-header a[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.card[data-v-fa6affac] {\r\n    border-top: none;\n}\n@media (max-width:500px) {\n.organisation-details[data-v-fa6affac] {\r\n        display: block !important;\n}\n.v-lg-none[data-v-fa6affac] {\r\n        display: block !important;\n}\n}\n@media (min-width:500px) {\n.v-lg-none[data-v-fa6affac] {\r\n        display: none;\n}\n}\n@media (max-width:1000px) {\n#first-flex[data-v-fa6affac] {\r\n        flex-direction: column !important;\r\n        justify-content: center;\r\n        align-items: center;\n}\n.greetings[data-v-fa6affac] {\r\n        font-size: 14px;\n}\n.events-card[data-v-fa6affac] {\r\n        width: 100%;\r\n        margin-top: 20px;\n}\n}\n.pending[data-v-fa6affac] {\r\n    width: 100%;\r\n    background-color: white;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.pending .content[data-v-fa6affac] {\r\n    flex: 1;\r\n    width: 100%;\r\n    overflow-y: scroll;\r\n    background-color: #fafafa;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.pending .header[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    width: 70%;\r\n    margin: auto;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.greetings[data-v-fa6affac] {\r\n    font-family: \"poppins\", sans-serif;\r\n    font-size: 24px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    margin: auto;\r\n    margin-top: 20px;\n}\n.home[data-v-fa6affac] {\r\n    background-color: transparent !important;\r\n    display: block !important;\n}\n.loader[data-v-fa6affac] {\r\n    background-color: #f1f5f7;\n}\n.quote blockquote[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.quote .card[data-v-fa6affac] {\r\n    background-color: transparent;\r\n    background-color: white;\n}\n.organisation-details[data-v-fa6affac] {\r\n    display: flex;\r\n    width: 90%;\r\n    justify-content: space-between;\r\n    font-weight: bold;\n}\n.organisation-details .organisation-code[data-v-fa6affac] {\r\n    font-family: \"Courier New\", Courier, monospace;\r\n    font-size: 18px;\n}\n.organisation-details .organisation-name[data-v-fa6affac] {\r\n    font-size: 18px;\n}\n.notification-card[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    background-color: white;\r\n    border-bottom: solid 1px #2c76dc;\n}\n.white-card[data-v-fa6affac] {\r\n    width: 300px;\r\n    height: 300px;\r\n    border-radius: 5px;\r\n    background-color: white;\n}\n.white-card .header[data-v-fa6affac] {\r\n    font-weight: bolder;\r\n    width: 100%;\r\n    text-align: center;\n}\n@media (min-width: 1000px) {\n.lg-none[data-v-fa6affac] {\r\n        display: none !important;\n}\n}\n.white-card .number[data-v-fa6affac] {\r\n    font-size: 100px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.events-card[data-v-fa6affac] {\r\n    background-color: white;\r\n    flex: 1 !important;\r\n    overflow-y: scroll;\r\n    height: 300px;\n}\n.events-card .header[data-v-fa6affac] {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2c76dc;\n}\n.content .card-header[data-v-fa6affac] {\r\n    background: white;\r\n    border: none;\r\n    border-bottom: solid 1px #2c76dc;\n}\n.card-header a[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.card[data-v-fa6affac] {\r\n    border-top: none;\n}\n@media (max-width: 500px) {\n.organisation-details[data-v-fa6affac] {\r\n        display: block !important;\n}\n.v-lg-none[data-v-fa6affac] {\r\n        display: block !important;\n}\n}\n@media (min-width: 500px) {\n.v-lg-none[data-v-fa6affac] {\r\n        display: none;\n}\n}\n@media (max-width: 1000px) {\n#first-flex[data-v-fa6affac] {\r\n        flex-direction: column !important;\r\n        justify-content: center;\r\n        align-items: center;\n}\n.greetings[data-v-fa6affac] {\r\n        font-size: 14px;\n}\n.events-card[data-v-fa6affac] {\r\n        width: 100%;\r\n        margin-top: 20px;\n}\n}\n.pending[data-v-fa6affac] {\r\n    width: 100%;\r\n    background-color: white;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.pending .content[data-v-fa6affac] {\r\n    flex: 1;\r\n    width: 100%;\r\n    overflow-y: scroll;\r\n    background-color: #fafafa;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2c76dc;\n}\n.pending .header[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    width: 70%;\r\n    margin: auto;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -95350,9 +95440,7 @@ var render = function() {
       _vm.organisation != null
         ? _c("div", { staticClass: "organisation-name text-muted" }, [
             _vm._v(
-              "\r\n            " +
-                _vm._s(_vm.organisation.name) +
-                "\r\n        "
+              "\n            " + _vm._s(_vm.organisation.name) + "\n        "
             )
           ])
         : _vm._e(),
@@ -95360,17 +95448,19 @@ var render = function() {
       _vm.organisation != null
         ? _c("div", { staticClass: "organisation-code" }, [
             _vm._v(
-              "\r\n            CODE:" +
+              "\n            CODE:" +
                 _vm._s(_vm.organisation.organisation_code) +
-                "\r\n        "
+                "\n        "
             )
           ])
         : _vm._e()
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "greetings" }, [
-      _vm._v(" howdy, " + _vm._s(_vm.user.name))
+      _vm._v("howdy, " + _vm._s(_vm.user.name))
     ]),
+    _vm._v(" "),
+    _vm._m(1),
     _vm._v(" "),
     _vm.organisation != null
       ? _c(
@@ -95404,9 +95494,9 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "There are " +
+                              "\n                    There are " +
                                 _vm._s(_vm.requests.length) +
-                                " unattended membership requests"
+                                " unattended membership\n                    requests\n                "
                             )
                           ]
                         )
@@ -95427,7 +95517,11 @@ var render = function() {
                 },
                 [
                   _c("div", { staticClass: "font-weight-bolder text-muted" }, [
-                    _vm._v(_vm._s(notification.data.message))
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(notification.data.message) +
+                        "\n            "
+                    )
                   ]),
                   _vm._v(" "),
                   _c(
@@ -95491,9 +95585,9 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\r\n                                " +
+                          "\n                                " +
                             _vm._s(assignment.title) +
-                            "\r\n                            "
+                            "\n                            "
                         )
                       ]
                     )
@@ -95503,7 +95597,7 @@ var render = function() {
                 _c("div", [
                   _c("small", { staticClass: "text-muted" }, [
                     _vm._v(
-                      "due " +
+                      "due\n                            " +
                         _vm._s(
                           _vm._f("moment")(assignment.date_due, "from", "now")
                         )
@@ -95526,9 +95620,9 @@ var render = function() {
               [
                 _c("div", { staticClass: "card-body" }, [
                   _vm._v(
-                    "\r\n                        " +
+                    "\n                        " +
                       _vm._s(assignment.description) +
-                      "\r\n                    "
+                      "\n                    "
                   )
                 ])
               ]
@@ -95550,15 +95644,15 @@ var render = function() {
             [
               _c("div", { staticClass: "header py-3" }, [
                 _vm._v(
-                  "\r\n                    Tasks almost due\r\n                "
+                  "\n                    Tasks almost due\n                "
                 )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "number text-danger" }, [
                 _vm._v(
-                  "\r\n                    " +
+                  "\n                    " +
                     _vm._s(_vm.activitiesAlmostDue.length) +
-                    "\r\n                "
+                    "\n                "
                 )
               ])
             ]
@@ -95569,7 +95663,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "events-card shadow-sm mx-3" }, [
         _c("div", { staticClass: "header text-center p-3" }, [
-          _vm._m(1),
+          _vm._m(2),
           _vm._v(" "),
           _c(
             "div",
@@ -95627,9 +95721,9 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\r\n                                        " +
+                                  "\n                                        " +
                                     _vm._s(event.title) +
-                                    "\r\n                                    "
+                                    "\n                                    "
                                 )
                               ]
                             )
@@ -95661,9 +95755,9 @@ var render = function() {
                       [
                         _c("div", { staticClass: "card-body" }, [
                           _vm._v(
-                            "\r\n                                " +
+                            "\n                                " +
                               _vm._s(event.description) +
-                              "\r\n                            "
+                              "\n                            "
                           )
                         ])
                       ]
@@ -95714,6 +95808,18 @@ var staticRenderFns = [
         _c("div"),
         _vm._v(" "),
         _c("div")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "alert info" }, [
+      _c("h3", [_vm._v("expetr app is better on desktop")]),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-muted" }, [
+        _vm._v("Hang on for a mobile friendlier dashboard.")
       ])
     ])
   },
