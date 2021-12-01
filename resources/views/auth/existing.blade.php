@@ -2,7 +2,7 @@
 {{-- register to an existing org --}}
 @section('content')
     <div class="container">
-        <div class="container bg-white shadow-md p-3" id="notLogged-links" style="display: flex;">
+        <div class="container bg-white shadow-md lg:p-3 md:p-3" id="notLogged-links" style="display: flex;">
             <form method="POST" id="login" class="lg:p-5 md:p-5" action="{{ route('register') }}">
                 <div class="header">
                     <h3>Request the organisation code from your team's account administrator.</h3>
