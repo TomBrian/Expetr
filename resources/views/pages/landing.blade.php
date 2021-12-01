@@ -40,16 +40,18 @@
                 <h2 class="my-3">Dont miss out on activities at your workplace</h2>
                 <div class="spacer py-3">
                 </div>
-                <button class="btn btn-light text-md py-3">
-                    Join your team
-                </button>
+                <a href="{{ route('exOrga') }}">
+                    <button class="btn btn-light text-md py-3">
+                        Join your team
+                    </button>
+                </a>
             </div>
         </div>
     </div>
     <h2 class="text-center tools-header my-5">
         expetr management Tools
     </h2>
-    <div class="container flex">
+    <div class="container flex wrap-reverse">
         <div class="image">
             <img src="{{ asset('images/recording.png') }}" alt="expence recording">
         </div>
@@ -79,7 +81,7 @@
 
     </div>
     <div class="spacer py-3"></div>
-    <div class="container flex">
+    <div class="container flex wrap-reverse">
         <div class="image">
             <img src="{{ asset('images/task.png') }}" alt="expence recording">
         </div>

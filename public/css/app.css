@@ -10020,6 +10020,7 @@ body {
   z-index: 3000;
   background-color: transparent !important;
   align-items: center;
+  flex-wrap: nowrap !important;
 }
 .navbar .btn {
   min-width: 130px;
@@ -10329,8 +10330,8 @@ h2 {
     width: 95% !important;
   }
 
-  .flex:not(.flex .flex) {
-    flex-wrap: wrap;
+  .flex:not(.flex .flex).wrap-reverse {
+    flex-wrap: wrap-reverse !important;
   }
   .flex:not(.flex .flex) .text {
     width: 100% !important;
@@ -10361,11 +10362,15 @@ h2 {
 .flex .text {
   width: 50%;
   min-width: 320px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .flex .text h1 {
   color: #464646;
 }
 .flex .image {
+  margin-top: 20px;
+  margin-bottom: 20px;
   width: 50%;
   min-width: 320px;
   display: flex;

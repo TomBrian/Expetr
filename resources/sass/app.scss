@@ -24,6 +24,7 @@ body {
     z-index: 3000;
     background-color: transparent !important;
     align-items: center;
+    flex-wrap: nowrap !important;
     .btn {
         min-width: 130px;
         width: fit-content;
@@ -315,7 +316,9 @@ h2 {
         }
     }
     .flex:not(.flex .flex) {
-        flex-wrap: wrap;
+        &.wrap-reverse {
+            flex-wrap: wrap-reverse !important;
+        }
         .text {
             width: 100% !important;
             p {
@@ -345,11 +348,15 @@ h2 {
     .text {
         width: 50%;
         min-width: 320px;
+        margin-top: 20px;
+        margin-bottom: 20px;
         h1 {
             color: $text-dark;
         }
     }
     .image {
+        margin-top: 20px;
+        margin-bottom: 20px;
         width: 50%;
         min-width: 320px;
         display: flex;
