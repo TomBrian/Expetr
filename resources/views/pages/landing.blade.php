@@ -3,7 +3,7 @@
 @section('content')
     <div class="hero py-4 container px-4 flex align-items-center justify-content-between">
         <div class="text my-2">
-            <h1>expetr provides vital business management tools to help you track growth</h1>
+            <h1>expetr provides vital business team management tools to help you track growth</h1>
             <p class="text-muted my-4">
                 Track and analyse your expenses,Manage events and assign tasks all on one dashboard.
             </p>

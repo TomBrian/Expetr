@@ -10306,6 +10306,7 @@ h2 {
     height: fit-content !important;
     width: 100vw !important;
     margin: 0px !important;
+    border-radius: 0px !important;
   }
   #notLogged-links form {
     padding: 20px !important;
