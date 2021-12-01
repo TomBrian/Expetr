@@ -10020,7 +10020,6 @@ body {
   z-index: 3000;
   background-color: transparent !important;
   align-items: center;
-  flex-wrap: nowrap !important;
 }
 .navbar .btn {
   min-width: 130px;
