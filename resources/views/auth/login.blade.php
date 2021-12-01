@@ -14,6 +14,7 @@
                     </div>
                 @endif
                 @csrf
+                @method('GET')
                 <input id="organisation" type="text" placeholder="organisation Code..."
                     class="form-control @error('organisation') is-invalid @enderror" name="organisation"
                     value="{{ old('organisation') }}" required autocomplete="organisation">
