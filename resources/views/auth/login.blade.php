@@ -1,7 +1,7 @@
 @extends('layouts.app')
 {{-- the form to logn in --}}
 @section('content')
-    <div class="container">
+    <div class="flex-wrapper">
         <div class="container shadow-md bg-white" id="notLogged-links" style="display: flex; align-items-center">
             <form method="POST" id="login" class="card p-5 my-3" action="{{ route('login-custom') }}">
                 @csrf

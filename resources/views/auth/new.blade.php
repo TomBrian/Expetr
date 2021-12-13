@@ -1,7 +1,7 @@
 @extends('layouts.app')
 {{-- the form to create a new org --}}
 @section('content')
-    <div class="container">
+    <div class="flex-wrapper">
         <div class="container shadow-md bg-white" id="notLogged-links" style="display: flex;">
             <form method="POST" id="login" class="p-5 card bg-white" action="{{ route('createOrg') }}">
                 <div class="header-text">

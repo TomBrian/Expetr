@@ -130,11 +130,17 @@ body {
 .tools-header {
     color: $dark-color;
 }
+.flex-wrapper {
+    display: flex;
+    align-items: center;
+    height: 85vh;
+}
 //not logged in page
 #notLogged-links {
     border-radius: 37px;
-    height: 90vh;
-    max-height: 640px;
+    // height: 90vh;
+    height: 500px;
+    align-items: center;
     overflow: hidden;
     padding: 0px !important;
     // height: fit-content;

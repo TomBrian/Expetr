@@ -1,50 +1,50 @@
 @extends('layouts.app')
 {{-- register to an existing org --}}
 @section('content')
-    <div class="container-fluid bg-white p-3" id="notLogged-links" style="display: flex;justify-content:center;">
-        <form method="POST" id="login" class="shadow-sm card my-3" action="{{ route('register') }}">
+    <div class="flex-wrapper">
+        <div class="container-fluid bg-white p-3" id="notLogged-links" style="display: flex;justify-content:center;">
+            <form method="POST" id="login" class="shadow-sm card my-3" action="{{ route('register') }}">
 
-            <div style="width:fit-content;margin:auto">
-                <img src="{{ asset('images') }}/existing.svg" class="form-icon my-2">
-            </div>
-
-            {{-- <div class="form-title" style="text-transform:uppercase;">{{ __('Register to an existing organisation') }}</div> --}}
-            @if (session('message'))
-                <div class="alert alert-warning">
-                    {{ session('message') }}
+                <div style="width:fit-content;margin:auto">
+                    <img src="{{ asset('images') }}/existing.svg" class="form-icon my-2">
                 </div>
-            @endif
-            @csrf
-            <input id="organisation" type="text" placeholder="organisation Code..."
-                class="form-control @error('organisation') is-invalid @enderror" name="organisation"
-                value="{{ old('organisation') }}" required autocomplete="organisation" autofocus>
 
-            @error('organisation')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+                {{-- <div class="form-title" style="text-transform:uppercase;">{{ __('Register to an existing organisation') }}</div> --}}
+                @if (session('message'))
+                    <div class="alert alert-warning">
+                        {{ session('message') }}
+                    </div>
+                @endif
+                @csrf
+                <input id="organisation" type="text" placeholder="organisation Code..."
+                    class="form-control @error('organisation') is-invalid @enderror" name="organisation"
+                    value="{{ old('organisation') }}" required autocomplete="organisation" autofocus>
 
-            <input id="name" type="text" placeholder="your name..." class="form-control @error('name') is-invalid @enderror"
-                name="name" value="{{ old('name') }}" required autocomplete="name">
+                @error('organisation')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
 
-            <<<<<<< HEAD <input id="name" type="text" placeholder="your name..."
-                class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required
-                autocomplete="name">
+                <input id="name" type="text" placeholder="your name..."
+                    class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required
+                    autocomplete="name">
+
+                <input id="name" type="text" placeholder="your name..."
+                    class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required
+                    autocomplete="name">
 
                 @error('name')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-                =======
                 @error('name')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
 
-                >>>>>>> 0f8b5524adb0818dd67e2cc6b97f09a1960f1296
 
                 <input id="email" type="email" placeholder="your email..."
                     class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"
@@ -59,46 +59,45 @@
                         class="form-control @error('password') is-invalid @enderror" name="password" required
                         autocomplete="new-password">
 
-                    <<<<<<< HEAD <input id="email" type="email" placeholder="your email..."
+                    <input id="email" type="email" placeholder="your email..."
                         class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"
                         required autocomplete="email">
-                        @error('email')
+                    @error('email')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                    <div class="password-group">
+                        <input id="password" type="password" placeholder="password..."
+                            class="form-control @error('password') is-invalid @enderror" name="password" required
+                            autocomplete="new-password">
+
+                        @error('password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                        <div class="password-group">
-                            <input id="password" type="password" placeholder="password..."
-                                class="form-control @error('password') is-invalid @enderror" name="password" required
-                                autocomplete="new-password">
 
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                        <input id="password-confirm" type="password" placeholder="confirm password..."
+                            class="form-control" name="password_confirmation" required autocomplete="new-password">
 
-                            <input id="password-confirm" type="password" placeholder="confirm password..."
-                                class="form-control" name="password_confirmation" required autocomplete="new-password">
+                    </div>
 
-                        </div>
+                    <button type="submit" id="btn">
+                        {{ __('Register') }}
+                    </button>
+                    <div class="flex my-3"><small>Already have an account? <a href="{{ route('login') }}">log
+                                in</a></small>
+                    </div>
+            </form>
+        </div>
+        <div class="container-fluid bg-white background">
+            <div class="content container-fluid p-4"></div>
+        </div>
+        <div class="spacer p-2"></div>
 
-                        <button type="submit" id="btn">
-                            {{ __('Register') }}
-                        </button>
-                        <div class="flex my-3"><small>Already have an account? <a href="{{ route('login') }}">log
-                                    in</a></small>
-                        </div>
-        </form>
-    </div>
-    <div class="container-fluid bg-white background">
-        <div class="content container-fluid p-4"></div>
-    </div>
-    =======
-    <div class="spacer p-2"></div>
-
-    <input id="password-confirm" type="password" placeholder="confirm password..." class="form-control"
-        name="password_confirmation" required autocomplete="new-password">
+        <input id="password-confirm" type="password" placeholder="confirm password..." class="form-control"
+            name="password_confirmation" required autocomplete="new-password">
 
     </div>
     @error('password')
@@ -126,6 +125,6 @@
     </div>
     </div>
     </div>
+    </div>
 
-    >>>>>>> 0f8b5524adb0818dd67e2cc6b97f09a1960f1296
 @endsection
