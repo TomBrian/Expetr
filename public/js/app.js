@@ -4520,9 +4520,115 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/members.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************************************************************************************************************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\resources\\js\\components\\members.vue: Unexpected token (75:0)\n\n\u001b[0m \u001b[90m 73 |\u001b[39m                 \u001b[90m//console.log(this.AllUsers)\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 74 |\u001b[39m                 \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateAvatar()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 75 |\u001b[39m \u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<\u001b[39m \u001b[33mHEAD\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m                 $(\u001b[32m\".loader\"\u001b[39m)\u001b[33m.\u001b[39mhide()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m \u001b[33m===\u001b[39m\u001b[33m===\u001b[39m\u001b[33m=\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m \u001b[33m>>>\u001b[39m\u001b[33m>>>\u001b[39m\u001b[33m>\u001b[39m \u001b[35m0\u001b[39mf8b5524adb0818dd67e2cc6b97f09a1960f1296\u001b[0m\n    at Parser._raise (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:816:17)\n    at Parser.raiseWithData (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:809:17)\n    at Parser.raise (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:770:17)\n    at Parser.unexpected (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:9893:16)\n    at Parser.parseExprAtom (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:11307:20)\n    at Parser.parseExprSubscripts (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10881:23)\n    at Parser.parseUpdate (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10861:21)\n    at Parser.parseMaybeUnary (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10839:23)\n    at Parser.parseExprOps (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10696:23)\n    at Parser.parseMaybeConditional (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10670:23)\n    at Parser.parseMaybeAssign (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10633:21)\n    at Parser.parseExpressionBase (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10573:23)\n    at C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10567:39\n    at Parser.allowInAnd (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:12334:12)\n    at Parser.parseExpression (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10567:17)\n    at Parser.parseStatementContent (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:12665:23)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "members",
+  data: function data() {
+    return {
+      AllUsers: []
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get(location.origin + "/api/all-users").then(function (res) {
+      _this.AllUsers = res.data; //console.log(this.AllUsers)
+
+      _this.createAvatar();
+
+      $(".loader").hide(); // this.sanitizeDate()
+    })["catch"](function (err) {
+      console.log(err);
+    });
+    this.countUnreadNotifications();
+  },
+  methods: {
+    // sanitizeDate: function () {
+    //     this.AllUsers.forEach(
+    //         user => {
+    //             const date = user.created_at;
+    //             const dateArray = date.split('T');
+    //             user.created_at = dateArray[0];
+    //         }
+    //     )
+    // },
+    createAvatar: function createAvatar() {
+      this.AllUsers.forEach(function (user) {
+        var fullName = user.name;
+        var nameArr = fullName.split(" ");
+        var firstName = nameArr[0];
+        var secondName = nameArr[1];
+        var initials = firstName.charAt(0) + secondName.charAt(0);
+        user.avatar = initials;
+      });
+    }
+  }
+});
 
 /***/ }),
 

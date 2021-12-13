@@ -72,10 +72,7 @@ export default {
                 this.AllUsers = res.data;
                 //console.log(this.AllUsers)
                 this.createAvatar();
-<<<<<<< HEAD
                 $(".loader").hide();
-=======
->>>>>>> 0f8b5524adb0818dd67e2cc6b97f09a1960f1296
                 // this.sanitizeDate()
             })
             .catch(err => {
