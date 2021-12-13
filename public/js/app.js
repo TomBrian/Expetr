@@ -3116,182 +3116,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "chats",
@@ -4474,8 +4298,98 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'home',
+  name: "home",
   data: function data() {
     return {
       user: [],
@@ -4492,15 +4406,15 @@ __webpack_require__.r(__webpack_exports__);
         origin: location.origin
       },
       quote: {
-        body: '',
-        credits: ''
+        body: "",
+        credits: ""
       }
     };
   },
   mounted: function mounted() {
     var _this = this;
 
-    fetch(location.origin + '/api/user').then(function (res) {
+    fetch(location.origin + "/api/user").then(function (res) {
       return res.json();
     }).then(function (data) {
       _this.user = data;
@@ -4519,14 +4433,14 @@ __webpack_require__.r(__webpack_exports__);
     getMyAssignments: function getMyAssignments() {
       var _this2 = this;
 
-      axios.get(location.origin + '/api/get-assignments').then(function (res) {
+      axios.get(location.origin + "/api/get-assignments").then(function (res) {
         _this2.assignments = res.data;
       });
     },
     getJoinRequests: function getJoinRequests() {
       var _this3 = this;
 
-      axios.get(location.origin + '/api/get-all-join-requests').then(function (res) {
+      axios.get(location.origin + "/api/get-all-join-requests").then(function (res) {
         _this3.requests = res.data;
       })["catch"](function (err) {
         alert(err);
@@ -4535,8 +4449,8 @@ __webpack_require__.r(__webpack_exports__);
     getQuote: function getQuote() {
       var _this4 = this;
 
-      axios.get(location.origin + '/api/get-quote').then(function (res) {
-        var expl = res.data.split('-');
+      axios.get(location.origin + "/api/get-quote").then(function (res) {
+        var expl = res.data.split("-");
         _this4.quote.body = expl[0];
         _this4.quote.credits = expl[1];
       });
@@ -4544,11 +4458,11 @@ __webpack_require__.r(__webpack_exports__);
     getNotifications: function getNotifications() {
       var _this5 = this;
 
-      axios.get(location.origin + '/api/get-unread-notifications').then(function (res) {
+      axios.get(location.origin + "/api/get-unread-notifications").then(function (res) {
         return res.data;
       }).then(function (data) {
         _this5.unreadNotifications = data;
-        axios.get(location.origin + '/api/get-read-notifications').then(function (res) {
+        axios.get(location.origin + "/api/get-read-notifications").then(function (res) {
           return res.data;
         }).then(function (data) {
           _this5.readNotifications = data;
@@ -4564,7 +4478,7 @@ __webpack_require__.r(__webpack_exports__);
     getApproachingEvents: function getApproachingEvents() {
       var _this6 = this;
 
-      axios.get(location.origin + '/api/approaching-events').then(function (res) {
+      axios.get(location.origin + "/api/approaching-events").then(function (res) {
         _this6.eventsAlmostDue = res.data;
       });
     },
@@ -4595,7 +4509,7 @@ __webpack_require__.r(__webpack_exports__);
       } //console.log(this.topNotifications);
 
 
-      $('.loader').hide();
+      $(".loader").hide();
     }
   }
 });
@@ -4606,115 +4520,9 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/members.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "members",
-  data: function data() {
-    return {
-      AllUsers: []
-    };
-  },
-  mounted: function mounted() {
-    var _this = this;
-
-    axios.get(location.origin + "/api/all-users").then(function (res) {
-      _this.AllUsers = res.data; //console.log(this.AllUsers)
-
-      _this.createAvatar();
-
-      $(".loader").hide(); // this.sanitizeDate()
-    })["catch"](function (err) {
-      console.log(err);
-    });
-    this.countUnreadNotifications();
-  },
-  methods: {
-    // sanitizeDate: function () {
-    //     this.AllUsers.forEach(
-    //         user => {
-    //             const date = user.created_at;
-    //             const dateArray = date.split('T');
-    //             user.created_at = dateArray[0];
-    //         }
-    //     )
-    // },
-    createAvatar: function createAvatar() {
-      this.AllUsers.forEach(function (user) {
-        var fullName = user.name;
-        var nameArr = fullName.split(" ");
-        var firstName = nameArr[0];
-        var secondName = nameArr[1];
-        var initials = firstName.charAt(0) + secondName.charAt(0);
-        user.avatar = initials;
-      });
-    }
-  }
-});
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\resources\\js\\components\\members.vue: Unexpected token (75:0)\n\n\u001b[0m \u001b[90m 73 |\u001b[39m                 \u001b[90m//console.log(this.AllUsers)\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 74 |\u001b[39m                 \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateAvatar()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 75 |\u001b[39m \u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<\u001b[39m \u001b[33mHEAD\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 76 |\u001b[39m                 $(\u001b[32m\".loader\"\u001b[39m)\u001b[33m.\u001b[39mhide()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 77 |\u001b[39m \u001b[33m===\u001b[39m\u001b[33m===\u001b[39m\u001b[33m=\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 78 |\u001b[39m \u001b[33m>>>\u001b[39m\u001b[33m>>>\u001b[39m\u001b[33m>\u001b[39m \u001b[35m0\u001b[39mf8b5524adb0818dd67e2cc6b97f09a1960f1296\u001b[0m\n    at Parser._raise (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:816:17)\n    at Parser.raiseWithData (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:809:17)\n    at Parser.raise (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:770:17)\n    at Parser.unexpected (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:9893:16)\n    at Parser.parseExprAtom (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:11307:20)\n    at Parser.parseExprSubscripts (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10881:23)\n    at Parser.parseUpdate (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10861:21)\n    at Parser.parseMaybeUnary (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10839:23)\n    at Parser.parseExprOps (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10696:23)\n    at Parser.parseMaybeConditional (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10670:23)\n    at Parser.parseMaybeAssign (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10633:21)\n    at Parser.parseExpressionBase (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10573:23)\n    at C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10567:39\n    at Parser.allowInAnd (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:12334:12)\n    at Parser.parseExpression (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:10567:17)\n    at Parser.parseStatementContent (C:\\Users\\KANAI\\Documents\\Trackex\\htdocs\\laravel\\node_modules\\@babel\\parser\\lib\\index.js:12665:23)");
 
 /***/ }),
 
@@ -4887,16 +4695,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'navbar',
+  name: "navbar",
   data: function data() {
     return {
       user: {},
-      avatar: '',
+      avatar: "",
       unreadNotifications: [],
       unreadCount: 0,
-      unreadTextsCount: '',
+      unreadTextsCount: "",
       location: {
         origin: location.origin
       }
@@ -4905,7 +4752,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    fetch(location.origin + '/api/user').then(function (res) {
+    fetch(location.origin + "/api/user").then(function (res) {
       return res.json();
     }).then(function (data) {
       _this.user = data;
@@ -4919,18 +4766,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     openSideNav: function openSideNav() {
-      _event_bus__WEBPACK_IMPORTED_MODULE_0__.default.$emit('openSideNav');
+      _event_bus__WEBPACK_IMPORTED_MODULE_0__.default.$emit("openSideNav");
     },
     countUnreadTexts: function countUnreadTexts() {
       var _this2 = this;
 
-      axios.get(location.origin + '/api/get-unread-messages-number').then(function (res) {
+      axios.get(location.origin + "/api/get-unread-messages-number").then(function (res) {
         _this2.unreadTextsCount = res.data;
       });
     },
     createAvatar: function createAvatar() {
       var fullName = this.user.name;
-      var nameArr = fullName.split(' ');
+      var nameArr = fullName.split(" ");
       var firstName = nameArr[0];
       var secondName = nameArr[1];
       var initials = firstName.charAt(0) + secondName.charAt(0);
@@ -27471,7 +27318,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.greetings[data-v-fa6affac] {\r\n    font-family: 'poppins', sans-serif;\r\n    font-size: 24px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    margin: auto;\r\n    margin-top: 20px;\n}\n.home[data-v-fa6affac] {\r\n    background-color: transparent !important;\r\n    display: block !important;\n}\n.loader[data-v-fa6affac] {\r\n    background-color: #F1F5F7;\n}\n.quote blockquote[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.quote .card[data-v-fa6affac] {\r\n    background-color: transparent;\r\n    background-color: white;\n}\n.organisation-details[data-v-fa6affac] {\r\n    display: flex;\r\n    width: 90%;\r\n    justify-content: space-between;\r\n    font-weight: bold;\n}\n.organisation-details .organisation-code[data-v-fa6affac] {\r\n    font-family: 'Courier New', Courier, monospace;\r\n    font-size: 18px;\n}\n.organisation-details .organisation-name[data-v-fa6affac] {\r\n    font-size: 18px;\n}\n.notification-card[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    background-color: white;\r\n    border-bottom: solid 1px #2C76DC;\n}\n.white-card[data-v-fa6affac] {\r\n    width: 300px;\r\n    height: 300px;\r\n    border-radius: 5px;\r\n    background-color: white;\n}\n.white-card .header[data-v-fa6affac] {\r\n    font-weight: bolder;\r\n    width: 100%;\r\n    text-align: center;\n}\n@media (min-width:1000px) {\n.lg-none[data-v-fa6affac] {\r\n        display: none !important;\n}\n}\n.white-card .number[data-v-fa6affac] {\r\n    font-size: 100px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.events-card[data-v-fa6affac] {\r\n    background-color: white;\r\n    flex: 1 !important;\r\n    overflow-y: scroll;\r\n    height: 300px;\n}\n.events-card .header[data-v-fa6affac] {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.content .card-header[data-v-fa6affac] {\r\n    background: white;\r\n    border: none;\r\n    border-bottom: solid 1px #2C76DC;\n}\n.card-header a[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.card[data-v-fa6affac] {\r\n    border-top: none;\n}\n@media (max-width:500px) {\n.organisation-details[data-v-fa6affac] {\r\n        display: block !important;\n}\n.v-lg-none[data-v-fa6affac] {\r\n        display: block !important;\n}\n}\n@media (min-width:500px) {\n.v-lg-none[data-v-fa6affac] {\r\n        display: none;\n}\n}\n@media (max-width:1000px) {\n#first-flex[data-v-fa6affac] {\r\n        flex-direction: column !important;\r\n        justify-content: center;\r\n        align-items: center;\n}\n.greetings[data-v-fa6affac] {\r\n        font-size: 14px;\n}\n.events-card[data-v-fa6affac] {\r\n        width: 100%;\r\n        margin-top: 20px;\n}\n}\n.pending[data-v-fa6affac] {\r\n    width: 100%;\r\n    background-color: white;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.pending .content[data-v-fa6affac] {\r\n    flex: 1;\r\n    width: 100%;\r\n    overflow-y: scroll;\r\n    background-color: #fafafa;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2C76DC;\n}\n.pending .header[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    width: 70%;\r\n    margin: auto;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.greetings[data-v-fa6affac] {\r\n    font-family: \"poppins\", sans-serif;\r\n    font-size: 24px;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    margin: auto;\r\n    margin-top: 20px;\n}\n.home[data-v-fa6affac] {\r\n    background-color: transparent !important;\r\n    display: block !important;\n}\n.loader[data-v-fa6affac] {\r\n    background-color: #f1f5f7;\n}\n.quote blockquote[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.quote .card[data-v-fa6affac] {\r\n    background-color: transparent;\r\n    background-color: white;\n}\n.organisation-details[data-v-fa6affac] {\r\n    display: flex;\r\n    width: 90%;\r\n    justify-content: space-between;\r\n    font-weight: bold;\n}\n.organisation-details .organisation-code[data-v-fa6affac] {\r\n    font-family: \"Courier New\", Courier, monospace;\r\n    font-size: 18px;\n}\n.organisation-details .organisation-name[data-v-fa6affac] {\r\n    font-size: 18px;\n}\n.notification-card[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    background-color: white;\r\n    border-bottom: solid 1px #2c76dc;\n}\n.white-card[data-v-fa6affac] {\r\n    width: 300px;\r\n    height: 300px;\r\n    border-radius: 5px;\r\n    background-color: white;\n}\n.white-card .header[data-v-fa6affac] {\r\n    font-weight: bolder;\r\n    width: 100%;\r\n    text-align: center;\n}\n@media (min-width: 1000px) {\n.lg-none[data-v-fa6affac] {\r\n        display: none !important;\n}\n}\n.white-card .number[data-v-fa6affac] {\r\n    font-size: 100px;\r\n    width: 100%;\r\n    text-align: center;\n}\n.events-card[data-v-fa6affac] {\r\n    background-color: white;\r\n    flex: 1 !important;\r\n    overflow-y: scroll;\r\n    height: 300px;\n}\n.events-card .header[data-v-fa6affac] {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.events-card[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2c76dc;\n}\n.content .card-header[data-v-fa6affac] {\r\n    background: white;\r\n    border: none;\r\n    border-bottom: solid 1px #2c76dc;\n}\n.card-header a[data-v-fa6affac] {\r\n    font-size: 15px;\n}\n.card[data-v-fa6affac] {\r\n    border-top: none;\n}\n.sm-show[data-v-fa6affac] {\r\n    display: none;\n}\n@media (max-width: 500px) {\n.organisation-details[data-v-fa6affac] {\r\n        display: block !important;\n}\n.v-lg-none[data-v-fa6affac] {\r\n        display: block !important;\n}\n}\n@media (min-width: 500px) {\n.v-lg-none[data-v-fa6affac] {\r\n        display: none;\n}\n}\n@media (max-width: 1000px) {\n.sm-show[data-v-fa6affac] {\r\n        display: block;\n}\n#first-flex[data-v-fa6affac] {\r\n        flex-direction: column !important;\r\n        justify-content: center;\r\n        align-items: center;\n}\n.greetings[data-v-fa6affac] {\r\n        font-size: 14px;\n}\n.events-card[data-v-fa6affac] {\r\n        width: 100%;\r\n        margin-top: 20px;\n}\n}\n.pending[data-v-fa6affac] {\r\n    width: 100%;\r\n    background-color: white;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\n}\n.pending .content[data-v-fa6affac] {\r\n    flex: 1;\r\n    width: 100%;\r\n    overflow-y: scroll;\r\n    background-color: #fafafa;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar {\r\n    width: 3px;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb {\r\n    background: #2c75dc6b;\n}\n.pending .content[data-v-fa6affac]::-webkit-scrollbar-thumb:hover {\r\n    background: #2c76dc;\n}\n.pending .header[data-v-fa6affac] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    font-family: roboto;\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    width: 70%;\r\n    margin: auto;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -27519,7 +27366,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.profile[data-v-11e733ca] {\r\n    display: flex;\r\n    align-items: center;\r\n    font-family: poppins;\r\n    font-size: 14px;\n}\n.avatar[data-v-11e733ca] {\r\n    width: 40px;\r\n    height: 40px;\r\n    position: relative;\r\n    color: white;\r\n    border-radius: 50%;\r\n    background-color: #2C76DC;\n}\n.avatar p[data-v-11e733ca] {\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\n}\n@media (max-width:1000px) {\n.sm-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.icon[data-v-11e733ca] {\r\n        width: 20px !important;\n}\n.logo-lg[data-v-11e733ca]{\r\n    display: none !important;\n}\n.logo-sm[data-v-11e733ca] {\r\n        width: 25px;\n}\n}\n@media (min-width:1000px) {\n.lg-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n}\n@media (max-width:500px){\n.nav-item[data-v-11e733ca]{\r\n          padding: 0% !important;\r\n          /* margin: 20px; */\n}\n.v-lg-none[data-v-11e733ca]{\r\n    display: block !important;\n}\n.v-sm-none[data-v-11e733ca]{\r\n     display: none !important;\n}\n.lg-none[data-v-11e733ca]{\r\n        display:none !important;\n}\n.icon[data-v-11e733ca] {\r\n         padding: 0% !important;\r\n        width: 20px !important;\n}\n}\n.v-lg-none[data-v-11e733ca]{\r\n    display: none;\n}\n.navbar[data-v-11e733ca] {\r\n    width: 100%;\r\n    background-color: white;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    z-index: 2;\n}\n.nav-item[data-v-11e733ca] {\r\n    font-weight: bolder;\n}\n.logo-lg[data-v-11e733ca] {\r\n    width: 150px;\n}\n.navbar-link[data-v-11e733ca] {\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.nav-link .w[data-v-11e733ca] {\r\n    padding: 10px;\r\n    position: relative;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.badge[data-v-11e733ca] {\r\n    position: absolute;\r\n    border-radius: 50%;\r\n    min-width: 20px;\r\n    min-height: 20px;\r\n    top: 0;\r\n    right: 0;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    font-size: 10px;\n}\n.nav-item[data-v-11e733ca] {\r\n    display: flex;\r\n    width:-webkit-fit-content !important;\r\n    width:-moz-fit-content !important;\r\n    width:fit-content !important;\r\n    align-items: center;\n}\n.icon[data-v-11e733ca] {\r\n    width: 25px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.profile[data-v-11e733ca] {\r\n    display: flex;\r\n    align-items: center;\r\n    font-family: poppins;\r\n    font-size: 14px;\n}\n.avatar[data-v-11e733ca] {\r\n    width: 40px;\r\n    height: 40px;\r\n    position: relative;\r\n    color: white;\r\n    border-radius: 50%;\r\n    background-color: #2c76dc;\n}\n.avatar p[data-v-11e733ca] {\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\n}\n@media (max-width: 1000px) {\n.sm-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.icon[data-v-11e733ca] {\r\n        width: 20px !important;\n}\n.logo-lg[data-v-11e733ca] {\r\n        display: none !important;\n}\n.logo-sm[data-v-11e733ca] {\r\n        width: 25px;\n}\n}\n@media (min-width: 1000px) {\n.lg-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n}\n@media (max-width: 500px) {\n.nav-item[data-v-11e733ca] {\r\n        padding: 0% !important;\r\n        /* margin: 20px; */\n}\n.v-lg-none[data-v-11e733ca] {\r\n        display: block !important;\n}\n.v-sm-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.lg-none[data-v-11e733ca] {\r\n        display: none !important;\n}\n.icon[data-v-11e733ca] {\r\n        padding: 0% !important;\r\n        width: 20px !important;\n}\n}\n.v-lg-none[data-v-11e733ca] {\r\n    display: none;\n}\n.navbar[data-v-11e733ca] {\r\n    width: 100%;\r\n    background-color: white;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    z-index: 2;\n}\n.nav-item[data-v-11e733ca] {\r\n    font-weight: bolder;\n}\n.logo-lg[data-v-11e733ca] {\r\n    width: 150px;\n}\n.navbar-link[data-v-11e733ca] {\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.nav-link .w[data-v-11e733ca] {\r\n    padding: 10px;\r\n    position: relative;\r\n    height: -webkit-fit-content;\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    width: -webkit-fit-content;\r\n    width: -moz-fit-content;\r\n    width: fit-content;\n}\n.badge[data-v-11e733ca] {\r\n    position: absolute;\r\n    border-radius: 50%;\r\n    min-width: 20px;\r\n    min-height: 20px;\r\n    top: 0;\r\n    right: 0;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    font-size: 10px;\n}\n.nav-item[data-v-11e733ca] {\r\n    display: flex;\r\n    width: -webkit-fit-content !important;\r\n    width: -moz-fit-content !important;\r\n    width: fit-content !important;\r\n    align-items: center;\n}\n.icon[data-v-11e733ca] {\r\n    width: 25px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -93205,382 +93052,92 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(
-        "\n\n        >>>>>>> b76127416238573a71100617fa38f108f7a02456\n        "
-      ),
-      _vm.openConversation != null
-        ? _c(
-            "div",
-            _vm._l(_vm.conversations, function(convo, i) {
-              return _c(
-                "div",
-                {
-                  key: i,
-                  class:
-                    _vm.openConversation.conversationId == convo.conversationId
-                      ? "open profile-card p-3 flex"
-                      : "profile-card p-3 flex",
-                  on: {
-                    click: function($event) {
-                      return _vm.changeOpenConv(convo.conversationId)
-                    }
+        "\n\n        >>>>>>> b76127416238573a71100617fa38f108f7a02456 =======\n    "
+      )
+    ]),
+    _vm._v("\n\n    >>>>>>> 0f8b5524adb0818dd67e2cc6b97f09a1960f1296\n    "),
+    _vm.openConversation != null
+      ? _c(
+          "div",
+          _vm._l(_vm.conversations, function(convo, i) {
+            return _c(
+              "div",
+              {
+                key: i,
+                class:
+                  _vm.openConversation.conversationId == convo.conversationId
+                    ? "open profile-card p-3 flex"
+                    : "profile-card p-3 flex",
+                on: {
+                  click: function($event) {
+                    return _vm.changeOpenConv(convo.conversationId)
                   }
-                },
-                [
-                  _c("div", { staticClass: "a-wrapper" }, [
-                    convo.type == "personal"
-                      ? _c("div", { staticClass: "avatar font-weight-bold" }, [
-                          _c("p", { staticClass: "my-3" }, [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(
+                }
+              },
+              [
+                _c("div", { staticClass: "a-wrapper" }, [
+                  convo.type == "personal"
+                    ? _c("div", { staticClass: "avatar font-weight-bold" }, [
+                        _c("p", { staticClass: "my-3" }, [
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(
+                                convo.participants[0].name
+                                  .split(" ")[0]
+                                  .charAt(0) +
                                   convo.participants[0].name
-                                    .split(" ")[0]
-                                    .charAt(0) +
-                                    convo.participants[0].name
-                                      .split(" ")[1]
-                                      .charAt(0)
-                                ) +
-                                "\n                        "
-                            )
-                          ])
+                                    .split(" ")[1]
+                                    .charAt(0)
+                              ) +
+                              "\n                    "
+                          )
                         ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    convo.type == "group"
-                      ? _c("div", { staticClass: "avatar font-weight-bold" }, [
-                          _c("p", { staticClass: "my-3" }, [_vm._v("GR")])
-                        ])
-                      : _vm._e()
-                  ]),
+                      ])
+                    : _vm._e(),
                   _vm._v(" "),
                   convo.type == "group"
-                    ? _c("div", { staticClass: "d-wrapper" }, [
-                        _c("div", [_vm._v(_vm._s(convo.data.name))]),
-                        _vm._v(" "),
-                        _vm._m(3, true)
+                    ? _c("div", { staticClass: "avatar font-weight-bold" }, [
+                        _c("p", { staticClass: "my-3" }, [_vm._v("GR")])
                       ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  convo.type == "personal"
-                    ? _c("div", { staticClass: "d-wrapper" }, [
-                        _c("div", [_vm._v(_vm._s(convo.participants[0].name))]),
-                        _vm._v(" "),
-                        _c("div", [
-                          _c("small", { staticClass: "text-muted" }, [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(convo.participants[0].email) +
-                                "\n                        "
-                            )
-                          ])
-                        ])
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("div", [
-                    convo.unread > 0
-                      ? _c("span", { staticClass: "badge badge-primary" }, [
-                          _vm._v(_vm._s(convo.unread))
-                        ])
-                      : _vm._e()
-                  ])
-                ]
-              )
-            }),
-            0
-          )
-        : _vm._e()
-    ]),
-    _vm._v(" "),
-    _vm.conversations.length > 0 && _vm.openConversation != null
-      ? _c("div", { staticClass: "inbox" }, [
-          _vm._m(4),
-          _vm._v(" "),
-          _c("div", { staticClass: "inbox-header shadow-sm p-3 sticky-top" }, [
-            _vm.openConversation.type == "personal"
-              ? _c("div", { staticClass: "profile-details" }, [
-                  _c("div", { staticClass: "flex" }, [
-                    _c("div", [
-                      _c("div", { staticClass: "avatar" }, [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(
-                              _vm.openConversation.participants[0].name
-                                .split(" ")[0]
-                                .charAt(0) +
-                                _vm.openConversation.participants[0].name
-                                  .split(" ")[1]
-                                  .charAt(0)
-                            ) +
-                            "\n                        "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "mx-3" }, [
-                      _c("div", { staticClass: "username" }, [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(_vm.openConversation.participants[0].name) +
-                            "\n                        "
-                        )
-                      ]),
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                convo.type == "group"
+                  ? _c("div", { staticClass: "d-wrapper" }, [
+                      _c("div", [_vm._v(_vm._s(convo.data.name))]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "badge badge-secondary" }, [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(
-                              _vm.openConversation.participants[0].position
-                            ) +
-                            "\n                        "
-                        )
-                      ])
+                      _vm._m(3, true)
                     ])
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.openConversation.type == "group"
-              ? _c("div", { staticClass: "profile-details" }, [
-                  _c("div", { staticClass: "flex" }, [
-                    _c("div", { staticClass: "mx-3" }, [
-                      _c("div", { staticClass: "username" }, [
-                        _c("h5", [
-                          _vm._v(_vm._s(_vm.openConversation.data.name))
-                        ])
-                      ]),
+                  : _vm._e(),
+                _vm._v(" "),
+                convo.type == "personal"
+                  ? _c("div", { staticClass: "d-wrapper" }, [
+                      _c("div", [_vm._v(_vm._s(convo.participants[0].name))]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "text-muted" }, [
-                        _c("small", [
+                      _c("div", [
+                        _c("small", { staticClass: "text-muted" }, [
                           _vm._v(
-                            "created by\n                                " +
-                              _vm._s(_vm.openConversation.data.admin)
+                            "\n                        " +
+                              _vm._s(convo.participants[0].email) +
+                              "\n                    "
                           )
                         ])
                       ])
                     ])
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "text-danger",
-                attrs: { title: "delete conversation" },
-                on: {
-                  click: function($event) {
-                    return _vm.deleteConversation(
-                      _vm.openConversation.conversationId
-                    )
-                  }
-                }
-              },
-              [
-                _c("i", {
-                  staticClass: "fa fa-trash",
-                  attrs: { "aria-hidden": "true" }
-                })
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "inbox-content my-1 px-1" }, [
-            _c(
-              "div",
-              {
-                staticStyle: { height: "fit-content" },
-                attrs: { id: "innerH" }
-              },
-              [
-                _vm.openConversation.type == "group"
-                  ? _c("div", { staticClass: "text-muted text-center" }, [
-                      _c("p", [_vm._v("participants:")]),
-                      _vm._v(" "),
-                      _c(
-                        "p",
-                        _vm._l(_vm.openConversation.participants, function(
-                          participant
-                        ) {
-                          return _c("u", { key: participant.id }, [
-                            _c("small", [
-                              _vm._v(_vm._s(participant.name) + ",")
-                            ])
-                          ])
-                        }),
-                        0
-                      )
-                    ])
                   : _vm._e(),
                 _vm._v(" "),
-                _vm._l(_vm.messages, function(message) {
-                  return _c(
-                    "div",
-                    {
-                      key: message.id,
-                      class:
-                        message.sender.id == _vm.me.id
-                          ? "message-to-wrapper my-2"
-                          : "message-from-wrapper my-2"
-                    },
-                    [
-                      _c(
-                        "div",
-                        {
-                          class:
-                            message.sender.id == _vm.me.id
-                              ? "message-to"
-                              : "message-from"
-                        },
-                        [
-                          _c("p", [_vm._v(_vm._s(message.body))]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "date" }, [
-                            _c("small", [
-                              _vm._v(
-                                _vm._s(
-                                  _vm._f("moment")(
-                                    message.created_at,
-                                    "from",
-                                    "now"
-                                  )
-                                )
-                              )
-                            ])
-                          ])
-                        ]
-                      ),
-                      _vm._v(" "),
-                      message.sender.id != _vm.me.id &&
-                      _vm.openConversation.type == "group"
-                        ? _c("div", [
-                            _c(
-                              "small",
-                              {
-                                staticClass: "text-muted font-weight-lighter",
-                                staticStyle: {
-                                  position: "absolute",
-                                  top: "0",
-                                  left: "10px"
-                                }
-                              },
-                              [_vm._v(_vm._s(message.sender.name))]
-                            )
-                          ])
-                        : _vm._e()
-                    ]
-                  )
-                })
-              ],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "form",
-            {
-              staticClass: "inbox-footer px-4 py-4",
-              attrs: { autocomplete: "off" },
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.sendMessage(_vm.openConversation.conversationId)
-                }
-              }
-            },
-            [
-              _c("div", { staticClass: "form flex" }, [
-                _c("div"),
-                _vm._v(" "),
                 _c("div", [
-                  _c("div", { staticClass: "dropdown" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "emojis",
-                        attrs: {
-                          id: "triggerId",
-                          "data-toggle": "dropdown",
-                          "aria-haspopup": "true",
-                          "aria-expanded": "false"
-                        }
-                      },
-                      [
-                        _c("img", {
-                          staticClass: "icon",
-                          attrs: { src: "/images/emojis.svg", alt: "new" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "dropdown-menu picker",
-                        attrs: { "aria-labelledby": "triggerId" }
-                      },
-                      [
-                        _c(
-                          "form",
-                          [
-                            _c("VEmojiPicker", {
-                              on: { select: _vm.selectEmoji }
-                            })
-                          ],
-                          1
-                        )
-                      ]
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "footer-form" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.message,
-                        expression: "message"
-                      }
-                    ],
-                    staticClass: "form-control px-2",
-                    attrs: {
-                      type: "text",
-                      placeholder: "message...",
-                      id: "inboxChat",
-                      required: ""
-                    },
-                    domProps: { value: _vm.message },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.message = $event.target.value
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", [
-                  _c(
-                    "button",
-                    { staticClass: "btn", attrs: { type: "submit" } },
-                    [
-                      _c("img", {
-                        staticClass: "icon",
-                        attrs: { src: "/images/send.svg", alt: "new" }
-                      })
-                    ]
-                  )
+                  convo.unread > 0
+                    ? _c("span", { staticClass: "badge badge-primary" }, [
+                        _vm._v(_vm._s(convo.unread))
+                      ])
+                    : _vm._e()
                 ])
-              ]),
-              _vm._v(" "),
-              _c("div")
-            ]
-          )
-        ])
+              ]
+            )
+          }),
+          0
+        )
       : _vm._e()
   ])
 }
@@ -93673,23 +93230,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", [
       _c("small", { staticClass: "text-muted" }, [
-        _vm._v("\n                            group\n                        ")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "loader shadow-sm" }, [
-      _c("div", { staticClass: "lds-ellipsis" }, [
-        _c("div"),
-        _vm._v(" "),
-        _c("div"),
-        _vm._v(" "),
-        _c("div"),
-        _vm._v(" "),
-        _c("div")
+        _vm._v("\n                        group\n                    ")
       ])
     ])
   }
@@ -95342,9 +94883,7 @@ var render = function() {
       _vm.organisation != null
         ? _c("div", { staticClass: "organisation-name text-muted" }, [
             _vm._v(
-              "\r\n            " +
-                _vm._s(_vm.organisation.name) +
-                "\r\n        "
+              "\n            " + _vm._s(_vm.organisation.name) + "\n        "
             )
           ])
         : _vm._e(),
@@ -95352,17 +94891,19 @@ var render = function() {
       _vm.organisation != null
         ? _c("div", { staticClass: "organisation-code" }, [
             _vm._v(
-              "\r\n            CODE:" +
+              "\n            CODE:" +
                 _vm._s(_vm.organisation.organisation_code) +
-                "\r\n        "
+                "\n        "
             )
           ])
         : _vm._e()
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "greetings" }, [
-      _vm._v(" howdy, " + _vm._s(_vm.user.name))
+    _c("h2", { staticClass: "greetings" }, [
+      _vm._v("howdy, " + _vm._s(_vm.user.name))
     ]),
+    _vm._v(" "),
+    _vm._m(1),
     _vm._v(" "),
     _vm.organisation != null
       ? _c(
@@ -95396,9 +94937,9 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "There are " +
+                              "\n                    There are " +
                                 _vm._s(_vm.requests.length) +
-                                " unattended membership requests"
+                                " unattended membership\n                    requests\n                "
                             )
                           ]
                         )
@@ -95419,7 +94960,11 @@ var render = function() {
                 },
                 [
                   _c("div", { staticClass: "font-weight-bolder text-muted" }, [
-                    _vm._v(_vm._s(notification.data.message))
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(notification.data.message) +
+                        "\n            "
+                    )
                   ]),
                   _vm._v(" "),
                   _c(
@@ -95483,9 +95028,9 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\r\n                                " +
+                          "\n                                " +
                             _vm._s(assignment.title) +
-                            "\r\n                            "
+                            "\n                            "
                         )
                       ]
                     )
@@ -95495,7 +95040,7 @@ var render = function() {
                 _c("div", [
                   _c("small", { staticClass: "text-muted" }, [
                     _vm._v(
-                      "due " +
+                      "due\n                            " +
                         _vm._s(
                           _vm._f("moment")(assignment.date_due, "from", "now")
                         )
@@ -95518,9 +95063,9 @@ var render = function() {
               [
                 _c("div", { staticClass: "card-body" }, [
                   _vm._v(
-                    "\r\n                        " +
+                    "\n                        " +
                       _vm._s(assignment.description) +
-                      "\r\n                    "
+                      "\n                    "
                   )
                 ])
               ]
@@ -95542,15 +95087,15 @@ var render = function() {
             [
               _c("div", { staticClass: "header py-3" }, [
                 _vm._v(
-                  "\r\n                    Tasks almost due\r\n                "
+                  "\n                    Tasks almost due\n                "
                 )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "number text-danger" }, [
                 _vm._v(
-                  "\r\n                    " +
+                  "\n                    " +
                     _vm._s(_vm.activitiesAlmostDue.length) +
-                    "\r\n                "
+                    "\n                "
                 )
               ])
             ]
@@ -95561,7 +95106,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "events-card shadow-sm mx-3" }, [
         _c("div", { staticClass: "header text-center p-3" }, [
-          _vm._m(1),
+          _vm._m(2),
           _vm._v(" "),
           _c(
             "div",
@@ -95619,9 +95164,9 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\r\n                                        " +
+                                  "\n                                        " +
                                     _vm._s(event.title) +
-                                    "\r\n                                    "
+                                    "\n                                    "
                                 )
                               ]
                             )
@@ -95653,9 +95198,9 @@ var render = function() {
                       [
                         _c("div", { staticClass: "card-body" }, [
                           _vm._v(
-                            "\r\n                                " +
+                            "\n                                " +
                               _vm._s(event.description) +
-                              "\r\n                            "
+                              "\n                            "
                           )
                         ])
                       ]
@@ -95706,6 +95251,18 @@ var staticRenderFns = [
         _c("div"),
         _vm._v(" "),
         _c("div")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "alert sm-show my-3 alert-info" }, [
+      _c("h3", [_vm._v("expetr app is better on desktop")]),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-muted" }, [
+        _vm._v("Hang on for a mobile friendlier dashboard.")
       ])
     ])
   },
@@ -95868,7 +95425,11 @@ var render = function() {
           staticClass: "logo-lg v-sm-none",
           attrs: { href: _vm.location.origin }
         },
-        [_c("img", { attrs: { src: "/images/logo.svg", alt: "" } })]
+        [
+          _c("img", {
+            attrs: { src: "/images/logo.svg", width: "150px", alt: "" }
+          })
+        ]
       ),
       _c(
         "a",
@@ -95916,7 +95477,10 @@ var render = function() {
                   }),
                   _vm.unreadTextsCount != "0"
                     ? _c("span", { staticClass: "badge badge-info" }, [
-                        _vm._v(" " + _vm._s(_vm.unreadTextsCount))
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(_vm.unreadTextsCount)
+                        )
                       ])
                     : _vm._e()
                 ])
@@ -95945,7 +95509,10 @@ var render = function() {
                     }),
                     _vm.unreadCount > 0
                       ? _c("span", { staticClass: "badge badge-info" }, [
-                          _vm._v(" " + _vm._s(_vm.unreadCount))
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(_vm.unreadCount)
+                          )
                         ])
                       : _vm._e()
                   ])

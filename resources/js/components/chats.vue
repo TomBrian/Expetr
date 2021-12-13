@@ -250,242 +250,66 @@
                 <h5>You have no conversations</h5>
             </div>
 
-            >>>>>>> b76127416238573a71100617fa38f108f7a02456
-            <div v-if="openConversation != null">
-                <div
-                    :class="
-                        openConversation.conversationId == convo.conversationId
-                            ? 'open profile-card p-3 flex'
-                            : 'profile-card p-3 flex'
-                    "
-                    v-on:click="changeOpenConv(convo.conversationId)"
-                    v-for="(convo, i) in conversations"
-                    :key="i"
-                >
-                    <div class="a-wrapper">
-                        <div
-                            class="avatar font-weight-bold"
-                            v-if="convo.type == 'personal'"
-                        >
-                            <p class="my-3">
-                                {{
-                                    convo.participants[0].name
-                                        .split(" ")[0]
-                                        .charAt(0) +
-                                        convo.participants[0].name
-                                            .split(" ")[1]
-                                            .charAt(0)
-                                }}
-                            </p>
-                        </div>
-                        <div
-                            class="avatar font-weight-bold"
-                            v-if="convo.type == 'group'"
-                        >
-                            <p class="my-3">GR</p>
-                        </div>
-                    </div>
-                    <div class="d-wrapper" v-if="convo.type == 'group'">
-                        <div>{{ convo.data.name }}</div>
-                        <div>
-                            <small class="text-muted">
-                                group
-                            </small>
-                        </div>
-                    </div>
-                    <div class="d-wrapper" v-if="convo.type == 'personal'">
-                        <div>{{ convo.participants[0].name }}</div>
-                        <div>
-                            <small class="text-muted">
-                                {{ convo.participants[0].email }}
-                            </small>
-                        </div>
-                    </div>
-                    <div>
-                        <span
-                            class="badge badge-primary"
-                            v-if="convo.unread > 0"
-                            >{{ convo.unread }}</span
-                        >
-                    </div>
-                </div>
-            </div>
+            >>>>>>> b76127416238573a71100617fa38f108f7a02456 =======
         </div>
-        <div
-            class="inbox"
-            v-if="conversations.length > 0 && openConversation != null"
-        >
-            <div class="loader shadow-sm">
-                <div class="lds-ellipsis">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
-            <div class="inbox-header shadow-sm p-3 sticky-top">
-                <div
-                    class="profile-details"
-                    v-if="openConversation.type == 'personal'"
-                >
-                    <div class="flex">
-                        <div>
-                            <div class="avatar">
-                                {{
-                                    openConversation.participants[0].name
-                                        .split(" ")[0]
-                                        .charAt(0) +
-                                        openConversation.participants[0].name
-                                            .split(" ")[1]
-                                            .charAt(0)
-                                }}
-                            </div>
-                        </div>
-                        <div class="mx-3">
-                            <div class="username">
-                                {{ openConversation.participants[0].name }}
-                            </div>
-                            <div class="badge badge-secondary">
-                                {{ openConversation.participants[0].position }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="profile-details"
-                    v-if="openConversation.type == 'group'"
-                >
-                    <div class="flex">
-                        <div class="mx-3">
-                            <div class="username">
-                                <h5>{{ openConversation.data.name }}</h5>
-                            </div>
-                            <div class="text-muted">
-                                <small
-                                    >created by
-                                    {{ openConversation.data.admin }}</small
-                                >
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="text-danger"
-                    title="delete conversation"
-                    v-on:click="
-                        deleteConversation(openConversation.conversationId)
-                    "
-                >
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                </div>
-            </div>
-            <div class="inbox-content my-1 px-1">
-                <div id="innerH" style="height:fit-content;">
+
+        >>>>>>> 0f8b5524adb0818dd67e2cc6b97f09a1960f1296
+        <div v-if="openConversation != null">
+            <div
+                :class="
+                    openConversation.conversationId == convo.conversationId
+                        ? 'open profile-card p-3 flex'
+                        : 'profile-card p-3 flex'
+                "
+                v-on:click="changeOpenConv(convo.conversationId)"
+                v-for="(convo, i) in conversations"
+                :key="i"
+            >
+                <div class="a-wrapper">
                     <div
-                        class="text-muted text-center"
-                        v-if="openConversation.type == 'group'"
+                        class="avatar font-weight-bold"
+                        v-if="convo.type == 'personal'"
                     >
-                        <p>participants:</p>
-                        <p>
-                            <u
-                                v-for="participant in openConversation.participants"
-                                :key="participant.id"
-                                ><small>{{ participant.name }},</small></u
-                            >
+                        <p class="my-3">
+                            {{
+                                convo.participants[0].name
+                                    .split(" ")[0]
+                                    .charAt(0) +
+                                    convo.participants[0].name
+                                        .split(" ")[1]
+                                        .charAt(0)
+                            }}
                         </p>
                     </div>
                     <div
-                        :class="
-                            message.sender.id == me.id
-                                ? 'message-to-wrapper my-2'
-                                : 'message-from-wrapper my-2'
-                        "
-                        v-for="message in messages"
-                        :key="message.id"
+                        class="avatar font-weight-bold"
+                        v-if="convo.type == 'group'"
                     >
-                        <div
-                            :class="
-                                message.sender.id == me.id
-                                    ? 'message-to'
-                                    : 'message-from'
-                            "
-                        >
-                            <p>{{ message.body }}</p>
-                            <div class="date">
-                                <small>{{
-                                    message.created_at | moment("from", "now")
-                                }}</small>
-                            </div>
-                        </div>
-                        <div
-                            v-if="
-                                message.sender.id != me.id &&
-                                    openConversation.type == 'group'
-                            "
-                        >
-                            <small
-                                class="text-muted font-weight-lighter"
-                                style="position:absolute; top:0; left:10px;"
-                                >{{ message.sender.name }}</small
-                            >
-                        </div>
+                        <p class="my-3">GR</p>
                     </div>
+                </div>
+                <div class="d-wrapper" v-if="convo.type == 'group'">
+                    <div>{{ convo.data.name }}</div>
+                    <div>
+                        <small class="text-muted">
+                            group
+                        </small>
+                    </div>
+                </div>
+                <div class="d-wrapper" v-if="convo.type == 'personal'">
+                    <div>{{ convo.participants[0].name }}</div>
+                    <div>
+                        <small class="text-muted">
+                            {{ convo.participants[0].email }}
+                        </small>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-primary" v-if="convo.unread > 0">{{
+                        convo.unread
+                    }}</span>
                 </div>
             </div>
-            <form
-                @submit.prevent="sendMessage(openConversation.conversationId)"
-                class="inbox-footer px-4 py-4"
-                autocomplete="off"
-            >
-                <div class="form flex">
-                    <div></div>
-                    <div>
-                        <div class="dropdown">
-                            <div
-                                class="emojis"
-                                id="triggerId"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                            >
-                                <img
-                                    :src="'/images/emojis.svg'"
-                                    alt="new"
-                                    class="icon"
-                                />
-                            </div>
-                            <div
-                                class="dropdown-menu picker"
-                                aria-labelledby="triggerId"
-                            >
-                                <form>
-                                    <VEmojiPicker @select="selectEmoji" />
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="footer-form">
-                        <input
-                            type="text"
-                            placeholder="message..."
-                            v-model="message"
-                            class="form-control px-2"
-                            id="inboxChat"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <button class="btn" type="submit">
-                            <img
-                                :src="'/images/send.svg'"
-                                alt="new"
-                                class="icon"
-                            />
-                        </button>
-                    </div>
-                </div>
-                <div></div>
-            </form>
         </div>
     </div>
 </template>

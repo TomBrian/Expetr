@@ -10005,21 +10005,11 @@ h3 {
 body {
   width: 100vw;
   overflow-x: hidden;
-  background-color: #f1f5f7;
+  background-color: white;
   min-height: 100vh;
   height: -webkit-fit-content !important;
   height: -moz-fit-content !important;
   height: fit-content !important;
-}
-
-.background {
-  padding: 0%;
-}
-.background .content {
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  border-radius: 0% 60% 0% 0%;
 }
 
 .home {
@@ -10029,6 +10019,13 @@ body {
 .navbar {
   z-index: 3000;
   background-color: transparent !important;
+  align-items: center;
+}
+.navbar .btn {
+  min-width: 130px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 .navbar .nav-content {
   display: flex;
@@ -10063,11 +10060,93 @@ body {
   border-radius: 37px;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
+.hero {
+  display: flex;
+  min-height: 500px;
   width: 100%;
-  height: 250px;
+}
+.hero .image {
+  width: 50%;
+  min-width: 320px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.hero .image img {
+  width: 80%;
+  min-width: 300px;
+}
+.hero .text {
+  width: 50%;
+  min-width: 320px;
+}
+.hero .text h1 {
+  font-weight: 900;
+  font-size: 40px;
+  color: #090774;
+  line-height: 140%;
+}
+.hero .text p {
+  font-family: "Nunito";
+  width: 70%;
+  font-size: 18px;
+  min-width: 300px;
+}
+.hero .text .hero-cta {
+  background: linear-gradient(180deg, rgba(9, 7, 116, 0.68) 0%, #1813ff 97.4%);
+  font-size: 18px;
+  font-weight: bold;
+  width: 60%;
+  border-radius: 24px;
+}
+
+.after-hero .text p {
+  width: 70%;
+}
+
+.dont-miss-out {
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.dont-miss-out .container {
+  min-height: 350px;
+}
+.dont-miss-out .container h2 {
+  color: white !important;
+}
+
+.tools-header {
+  color: #090774;
+}
+
+#notLogged-links {
+  border-radius: 37px;
+  height: 90vh;
+  max-height: 640px;
+  overflow: hidden;
+  padding: 0px !important;
+}
+#notLogged-links form {
+  width: 50%;
+  min-width: 350px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+#notLogged-links .image {
+  width: 50% !important;
+  min-width: 320px;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.footer {
+  margin-bottom: 0px;
+  width: 100%;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
 }
 .footer .link-cards {
   width: 70%;
@@ -10099,34 +10178,37 @@ body {
 }
 
 #login {
+  border: none;
   width: 400px;
   padding: 20px;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   flex-direction: column;
   background-color: white;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
+#login p {
+  font-size: 14px;
+}
 #login .password-group {
   display: flex;
 }
-#login .form-icon {
-  width: 60px;
-}
 #login input {
   height: 30px;
-  border: solid 0.6px #373535bb;
-  border-radius: 37px;
+  border: solid 0.6px #090774;
+  border-radius: 5px;
   padding: 20px;
   margin-bottom: 20px;
 }
 #login input:focus {
   box-shadow: 10px 10px transparent !important;
 }
-#login #btn {
-  margin: auto !important;
+
+.container {
+  max-width: none;
+  width: 90% !important;
 }
 
 h1,
@@ -10136,10 +10218,15 @@ h4,
 h5,
 h6 {
   font-family: "poppins";
+  color: #464646;
 }
 
 .em {
-  color: #ffa500;
+  color: #3490dc;
+}
+
+p {
+  font-size: 18px;
 }
 
 .flex {
@@ -10152,6 +10239,13 @@ h6 {
 
 .btn-primary {
   background-color: #1813ff;
+}
+.btn-primary:hover {
+  background-color: #1813ff !important;
+}
+
+h2 {
+  color: #464646;
 }
 
 #btn {
@@ -10188,6 +10282,10 @@ h6 {
   font-weight: 700 !important;
 }
 
+.sm-show {
+  display: none;
+}
+
 @media (min-width: 900px) {
   .navbar-collapse {
     width: -webkit-fit-content !important;
@@ -10201,7 +10299,100 @@ h6 {
   }
 }
 @media (max-width: 900px) {
+  .container {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  #notLogged-links {
+    height: -webkit-fit-content !important;
+    height: -moz-fit-content !important;
+    height: fit-content !important;
+    width: 100vw !important;
+    margin: 0px !important;
+    border-radius: 0px !important;
+  }
+  #notLogged-links form {
+    padding: 20px !important;
+  }
+  #notLogged-links .image {
+    display: none !important;
+  }
+
+  .hero {
+    width: 100% !important;
+  }
+  .hero .image {
+    width: 100%;
+    justify-content: center;
+  }
+  .hero .text {
+    width: 100% !important;
+  }
+  .hero .text h1 {
+    font-size: 24px !important;
+  }
+  .hero .text .btn {
+    width: 95% !important;
+  }
+
+  .flex:not(.flex .flex).wrap-reverse {
+    flex-wrap: wrap-reverse !important;
+  }
+  .flex:not(.flex .flex) .text {
+    width: 100% !important;
+  }
+  .flex:not(.flex .flex) .text p {
+    width: 95% !important;
+  }
+  .flex:not(.flex .flex) .image.flex {
+    width: 100% !important;
+    justify-content: center;
+  }
+
   .sm-none {
     display: none;
   }
+}
+.btn-light {
+  background-color: white;
+  color: #090774;
+  font-weight: bolder;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  min-width: 200px;
+}
+
+.flex .text {
+  width: 50%;
+  min-width: 320px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.flex .text h1 {
+  color: #464646;
+}
+.flex .image {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 50%;
+  min-width: 320px;
+  display: flex;
+  justify-content: end;
+}
+
+.btn {
+  transition: 0.2s;
+  min-width: 200px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+.btn:hover {
+  transform: scale(1.03);
+}
+
+a:hover {
+  text-decoration: none;
 }

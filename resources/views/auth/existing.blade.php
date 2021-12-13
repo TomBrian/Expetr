@@ -25,49 +25,107 @@
                 </span>
             @enderror
 
-
             <input id="name" type="text" placeholder="your name..." class="form-control @error('name') is-invalid @enderror"
                 name="name" value="{{ old('name') }}" required autocomplete="name">
 
-            @error('name')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+            <<<<<<< HEAD <input id="name" type="text" placeholder="your name..."
+                class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required
+                autocomplete="name">
 
-
-            <input id="email" type="email" placeholder="your email..."
-                class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required
-                autocomplete="email">
-            @error('email')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-            <div class="password-group">
-                <input id="password" type="password" placeholder="password..."
-                    class="form-control @error('password') is-invalid @enderror" name="password" required
-                    autocomplete="new-password">
-
-                @error('password')
+                @error('name')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                =======
+                @error('name')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
 
-                <input id="password-confirm" type="password" placeholder="confirm password..." class="form-control"
-                    name="password_confirmation" required autocomplete="new-password">
+                >>>>>>> 0f8b5524adb0818dd67e2cc6b97f09a1960f1296
 
-            </div>
+                <input id="email" type="email" placeholder="your email..."
+                    class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"
+                    required autocomplete="email">
+                @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                <div class="password-group">
+                    <input id="password" type="password" placeholder="password..."
+                        class="form-control @error('password') is-invalid @enderror" name="password" required
+                        autocomplete="new-password">
 
-            <button type="submit" id="btn">
-                {{ __('Register') }}
-            </button>
-            <div class="flex my-3"><small>Already have an account? <a href="{{ route('login') }}">log in</a></small>
-            </div>
+                    <<<<<<< HEAD <input id="email" type="email" placeholder="your email..."
+                        class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"
+                        required autocomplete="email">
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        <div class="password-group">
+                            <input id="password" type="password" placeholder="password..."
+                                class="form-control @error('password') is-invalid @enderror" name="password" required
+                                autocomplete="new-password">
+
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+
+                            <input id="password-confirm" type="password" placeholder="confirm password..."
+                                class="form-control" name="password_confirmation" required autocomplete="new-password">
+
+                        </div>
+
+                        <button type="submit" id="btn">
+                            {{ __('Register') }}
+                        </button>
+                        <div class="flex my-3"><small>Already have an account? <a href="{{ route('login') }}">log
+                                    in</a></small>
+                        </div>
         </form>
     </div>
     <div class="container-fluid bg-white background">
         <div class="content container-fluid p-4"></div>
     </div>
+    =======
+    <div class="spacer p-2"></div>
+
+    <input id="password-confirm" type="password" placeholder="confirm password..." class="form-control"
+        name="password_confirmation" required autocomplete="new-password">
+
+    </div>
+    @error('password')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+
+    <div class="flex">
+        <button type="submit" class="btn m-2 btn-primary">
+            {{ __('Register') }}
+        </button>
+        <a href="{{ route('regOrg') }}">
+            <button type="button" class="btn m-2 shadow-sm btn-light">
+                {{ __('create a team') }}
+            </button>
+        </a>
+    </div>
+    <div class="flex my-3"><small>Already have an account? <a href="{{ route('login') }}">log
+                in</a></small>
+    </div>
+    </form>
+    <div class="image bg-dark" style="background-image: url('{{ asset('images/form background.png') }}')">
+
+    </div>
+    </div>
+    </div>
+
+    >>>>>>> 0f8b5524adb0818dd67e2cc6b97f09a1960f1296
 @endsection
