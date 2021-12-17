@@ -3,7 +3,7 @@
 @section('content')
     <div class="flex-wrapper">
         <div class="container shadow-md bg-white" id="notLogged-links" style="display: flex;">
-            <form method="POST" id="login" class="p-5 card bg-white" action="{{ route('register') }}">
+            <form method="POST" id="login" class="p-5 card bg-white" action="{{ route('createOrg') }}">
                 <div class="header-text">
                     <h3>Create a team account and start adding members !</h3>
                     <p class="my-3 text-muted">
@@ -13,7 +13,7 @@
                 </div>
                 @csrf
                 @method('GET')
-                <input id="organisation" type="text" placeholder="organisation code..."
+                <input id="organisation" type="text" placeholder="organisation name..."
                     class="form-control @error('organisation') is-invalid @enderror" name="organisation"
                     value="{{ old('organisation') }}" required autocomplete="organisation">
 
@@ -22,7 +22,7 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-                <input id="name" type="text" placeholder="your name..."
+                <input id="name" type="text" placeholder="your(admin) name..."
                     class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required
                     autocomplete="name" autofocus>
 

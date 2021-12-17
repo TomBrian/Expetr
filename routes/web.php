@@ -34,6 +34,6 @@ Route::get('/dashboard/advanced/{any}', [App\Http\Controllers\HomeController::cl
 Route::get('/dashboard/advanced/account/{any}', [App\Http\Controllers\HomeController::class, 'index'])->middleware('auth');
 Route::get('/register-organisation', [App\Http\Controllers\newOrgcontroller::class, 'index'])->name('regOrg');
 Route::get('/existing-organisation', [App\Http\Controllers\exOrgController::class, 'index'])->name('exOrga');
-Route::get('/register-organisation/create', [App\Http\Controllers\newOrgcontroller::class, 'make'])->name('createOrg');
+Route::post('/register-organisation/create', [App\Http\Controllers\newOrgcontroller::class, 'make'])->name('createOrg');
 Route::post('/register-to-org', [App\Http\Controllers\exOrgController::class, 'register'])->name('register');
 Route::get('/downloads/print-expenses-pdf', [App\Http\Controllers\pdfConverter::class, 'index']);

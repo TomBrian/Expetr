@@ -15,8 +15,8 @@
 
                 @csrf
                 @method('GET')
-                <input id="organisation" type="text" placeholder="organisation name..."
-                    class="form-control @error('organisation') is-invalid @enderror" name="organisation_name"
+                <input id="organisation" type="text" placeholder="organisation code..."
+                    class="form-control @error('organisation') is-invalid @enderror" name="organisation"
                     value="{{ old('organisation') }}" required autocomplete="organisation">
 
                 @error('organisation')
@@ -24,7 +24,7 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-                <input id="name" type="text" placeholder="your(admin) name..."
+                <input id="name" type="text" placeholder="your name..."
                     class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required
                     autocomplete="name" autofocus>
 
